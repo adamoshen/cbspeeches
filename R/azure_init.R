@@ -1,5 +1,9 @@
-# If you have not set up your Azure credentials, you will need to run
-# AzureRMR::create_azure_login(tenant = "adamshen1live.onmicrosoft.com")
+# If you have not set up your Azure credentials, you will need to run:
+# AzureRMR::create_azure_login(
+#   tenant = "adamshen1live.onmicrosoft.com",
+#   auth_type = "device_code"
+# )
+
 AzureRMR::get_azure_login(
   tenant = "adamshen1live.onmicrosoft.com",
   auth_type = "device_code"
