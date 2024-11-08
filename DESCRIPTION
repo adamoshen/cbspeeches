@@ -1,0 +1,19 @@
+Package: cbspeeches
+Title: Analysis of Central Bank Speeches
+Version: 0.0.0.9000
+Authors@R: 
+    person("Adam", "Shen", , "adamshen1@gmail.com", role = c("aut", "cre"))
+Description: Contains the code to document the analysis of central bank speeches.
+License: GPL (>= 3)
+Encoding: UTF-8
+Imports: 
+    cld2,
+    dplyr,
+    lubridate,
+    pins (>= 1.0.0),
+    pinsqs (>= 0.0.0.9000),
+    readr,
+    stringi,
+    stringr
+Remotes:  
+    adamoshen/pinsqs
