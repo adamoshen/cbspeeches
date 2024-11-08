@@ -24,7 +24,7 @@ library(AzureStor)
 
 source("R/azure_init.R")
 
-speech_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
   storage_container(name = "cbspeeches") %>%
   board_azure(path = "data-speeches")
 ```
@@ -56,7 +56,7 @@ speeches <- speeches %>%
 Write the raw data to the pin board:
 
 ```{r}
-speech_board %>%
+speeches_board %>%
   pin_qsave(
     speeches,
     "speeches-raw",
