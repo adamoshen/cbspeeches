@@ -7,13 +7,17 @@ Description: Contains the code to document the analysis of central bank speeches
 License: GPL (>= 3)
 Encoding: UTF-8
 Imports: 
+    bslib,
     cld2,
+    downlit,
     dplyr,
     lubridate,
     pins (>= 1.0.0),
     pinsqs (>= 0.0.0.9000),
     readr,
+    rmarkdown,
     stringi,
-    stringr
-Remotes:  
+    stringr,
+    tibble
+Remotes: 
     adamoshen/pinsqs
