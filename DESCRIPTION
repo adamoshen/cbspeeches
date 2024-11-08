@@ -3,9 +3,11 @@ Title: Analysis of Central Bank Speeches
 Version: 0.0.0.9000
 Authors@R: 
     person("Adam", "Shen", , "adamshen1@gmail.com", role = c("aut", "cre"))
-Description: Contains the code to document the analysis of central bank speeches.
+Description: Contains the code to document the analysis of central bank
+    speeches.
 License: GPL (>= 3)
-Encoding: UTF-8
+URL: https://adamoshen.github.io/cbspeeches/,
+    https://github.com/adamoshen/cbspeeches
 Imports: 
     bslib,
     cld2,
@@ -21,3 +23,4 @@ Imports:
     tibble
 Remotes: 
     adamoshen/pinsqs
+Encoding: UTF-8
