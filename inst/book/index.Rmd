@@ -1,0 +1,8 @@
+---
+title: "Analysis of Central Bank Speeches"
+author: "Adam Shen"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+site: bookdown::bookdown_site
+---
+
+# Analysis of Central Bank Speeches {.unnumbered}

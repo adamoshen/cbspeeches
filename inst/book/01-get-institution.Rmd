@@ -1,20 +1,8 @@
----
-title: "Extract institution"
-output:
-  html_document:
-    theme: 
-      version: 5
-      bootswatch: default
-    highlight: arrow
-    highlight_downlit: true
-    mathjax: null
-    css: "rmd.css"
-    md_extensions: "-smart"
----
-
 ```{r, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
+
+# Extracting the institution from the text
 
 ```{r}
 library(tidyverse)
