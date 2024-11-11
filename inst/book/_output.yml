@@ -12,3 +12,4 @@ bookdown::bs4_book:
     branch: "main"
     subdir: "inst/book"
     md_extensions: -smart
+  mathjax: null
