@@ -9,19 +9,25 @@ License: GPL (>= 3)
 URL: https://adamoshen.github.io/cbspeeches/,
     https://github.com/adamoshen/cbspeeches
 Imports: 
-    bslib,
+    AzureAuth,
+    AzureStor,
     cld2,
-    downlit,
     dplyr,
     here,
     lubridate,
     pins (>= 1.0.0),
     pinsqs (>= 0.0.0.9000),
     readr,
-    rmarkdown,
+    readxl,
     stringi,
     stringr,
     tibble
+Suggests: 
+    bookdown,
+    bslib,
+    downlit,
+    rmarkdown,
+    servr
 Remotes: 
     adamoshen/pinsqs
 Encoding: UTF-8
