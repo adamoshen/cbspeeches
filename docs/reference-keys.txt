@@ -7,7 +7,7 @@ initialisation-1
 load-the-data
 perform-language-detection
 get-country
-extraction-institution-by-regex-patterns
+extract-institution-by-regex-patterns
 fill-missingincorrect-institutions
 normalise-institution-names
 get-country-from-institution-names

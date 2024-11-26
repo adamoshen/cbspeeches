@@ -59,7 +59,7 @@ affiliation of the author.
 
 :::
 
-### Extraction institution by regex patterns
+### Extract institution by regex patterns
 
 The institutions/organizations were extracted by looking for the general pattern of:
 `[position] (of|of the) [institution name]` within the first sentence of each speech. An attempt at
