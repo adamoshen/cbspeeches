@@ -259,7 +259,7 @@ speeches <- speeches %>%
   left_join(bank_list, by="institution")
 ```
 
-## Saving the data
+## Save the data
 
 Writing the data to the pin board:
 

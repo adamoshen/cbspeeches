@@ -2,11 +2,11 @@ bookdown::bs4_book:
   theme:
     primary: "#00AB45"
     base_font:
-      google: "Pontano Sans"
+      google: "Noto Sans"
     code_font:
       google: "Fragment Mono"
     heading_font:
-      google: "Pontano Sans"
+      google: "Noto Sans"
   repo:
     base: "https://github.com/adamoshen/cbspeeches"
     branch: "main"
