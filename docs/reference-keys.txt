@@ -1,2 +1,14 @@
 data-setup
-extracting-the-institution-from-the-text
+initialisation
+minor-adjustments-to-raw-data
+save-the-data
+extracting-the-country-from-the-text
+initialisation-1
+load-the-data
+perform-language-detection
+get-country
+extraction-institution-by-regex-patterns
+fill-missingincorrect-institutions
+normalise-institution-names
+get-country-from-institution-names
+saving-the-data

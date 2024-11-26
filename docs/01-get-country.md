@@ -1,0 +1,274 @@
+
+
+# Extracting the country from the text
+
+## Initialisation
+
+
+```r
+library(tidyverse)
+library(readxl)
+library(pins)
+library(pinsqs)
+library(cld2)
+library(AzureStor)
+
+source(here::here("R", "azure_init.R"))
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+```
+
+## Load the data
+
+
+```r
+speeches <- speeches_board %>%
+  pin_qread("speeches-raw")
+```
+
+## Perform language detection
+
+Speeches where the dominant language is not English, are removed. Of the 18,827 speeches, 18,813
+(99.93%) are English and 14 (0.7%) are not English.
+
+
+```r
+speeches <- speeches %>%
+  mutate(lang_cld2 = detect_language(text)) %>%
+  filter(lang_cld2 == "en") %>%
+  select(-lang_cld2)
+```
+
+## Get country
+
+The identification of speech countries can be briefly summarised as follows:
+
+1. Extract institution name by regex patterns.
+2. If unable to extract anything, or if the extracted institution is incorrect, the affiliation of
+the author is manually identified by Google-ing.
+3. Normalise central bank names according to the [format listed](https://www.bis.org/cbanks.htm) on
+the BIS website.
+4. Using the same list, identify the country from the bank name.
+
+::: {.rmdnote}
+
+This method was chosen instead of looking for mentions of country names in the first sentence of a
+speech as there are many instances of the meeting location being a different country from the
+affiliation of the author.
+
+:::
+
+### Extraction institution by regex patterns
+
+The institutions/organizations were extracted by looking for the general pattern of:
+`[position] (of|of the) [institution name]` within the first sentence of each speech. An attempt at
+the extraction of institution/organization is as follows:
+
+
+```r
+extract_pattern1 <- "(?<=(?:Board of Governors|Governing Board|Executive Board|Chief Executive Officer) of the )[^[:punct:]]+"
+extract_pattern2 <- "(?<=(?:Governor|President|Chairman|Director|Executive|Manager|Directorate) of the )[^[:punct:]]+"
+extract_pattern3 <- "(?<=Governor of )[^[:punct:]]+" # for Philippines
+extract_pattern4 <- "(?:Central|Reserve) Bank of (?:[:upper:][:lower:]+\\s?)+"
+extract_pattern5 <- "Bank of (?:[:upper:][:lower:]+\\s?)+"
+extract_pattern6 <- "(?i)National Bank of Serbia|Swiss National Bank|Hong Kong Monetary Authority|Monetary Authority of Singapore|Banco de Espana|Banco de Portugal|Banco de Mexico|South African Reserve Bank|Sveriges Riksbank|Oesterreichische Nationalbank"
+extract_pattern7 <- "Federal Reserve System"
+extract_pattern8 <- "(?i)Bank of [:alpha:]+"
+
+speeches <- speeches %>%
+  mutate(
+    # Remove periods after salutations, initials, and credentials
+    text = str_remove_all(text, "(?<=Mr|Ms|Mrs|PhD|Dr|Dott|Prof|Jr|Sig|\\bp|\\bm|\\ba|\\bh|\\bc|\\bmult|vs|[A-Z0-9])\\."),
+    text = str_replace_all(text, "Member Board of Governors", "Member of the Board of Governors"),
+    text = str_replace_all(text, "Govenor", "Governor"),
+    # Extract first sentence before looking for patterns.
+    first_sentence = str_extract(text, "^[^.]+\\."),
+    institution = str_extract(first_sentence, extract_pattern1),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern2), institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern3), institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern4), institution),
+    institution = if_else(institution == "People", "The People's Bank of China", institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern5), institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern6), institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern7), institution),
+    institution = if_else(is.na(institution), str_extract(first_sentence, extract_pattern8), institution)
+  )
+```
+
+### Fill missing/incorrect institutions
+
+Where extraction fails or is incorrect (determined by looking for `institution` values of `NA`
+and values with low frequencies), the speeches' institutions/organizations are
+manually determined by Google-ing the author or the speech. This information is stored in
+`inst/data-misc/author_affiliations.xlsx`. The data is updated according to this spreadsheet (where
+applicable).
+
+
+```r
+author_affiliations <- read_xlsx(here::here("inst", "data-misc", "author_affiliations.xlsx"))
+
+speeches <- speeches %>%
+  rows_update(author_affiliations, by="author")
+```
+
+Two speeches remain with missing values for author and institution. These missing values can be
+filled in as follows:
+
+
+```r
+missing_info <- tribble(
+  ~doc, ~author, ~institution,
+  "r180725i", "Pablo Hernandez de Cos", "Bank of Spain",
+  "r180810b", "Jorgovanka Tabakovic", "National Bank of Serbia"
+)
+
+speeches <- speeches %>%
+  rows_update(missing_info, by="doc")
+```
+
+### Normalise institution names
+
+The [list of banks and their official names](https://www.bis.org/cbanks.htm) from the BIS website
+were downloaded and stored in `inst/data-misc/bank_list.xlsx`. The extracted institution names from
+the previous step were normalised to match the names in this list. Additional organizations were
+added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
+Federal Reserves were associated with the common bank name of `Federal Reserve Bank`.
+
+
+```r
+speeches <- speeches %>%
+  mutate(
+    institution = str_squish(institution),
+    institution = case_when(
+      str_detect(institution, "Federal Reserve|Atlanta|Chicago|Kansas City|New York|Saint Louis|San Francisco|America|BANK of NEW") ~ "Federal Reserve Bank",
+      str_detect(institution, "European Central Bank") ~ "European Central Bank",
+      str_detect(institution, "ECB") ~ "European Central Bank",
+      str_detect(institution, "Mauritius") ~ "Bank of Mauritius",
+      str_detect(institution, "Bundesbank") ~ "Deutsche Bundesbank",
+      str_detect(institution, "Italy|Italty") ~ "Bank of Italy",
+      str_detect(institution, "France") ~ "Bank of France",
+      str_detect(institution, "Japan") ~ "Bank of Japan",
+      str_detect(institution, "Korea") ~ "Bank of Korea",
+      str_detect(institution, "Bank of Papua New Guinea") ~ "Bank of Papua New Guinea",
+      str_detect(institution, "Bank of PNG") ~ "Bank of Papua New Guinea",
+      str_detect(institution, "(?i)Mexico") ~ "Bank of Mexico",
+      str_detect(institution, "China") ~ "The People's Bank of China",
+      str_detect(institution, "Ireland") ~ "Central Bank of Ireland",
+      str_detect(institution, "(?i)Portugal") ~ "Banco de Portugal",
+      str_detect(institution, "Bosnia|Herzegovina") ~ "Central Bank of Bosnia and Herzegovina",
+      str_detect(institution, "Romania") ~ "National Bank of Romania",
+      str_detect(institution, "Malaysia") ~ "Central Bank of Malaysia",
+      str_detect(institution, "Sierra Leone") ~ "Bank of Sierra Leone",
+      str_detect(institution, "Thailand") ~ "Bank of Thailand",
+      str_detect(institution, "(?i)Uganda") ~ "Bank of Uganda",
+      str_detect(institution, "Slovenia") ~ "Bank of Slovenia",
+      str_detect(institution, "Banka Slovenije") ~ "Bank of Slovenia",
+      str_detect(institution, "Bangko|Philippine|\\bBSP\\b") ~ "Central Bank of the Philippines (Bangko Sentral ng Pilipinas)",
+      str_detect(institution, "(?i)Riksbank") ~ "Sveriges Riksbank",
+      str_detect(institution, "Sweden|Swedish") ~ "Sveriges Riksbank",
+      str_detect(institution, "Riskbank|Risksbank") ~ "Sveriges Riksbank",
+      str_detect(institution, "Swiss") ~ "Swiss National Bank",
+      str_detect(institution, "Austria|Oesterreichische") ~ "Oesterreichische Nationalbank, the Austrian Central Bank",
+      str_detect(institution, "Norges|Norwegian") ~ "Central Bank of Norway",
+      str_detect(institution, "Denmark|Danmarks") ~ "Danmarks Nationalbank",
+      str_detect(institution, "Nederlandsche|Netherlands|Nederlandse") ~ "De Nederlandsche Bank",
+      str_detect(institution, "Macedonia") ~ "National Bank of the Republic of North Macedonia",
+      str_detect(institution, "Spain") ~ "Bank of Spain",
+      str_detect(institution, "Espana") ~ "Bank of Spain",
+      str_detect(institution, "(?i)Canada") ~ "Bank of Canada",
+      str_detect(institution, "(?i)Serbia") ~ "National Bank of Serbia",
+      str_detect(institution, "Hong Kong") ~ "Hong Kong Monetary Authority",
+      str_detect(institution, "India") ~ "Reserve Bank of India",
+      str_detect(institution, "Bangladesh") ~ "Bangladesh Bank",
+      str_detect(institution, "Indonesia") ~ "Bank Indonesia",
+      str_detect(institution, "Algeria") ~ "Bank of Algeria",
+      str_detect(institution, "Pakistan") ~ "State Bank of Pakistan",
+      str_detect(institution, "England") ~ "Bank of England",
+      str_detect(institution, "Finland") ~ "Bank of Finland",
+      str_detect(institution, "Suomen Pankki") ~ "Bank of Finland",
+      str_detect(institution, "(?i)Australia") ~ "Reserve Bank of Australia",
+      str_detect(institution, "Bahrain") ~ "Central Bank of Bahrain",
+      str_detect(institution, "Barbados") ~ "Central Bank of Barbados",
+      str_detect(institution, "Bahamas") ~ "Central Bank of The Bahamas",
+      str_detect(institution, "Belgium") ~ "National Bank of Belgium",
+      str_detect(institution, "(?i)Botswana") ~ "Bank of Botswana",
+      str_detect(institution, "Carribean") ~ "Eastern Caribbean Central Bank",
+      str_detect(institution, "(?i)Cambodia") ~ "National Bank of Cambodia",
+      str_detect(institution, "Chile") ~ "Central Bank of Chile",
+      str_detect(institution, "Columbia") ~ "Central Bank of Colombia",
+      str_detect(institution, "Croatia|Croation") ~ "Croatian National Bank",
+      str_detect(institution, "Curacao") ~ "Central Bank of Curacao and Sint Maarten",
+      str_detect(institution, "Cyprus") ~ "Central Bank of Cyprus",
+      str_detect(institution, "Czech") ~ "Czech National Bank",
+      str_detect(institution, "Ecuador") ~ "Central Bank of Ecuador",
+      str_detect(institution, "Eesti Pank") ~ "Bank of Estonia",
+      str_detect(institution, "(?i)Fiji") ~ "Reserve Bank of Fiji",
+      str_detect(institution, "Gambia") ~ "Central Bank of The Gambia",
+      str_detect(institution, "(?i)Ghana") ~ "Bank of Ghana",
+      str_detect(institution, "Greece") ~ "Bank of Greece",
+      str_detect(institution, "Guatemala") ~ "Bank of Guatemala",
+      str_detect(institution, "Hellenic") ~ "Bank of Greece",
+      str_detect(institution, "Iceland") ~ "Central Bank of Iceland",
+      str_detect(institution, "Kenya") ~ "Central Bank of Kenya",
+      str_detect(institution, "Kosovo") ~ "Central Bank of the Republic of Kosovo",
+      str_detect(institution, "Kuwait") ~ "Central Bank of Kuwait",
+      str_detect(institution, "Lativa") ~ "Bank of Latvia",
+      str_detect(institution, "Lithuania") ~ "Bank of Lithuania",
+      str_detect(institution, "Luxembourg") ~ "Central Bank of Luxembourg",
+      str_detect(institution, "Malawi") ~ "Reserve Bank of Malawi",
+      str_detect(institution, "Malta") ~ "Central Bank of Malta",
+      str_detect(institution, "Mozambique") ~ "Bank of Mozambique",
+      str_detect(institution, "Bank of Al\\b|Bank Al\\b|Al-Maghrib|Morocco") ~ "Bank Al-Maghrib (Central Bank of Morocco)",
+      str_detect(institution, "Nepal") ~ "Central Bank of Nepal (Nepal Rastra Bank)",
+      str_detect(institution, "New Zealand") ~ "Reserve Bank of New Zealand",
+      str_detect(institution, "Poland|Polski") ~ "Narodowy Bank Polski",
+      str_detect(institution, "Russia") ~ "Central Bank of the Russian Federation",
+      str_detect(institution, "Saudi") ~ "Saudi Central Bank",
+      str_detect(institution, "Seychelles") ~ "Central Bank of Seychelles",
+      str_detect(institution, "Singapore") ~ "Monetary Authority of Singapore",
+      str_detect(institution, "Slovakia|Slovenska") ~ "National Bank of Slovakia",
+      str_detect(institution, "Solomon Islands") ~ "Central Bank of Solomon Islands",
+      str_detect(institution, "South Africa") ~ "South African Reserve Bank",
+      str_detect(institution, "Ceylon") ~ "Central Bank of Sri Lanka",
+      str_detect(institution, "Swaziland|Eswatini") ~ "The Central Bank of Eswatini",
+      str_detect(institution, "Trinidad") ~ "Central Bank of Trinidad and Tobago",
+      str_detect(institution, "Tunisia") ~ "Central Bank of Tunisia",
+      str_detect(institution, "Turkiye|Turkey") ~ "Central Bank of the Republic of Turkiye",
+      str_detect(institution, "Emirates|UAE") ~ "Central Bank of the United Arab Emirates",
+      str_detect(institution, "Ukraine") ~ "National Bank of Ukraine",
+      str_detect(institution, "(?i)Zambia") ~ "Bank of Zambia",
+      str_detect(institution, "Bank for International Settlements|\\bBIS\\b") ~ "Bank for International Settlements",
+      str_detect(institution, "\\bBSC\\b") ~ "Banking Supervision Committee",
+      str_detect(institution, "Basel") ~ "Basel Committee",
+      .default = institution
+    )
+  )
+```
+
+### Get country from institution names
+
+From the list of banks, we can associate each speech with a country by performing a join.
+
+
+```r
+bank_list <- read_xlsx(here::here("inst", "data-misc", "bank_list.xlsx"))
+
+speeches <- speeches %>%
+  left_join(bank_list, by="institution")
+```
+
+## Saving the data
+
+Writing the data to the pin board:
+
+
+```r
+speeches_board %>%
+  pin_qsave(
+    speeches,
+    "speeches-with-country",
+    title = "speeches with institutions and countries"
+  )
+```

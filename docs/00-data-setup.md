@@ -2,6 +2,8 @@
 
 # Data setup
 
+## Initialisation
+
 
 ```r
 library(tidyverse)
@@ -16,6 +18,8 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
   board_azure(path = "data-speeches")
 ```
 
+## Minor adjustments to raw data
+
 Read in speeches from the Dropbox:
 
 
@@ -28,6 +32,8 @@ Perform some minor adjustments:
 - Rename the column `processed_text` to simply `text`.
 - Remove the time component of the dates.
 - Perform normalization of text and author names to their ASCII form.
+- Remove excessive spaces in `text` and `author` fields.
+- Fix select author names for consistency.
 
 
 ```r
@@ -37,12 +43,22 @@ speeches <- speeches %>%
     date = as_date(date),
     text = stringi::stri_trans_general(text, "Greek-Latin"),
     text = stringi::stri_trans_general(text, "Latin-ASCII"),
+    text = str_squish(text),
     author = stringi::stri_trans_general(author, "Greek-Latin"),
-    author = stringi::stri_trans_general(author, "Latin-ASCII")
+    author = stringi::stri_trans_general(author, "Latin-ASCII"),
+    author = str_squish(author)
+  ) %>%
+  mutate(
+    author = str_replace_all(author, "Angelovska-Bezoska", "Angelovska-Bezhoska"),
+    author = str_replace_all(author, "Angelovska Bezhoska", "Angelovska-Bezhoska"),
+    text = str_replace_all(text, "Angelovska-Bezoska", "Angelovska-Bezhoska"),
+    text = str_replace_all(text, "Angelovska Bezhoska", "Angelovska-Bezhoska")
   )
 ```
 
-Write the raw data to the pin board:
+## Save the data
+
+Writing the data to the pin board:
 
 
 ```r

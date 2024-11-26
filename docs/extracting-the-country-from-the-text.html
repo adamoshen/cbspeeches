@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>2 Extracting the country from the text | Analysis of Central Bank Speeches</title>
+<meta name="author" content="Adam Shen">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="2 Extracting the country from the text | Analysis of Central Bank Speeches">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Extracting the country from the text | Analysis of Central Bank Speeches">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Pontano_Sans-0.4.5/font.css" rel="stylesheet">
+<link href="libs/Fragment_Mono-0.4.5/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<meta name="description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
+<meta property="og:description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
+<meta name="twitter:description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Analysis of Central Bank Speeches</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
+<li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
+<li><a class="active" href="extracting-the-country-from-the-text.html"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/adamoshen/cbspeeches">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="extracting-the-country-from-the-text" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Extracting the country from the text<a class="anchor" aria-label="anchor" href="#extracting-the-country-from-the-text"><i class="fas fa-link"></i></a>
+</h1>
+<div id="initialisation-1" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-1"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pins.rstudio.com/">pins</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">pinsqs</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/cld2/">cld2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pins.rstudio.com/reference/board_azure.html">board_azure</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data-speeches"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="load-the-data" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Load the data<a class="anchor" aria-label="anchor" href="#load-the-data"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/pinsqs/man/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-raw"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="perform-language-detection" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Perform language detection<a class="anchor" aria-label="anchor" href="#perform-language-detection"><i class="fas fa-link"></i></a>
+</h2>
+<p>Speeches where the dominant language is not English, are removed. Of the 18,827 speeches, 18,813
+(99.93%) are English and 14 (0.7%) are not English.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>lang_cld2 <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/cld2/reference/cld2.html">detect_language</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">lang_cld2</span> <span class="op">==</span> <span class="st">"en"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lang_cld2</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="get-country" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Get country<a class="anchor" aria-label="anchor" href="#get-country"><i class="fas fa-link"></i></a>
+</h2>
+<p>The identification of speech countries can be briefly summarised as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Extract institution name by regex patterns.</li>
+<li>If unable to extract anything, or if the extracted institution is incorrect, the affiliation of
+the author is manually identified by Google-ing.</li>
+<li>Normalise central bank names according to the <a href="https://www.bis.org/cbanks.htm">format listed</a> on
+the BIS website.</li>
+<li>Using the same list, identify the country from the bank name.</li>
+</ol>
+<div class="rmdnote">
+<p>This method was chosen instead of looking for mentions of country names in the first sentence of a
+speech as there are many instances of the meeting location being a different country from the
+affiliation of the author.</p>
+</div>
+<div id="extraction-institution-by-regex-patterns" class="section level3" number="2.4.1">
+<h3>
+<span class="header-section-number">2.4.1</span> Extraction institution by regex patterns<a class="anchor" aria-label="anchor" href="#extraction-institution-by-regex-patterns"><i class="fas fa-link"></i></a>
+</h3>
+<p>The institutions/organizations were extracted by looking for the general pattern of:
+<code>[position] (of|of the) [institution name]</code> within the first sentence of each speech. An attempt at
+the extraction of institution/organization is as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">extract_pattern1</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=(?:Board of Governors|Governing Board|Executive Board|Chief Executive Officer) of the )[^[:punct:]]+"</span></span>
+<span><span class="va">extract_pattern2</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=(?:Governor|President|Chairman|Director|Executive|Manager|Directorate) of the )[^[:punct:]]+"</span></span>
+<span><span class="va">extract_pattern3</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=Governor of )[^[:punct:]]+"</span> <span class="co"># for Philippines</span></span>
+<span><span class="va">extract_pattern4</span> <span class="op">&lt;-</span> <span class="st">"(?:Central|Reserve) Bank of (?:[:upper:][:lower:]+\\s?)+"</span></span>
+<span><span class="va">extract_pattern5</span> <span class="op">&lt;-</span> <span class="st">"Bank of (?:[:upper:][:lower:]+\\s?)+"</span></span>
+<span><span class="va">extract_pattern6</span> <span class="op">&lt;-</span> <span class="st">"(?i)National Bank of Serbia|Swiss National Bank|Hong Kong Monetary Authority|Monetary Authority of Singapore|Banco de Espana|Banco de Portugal|Banco de Mexico|South African Reserve Bank|Sveriges Riksbank|Oesterreichische Nationalbank"</span></span>
+<span><span class="va">extract_pattern7</span> <span class="op">&lt;-</span> <span class="st">"Federal Reserve System"</span></span>
+<span><span class="va">extract_pattern8</span> <span class="op">&lt;-</span> <span class="st">"(?i)Bank of [:alpha:]+"</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="co"># Remove periods after salutations, initials, and credentials</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?&lt;=Mr|Ms|Mrs|PhD|Dr|Dott|Prof|Jr|Sig|\\bp|\\bm|\\ba|\\bh|\\bc|\\bmult|vs|[A-Z0-9])\\."</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"Member Board of Governors"</span>, <span class="st">"Member of the Board of Governors"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"Govenor"</span>, <span class="st">"Governor"</span><span class="op">)</span>,</span>
+<span>    <span class="co"># Extract first sentence before looking for patterns.</span></span>
+<span>    first_sentence <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"^[^.]+\\."</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern1</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern2</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern3</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern4</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">institution</span> <span class="op">==</span> <span class="st">"People"</span>, <span class="st">"The People's Bank of China"</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern5</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern6</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern7</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>, <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">first_sentence</span>, <span class="va">extract_pattern8</span><span class="op">)</span>, <span class="va">institution</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="fill-missingincorrect-institutions" class="section level3" number="2.4.2">
+<h3>
+<span class="header-section-number">2.4.2</span> Fill missing/incorrect institutions<a class="anchor" aria-label="anchor" href="#fill-missingincorrect-institutions"><i class="fas fa-link"></i></a>
+</h3>
+<p>Where extraction fails or is incorrect (determined by looking for <code>institution</code> values of <code>NA</code>
+and values with low frequencies), the speeches’ institutions/organizations are
+manually determined by Google-ing the author or the speech. This information is stored in
+<code>inst/data-misc/author_affiliations.xlsx</code>. The data is updated according to this spreadsheet (where
+applicable).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">author_affiliations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"author_affiliations.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">author_affiliations</span>, by<span class="op">=</span><span class="st">"author"</span><span class="op">)</span></span></code></pre></div>
+<p>Two speeches remain with missing values for author and institution. These missing values can be
+filled in as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">missing_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">doc</span>, <span class="op">~</span><span class="va">author</span>, <span class="op">~</span><span class="va">institution</span>,</span>
+<span>  <span class="st">"r180725i"</span>, <span class="st">"Pablo Hernandez de Cos"</span>, <span class="st">"Bank of Spain"</span>,</span>
+<span>  <span class="st">"r180810b"</span>, <span class="st">"Jorgovanka Tabakovic"</span>, <span class="st">"National Bank of Serbia"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">missing_info</span>, by<span class="op">=</span><span class="st">"doc"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="normalise-institution-names" class="section level3" number="2.4.3">
+<h3>
+<span class="header-section-number">2.4.3</span> Normalise institution names<a class="anchor" aria-label="anchor" href="#normalise-institution-names"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <a href="https://www.bis.org/cbanks.htm">list of banks and their official names</a> from the BIS website
+were downloaded and stored in <code>inst/data-misc/bank_list.xlsx</code>. The extracted institution names from
+the previous step were normalised to match the names in this list. Additional organizations were
+added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
+Federal Reserves were associated with the common bank name of <code>Federal Reserve Bank</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Federal Reserve|Atlanta|Chicago|Kansas City|New York|Saint Louis|San Francisco|America|BANK of NEW"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Federal Reserve Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"European Central Bank"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"European Central Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"ECB"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"European Central Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Mauritius"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Mauritius"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bundesbank"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Deutsche Bundesbank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Italy|Italty"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Italy"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"France"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of France"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Japan"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Japan"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Korea"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Korea"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bank of Papua New Guinea"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Papua New Guinea"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bank of PNG"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Papua New Guinea"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Mexico"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Mexico"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"China"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"The People's Bank of China"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Ireland"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Ireland"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Portugal"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Banco de Portugal"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bosnia|Herzegovina"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Bosnia and Herzegovina"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Romania"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Romania"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Malaysia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Malaysia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Sierra Leone"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Sierra Leone"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Thailand"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Thailand"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Uganda"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Uganda"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Slovenia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Slovenia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Banka Slovenije"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Slovenia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bangko|Philippine|\\bBSP\\b"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of the Philippines (Bangko Sentral ng Pilipinas)"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Riksbank"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Sveriges Riksbank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Sweden|Swedish"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Sveriges Riksbank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Riskbank|Risksbank"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Sveriges Riksbank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Swiss"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Swiss National Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Austria|Oesterreichische"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Oesterreichische Nationalbank, the Austrian Central Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Norges|Norwegian"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Norway"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Denmark|Danmarks"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Danmarks Nationalbank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Nederlandsche|Netherlands|Nederlandse"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"De Nederlandsche Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Macedonia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of the Republic of North Macedonia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Spain"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Spain"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Espana"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Spain"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Canada"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Canada"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Serbia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Serbia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Hong Kong"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Hong Kong Monetary Authority"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"India"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Reserve Bank of India"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bangladesh"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bangladesh Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Indonesia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank Indonesia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Algeria"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Algeria"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Pakistan"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"State Bank of Pakistan"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"England"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of England"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Finland"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Finland"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Suomen Pankki"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Finland"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Australia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Reserve Bank of Australia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bahrain"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Bahrain"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Barbados"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Barbados"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bahamas"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of The Bahamas"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Belgium"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Belgium"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Botswana"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Botswana"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Carribean"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Eastern Caribbean Central Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Cambodia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Cambodia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Chile"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Chile"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Columbia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Colombia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Croatia|Croation"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Croatian National Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Curacao"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Curacao and Sint Maarten"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Cyprus"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Cyprus"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Czech"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Czech National Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Ecuador"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Ecuador"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Eesti Pank"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Estonia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Fiji"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Reserve Bank of Fiji"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Gambia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of The Gambia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Ghana"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Ghana"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Greece"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Greece"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Guatemala"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Guatemala"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Hellenic"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Greece"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Iceland"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Iceland"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Kenya"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Kenya"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Kosovo"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of the Republic of Kosovo"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Kuwait"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Kuwait"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Lativa"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Latvia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Lithuania"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Lithuania"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Luxembourg"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Luxembourg"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Malawi"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Reserve Bank of Malawi"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Malta"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Malta"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Mozambique"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Mozambique"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bank of Al\\b|Bank Al\\b|Al-Maghrib|Morocco"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank Al-Maghrib (Central Bank of Morocco)"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Nepal"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Nepal (Nepal Rastra Bank)"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"New Zealand"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Reserve Bank of New Zealand"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Poland|Polski"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Narodowy Bank Polski"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Russia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of the Russian Federation"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Saudi"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Saudi Central Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Seychelles"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Seychelles"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Singapore"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Monetary Authority of Singapore"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Slovakia|Slovenska"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Slovakia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Solomon Islands"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Solomon Islands"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"South Africa"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"South African Reserve Bank"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Ceylon"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Sri Lanka"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Swaziland|Eswatini"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"The Central Bank of Eswatini"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Trinidad"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Trinidad and Tobago"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Tunisia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of Tunisia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Turkiye|Turkey"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of the Republic of Turkiye"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Emirates|UAE"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Central Bank of the United Arab Emirates"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Ukraine"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"National Bank of Ukraine"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"(?i)Zambia"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank of Zambia"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Bank for International Settlements|\\bBIS\\b"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Bank for International Settlements"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"\\bBSC\\b"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Banking Supervision Committee"</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">institution</span>, <span class="st">"Basel"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Basel Committee"</span>,</span>
+<span>      .default <span class="op">=</span> <span class="va">institution</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="get-country-from-institution-names" class="section level3" number="2.4.4">
+<h3>
+<span class="header-section-number">2.4.4</span> Get country from institution names<a class="anchor" aria-label="anchor" href="#get-country-from-institution-names"><i class="fas fa-link"></i></a>
+</h3>
+<p>From the list of banks, we can associate each speech with a country by performing a join.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bank_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_list.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bank_list</span>, by<span class="op">=</span><span class="st">"institution"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div id="saving-the-data" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Saving the data<a class="anchor" aria-label="anchor" href="#saving-the-data"><i class="fas fa-link"></i></a>
+</h2>
+<p>Writing the data to the pin board:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/pinsqs/man/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
+<span>    <span class="va">speeches</span>,</span>
+<span>    <span class="st">"speeches-with-country"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"speeches with institutions and countries"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#extracting-the-country-from-the-text"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+<li><a class="nav-link" href="#initialisation-1"><span class="header-section-number">2.1</span> Initialisation</a></li>
+<li><a class="nav-link" href="#load-the-data"><span class="header-section-number">2.2</span> Load the data</a></li>
+<li><a class="nav-link" href="#perform-language-detection"><span class="header-section-number">2.3</span> Perform language detection</a></li>
+<li>
+<a class="nav-link" href="#get-country"><span class="header-section-number">2.4</span> Get country</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#extraction-institution-by-regex-patterns"><span class="header-section-number">2.4.1</span> Extraction institution by regex patterns</a></li>
+<li><a class="nav-link" href="#fill-missingincorrect-institutions"><span class="header-section-number">2.4.2</span> Fill missing/incorrect institutions</a></li>
+<li><a class="nav-link" href="#normalise-institution-names"><span class="header-section-number">2.4.3</span> Normalise institution names</a></li>
+<li><a class="nav-link" href="#get-country-from-institution-names"><span class="header-section-number">2.4.4</span> Get country from institution names</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#saving-the-data"><span class="header-section-number">2.5</span> Saving the data</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/01-get-country.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/01-get-country.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on November 26, 2024.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
