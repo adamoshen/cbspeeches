@@ -32,6 +32,7 @@ Perform some minor adjustments:
 - Rename the column `processed_text` to simply `text`.
 - Remove the time component of the dates.
 - Perform normalization of text and author names to their ASCII form.
+- Encode in utf-8.
 - Remove excessive spaces in `text` and `author` fields.
 - Fix select author names for consistency.
 
@@ -42,9 +43,11 @@ speeches <- speeches %>%
     date = as_date(date),
     text = stringi::stri_trans_general(text, "Greek-Latin"),
     text = stringi::stri_trans_general(text, "Latin-ASCII"),
+    text = utf8::as_utf8(text),
     text = str_squish(text),
     author = stringi::stri_trans_general(author, "Greek-Latin"),
     author = stringi::stri_trans_general(author, "Latin-ASCII"),
+    author = utf8::as_utf8(author),
     author = str_squish(author)
   ) %>%
   mutate(
