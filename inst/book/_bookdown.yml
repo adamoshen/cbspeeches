@@ -1,2 +1,10 @@
 output_dir: "../../docs"
 new_session: yes
+rmd_files:
+  [
+    "index.Rmd",
+
+    "00-data-setup.Rmd",
+    "01-get-country.Rmd",
+    "02a-clean-g7.Rmd"
+  ]
