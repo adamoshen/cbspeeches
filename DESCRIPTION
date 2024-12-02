@@ -21,13 +21,17 @@ Imports:
     readxl,
     stringi,
     stringr,
-    tibble
+    tibble,
+    udpipe,
+    utf8
 Suggests: 
     bookdown,
     bslib,
+    desc,
     downlit,
     rmarkdown,
-    servr
+    servr,
+    sessioninfo
 Remotes: 
     adamoshen/pinsqs
 Encoding: UTF-8
