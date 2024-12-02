@@ -11,5 +11,5 @@ bookdown::bs4_book:
     base: "https://github.com/adamoshen/cbspeeches"
     branch: "main"
     subdir: "inst/book"
-    md_extensions: -smart
+  md_extensions: -smart
   mathjax: null
