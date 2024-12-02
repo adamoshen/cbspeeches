@@ -92,9 +92,10 @@ speeches <- speeches %>%
 ### Remove own institution and country names
 
 It is of greater interest when a central bank mentions another central bank or another country.
-Therefore, all self-mentions of the bank, country, and inhabitants are removed. For example, for
-Canada, we would remove words such as Bank of Canada, Canada, Canada's, and Canadian. The patterns
-corresponding to each bank are store in `inst/data-misc/bank_country_regex_patterns.xlsx`.
+Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
+Canada, words to remove would include: `Bank of Canada`, `Canada`, `Canada's`, and `Canadian`. The
+removal patterns corresponding to each bank are stored in
+`inst/data-misc/bank_country_regex_patterns.xlsx`.
 
 ```{r}
 bank_country_regex_patterns <- read_xlsx("inst/data-misc/bank_country_regex_patterns.xlsx") %>%
@@ -130,6 +131,9 @@ speeches <- speeches %>%
     text = str_replace_all(text, "\\?|!", "."),
     text = str_remove_all(text, ","),
     text = str_remove_all(text, "\""),
+    text = str_replace_all(text, "'{2,}", "'"),
+    text = str_remove_all(text, "\\B'(?=[:alpha:])"),
+    text = str_remove_all(text, "(?<=[:alpha:])'\\B"),
     text = str_replace_all(text, "\\.{3}", "."),
     text = str_remove_all(text, " \\. "),
     text = str_remove_all(text, "-"),
@@ -138,19 +142,22 @@ speeches <- speeches %>%
   )
 ```
 
-### Remove numbers
+### Remove numerical quantities
+
+Remove numbers, dollar signs, and percent signs.
 
 ```{r}
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "[:digit:]"),
-    text = str_remove_all(text, "\\$")
+    text = str_remove_all(text, "\\$"),
+    text = str_remove_all(text, "%")
   )
 ```
 
 ### Final squish
 
-To remove any excessive whitespace resulting from previous removals/replacements.
+Remove any excessive whitespace resulting from previous removals/replacements.
 
 ```{r}
 speeches <- speeches %>%
