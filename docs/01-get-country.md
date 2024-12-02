@@ -30,8 +30,8 @@ speeches <- speeches_board %>%
 
 ## Perform language detection
 
-Speeches where the dominant language is not English, are removed. Of the 18,827 speeches, 18,813
-(99.93%) are English and 14 (0.7%) are not English.
+Speeches where the dominant language is not English, were removed. Of the 18,827 speeches, 18,813
+(99.93%) were English and 14 (0.7%) were not English.
 
 
 ```r
@@ -99,10 +99,10 @@ speeches <- speeches %>%
 
 ### Fill missing/incorrect institutions
 
-Where extraction fails or is incorrect (determined by looking for `institution` values of `NA`
-and values with low frequencies), the speeches' institutions/organizations are
-manually determined by Google-ing the author or the speech. This information is stored in
-`inst/data-misc/author_affiliations.xlsx`. The data is updated according to this spreadsheet (where
+Where extraction failed or was incorrect (determined by looking for `institution` values of `NA`
+and values with low frequencies), the speeches' institutions/organizations were
+manually determined by Google-ing the author or the speech. This information was stored in
+`inst/data-misc/author_affiliations.xlsx`. The data was updated according to this spreadsheet (where
 applicable).
 
 
@@ -113,7 +113,7 @@ speeches <- speeches %>%
   rows_update(author_affiliations, by="author")
 ```
 
-Two speeches remain with missing values for author and institution. These missing values can be
+Two speeches remained with missing values for author and institution. These missing values were
 filled in as follows:
 
 
@@ -132,9 +132,17 @@ speeches <- speeches %>%
 
 The [list of banks and their official names](https://www.bis.org/cbanks.htm) from the BIS website
 were downloaded and stored in `inst/data-misc/bank_list.xlsx`. The extracted institution names from
-the previous step were normalised to match the names in this list. Additional organizations were
+the previous step are normalised to match the names in this list. Additional organizations were
 added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
 Federal Reserves were associated with the common bank name of `Federal Reserve Bank`.
+
+::: {.rmdwarning}
+
+From the regex patterns below, one may notice that some institution names contain typos, extracted
+directly from the speech text. Examples include Italy as *Italty* and Latvia as *Lativa*. This may
+be important to keep in mind when cleaning the text at a later step.
+
+:::
 
 
 ```r

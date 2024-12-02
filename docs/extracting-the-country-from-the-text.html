@@ -47,6 +47,7 @@
 <li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
 <li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
 <li><a class="active" href="extracting-the-country-from-the-text.html"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+<li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
 </ul>
 
         <div class="book-extra">
@@ -62,7 +63,7 @@
 <h2>
 <span class="header-section-number">2.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-1"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pins.rstudio.com/">pins</a></span><span class="op">)</span></span>
@@ -80,7 +81,7 @@
 <h2>
 <span class="header-section-number">2.2</span> Load the data<a class="anchor" aria-label="anchor" href="#load-the-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-raw"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -88,9 +89,9 @@
 <h2>
 <span class="header-section-number">2.3</span> Perform language detection<a class="anchor" aria-label="anchor" href="#perform-language-detection"><i class="fas fa-link"></i></a>
 </h2>
-<p>Speeches where the dominant language is not English, are removed. Of the 18,827 speeches, 18,813
-(99.93%) are English and 14 (0.7%) are not English.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Speeches where the dominant language is not English, were removed. Of the 18,827 speeches, 18,813
+(99.93%) were English and 14 (0.7%) were not English.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>lang_cld2 <span class="op">=</span> <span class="fu"><a href="https://docs.ropensci.org/cld2/reference/cld2.html">detect_language</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">lang_cld2</span> <span class="op">==</span> <span class="st">"en"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -121,7 +122,7 @@ affiliation of the author.</p>
 <p>The institutions/organizations were extracted by looking for the general pattern of:
 <code>[position] (of|of the) [institution name]</code> within the first sentence of each speech. An attempt at
 the extraction of institution/organization is as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extract_pattern1</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=(?:Board of Governors|Governing Board|Executive Board|Chief Executive Officer) of the )[^[:punct:]]+"</span></span>
 <span><span class="va">extract_pattern2</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=(?:Governor|President|Chairman|Director|Executive|Manager|Directorate) of the )[^[:punct:]]+"</span></span>
 <span><span class="va">extract_pattern3</span> <span class="op">&lt;-</span> <span class="st">"(?&lt;=Governor of )[^[:punct:]]+"</span> <span class="co"># for Philippines</span></span>
@@ -154,19 +155,19 @@ the extraction of institution/organization is as follows:</p>
 <h3>
 <span class="header-section-number">2.4.2</span> Fill missing/incorrect institutions<a class="anchor" aria-label="anchor" href="#fill-missingincorrect-institutions"><i class="fas fa-link"></i></a>
 </h3>
-<p>Where extraction fails or is incorrect (determined by looking for <code>institution</code> values of <code>NA</code>
-and values with low frequencies), the speeches’ institutions/organizations are
-manually determined by Google-ing the author or the speech. This information is stored in
-<code>inst/data-misc/author_affiliations.xlsx</code>. The data is updated according to this spreadsheet (where
+<p>Where extraction failed or was incorrect (determined by looking for <code>institution</code> values of <code>NA</code>
+and values with low frequencies), the speeches' institutions/organizations were
+manually determined by Google-ing the author or the speech. This information was stored in
+<code>inst/data-misc/author_affiliations.xlsx</code>. The data was updated according to this spreadsheet (where
 applicable).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">author_affiliations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"author_affiliations.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">author_affiliations</span>, by<span class="op">=</span><span class="st">"author"</span><span class="op">)</span></span></code></pre></div>
-<p>Two speeches remain with missing values for author and institution. These missing values can be
+<p>Two speeches remained with missing values for author and institution. These missing values were
 filled in as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">missing_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">doc</span>, <span class="op">~</span><span class="va">author</span>, <span class="op">~</span><span class="va">institution</span>,</span>
 <span>  <span class="st">"r180725i"</span>, <span class="st">"Pablo Hernandez de Cos"</span>, <span class="st">"Bank of Spain"</span>,</span>
@@ -182,10 +183,15 @@ filled in as follows:</p>
 </h3>
 <p>The <a href="https://www.bis.org/cbanks.htm">list of banks and their official names</a> from the BIS website
 were downloaded and stored in <code>inst/data-misc/bank_list.xlsx</code>. The extracted institution names from
-the previous step were normalised to match the names in this list. Additional organizations were
+the previous step are normalised to match the names in this list. Additional organizations were
 added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
 Federal Reserves were associated with the common bank name of <code>Federal Reserve Bank</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="rmdwarning">
+<p>From the regex patterns below, one may notice that some institution names contain typos, extracted
+directly from the speech text. Examples include Italy as <em>Italty</em> and Latvia as <em>Lativa</em>. This may
+be important to keep in mind when cleaning the text at a later step.</p>
+</div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
 <span>    institution <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>,</span>
@@ -299,7 +305,7 @@ Federal Reserves were associated with the common bank name of <code>Federal Rese
 <span class="header-section-number">2.4.4</span> Get country from institution names<a class="anchor" aria-label="anchor" href="#get-country-from-institution-names"><i class="fas fa-link"></i></a>
 </h3>
 <p>From the list of banks, we can associate each speech with a country by performing a join.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bank_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_list.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -311,7 +317,7 @@ Federal Reserves were associated with the common bank name of <code>Federal Rese
 <span class="header-section-number">2.5</span> Save the data<a class="anchor" aria-label="anchor" href="#save-the-data-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>Writing the data to the pin board:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches</span>,</span>
@@ -323,7 +329,7 @@ Federal Reserves were associated with the common bank name of <code>Federal Rese
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></div>
-<div class="empty"></div>
+<div class="next"><a href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -357,7 +363,7 @@ Federal Reserves were associated with the common bank name of <code>Federal Rese
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on November 26, 2024.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 01, 2024.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
