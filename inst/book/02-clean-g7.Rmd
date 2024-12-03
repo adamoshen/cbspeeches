@@ -23,7 +23,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 ## Filter speeches to G7 countries
 
 ```{r}
-g7_members <- c("Canada", "France", "Germany", "Italy", "Japan", "England", "United States")
+g7_members <- c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States")
 
 speeches <- speeches_board %>%
   pin_qread("speeches-with-country") %>%
