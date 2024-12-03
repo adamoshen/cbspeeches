@@ -192,3 +192,17 @@ speeches_board %>%
     title = "speeches for g7 countries, cleaned"
   )
 ```
+
+Make a copy of just the metadata as well:
+
+```{r}
+speeches_metadata <- speeches %>%
+  select(doc, date, institution, country)
+
+speeches_board %>%
+  pin_qsave(
+    speeches_metadata,
+    "speeches-g7-metadata",
+    title = "metadata for g7 speeches"
+  )
+```
