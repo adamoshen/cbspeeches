@@ -143,13 +143,6 @@ speeches <- speeches %>%
   )
 ```
 
-### Remove stray letters
-
-```{r}
-speeches <- speeches %>%
-  mutate(text = str_remove_all(text, "\\b[A-Za-z]\\b"))
-```
-
 ### Remove numerical quantities
 
 Remove numbers, dollar signs, and percent signs.
@@ -157,10 +150,18 @@ Remove numbers, dollar signs, and percent signs.
 ```{r}
 speeches <- speeches %>%
   mutate(
-    text = str_remove_all(text, "[:digit:]"),
     text = str_remove_all(text, "\\$"),
-    text = str_remove_all(text, "%")
+    text = str_remove_all(text, "%"),
+    text = str_remove_all(text, "[:digit:]+([.,]+[:digit:]+)*"),
+    text = str_remove_all(text, "[:digit:]")
   )
+```
+
+### Remove stray letters
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "\\b[A-Za-z]\\b"))
 ```
 
 ### Final squish
