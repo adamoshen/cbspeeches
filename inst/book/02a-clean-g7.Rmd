@@ -134,12 +134,20 @@ speeches <- speeches %>%
     text = str_replace_all(text, "'{2,}", "'"),
     text = str_remove_all(text, "\\B'(?=[:alpha:])"),
     text = str_remove_all(text, "(?<=[:alpha:])'\\B"),
+    text = str_remove_all(text, "\\B'\\B"),
     text = str_replace_all(text, "\\.{3}", "."),
     text = str_remove_all(text, " \\. "),
     text = str_remove_all(text, "-"),
     text = str_remove_all(text, "_"),
     text = str_remove_all(text, "\\(|\\)|\\{|\\}|\\[|\\]|\\||;|:|\\+")
   )
+```
+
+### Remove stray letters
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "\\b[A-Za-z]\\b"))
 ```
 
 ### Remove numerical quantities
