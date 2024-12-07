@@ -21,6 +21,7 @@ Imports:
     purrr,
     readr,
     readxl,
+    rstudioapi,
     stringi,
     stringr,
     tibble,
