@@ -4,6 +4,8 @@ knitr::opts_chunk$set(eval = FALSE)
 
 # Cleaning text for G7 countries
 
+This chapter documents the cleaning of the text for speeches given by a G7 country.
+
 ## Initialisation
 
 ```{r}
@@ -47,7 +49,7 @@ speeches <- speeches %>%
 
 ## Repairs and removals
 
-## Remove introductions
+### Remove introductions
 
 The introductory remarks of each speech were removed using the same pattern previously used to
 identify the first sentence of each speech.
@@ -68,7 +70,7 @@ speeches <- speeches %>%
   mutate(text = str_remove(text, "Introduction (?=[:upper:])"))
 ```
 
-## Remove references section
+### Remove references section
 
 ```{r}
 speeches <- speeches %>%
@@ -81,7 +83,7 @@ speeches <- speeches %>%
 ### Repair typos
 
 As mentioned in the section on [normalising institution names](#normalise-institution-names), some
-country names were incorrectly entered and require repair. Of the G7 countries, Italy is the only
+country names were incorrectly entered and require repair. Of the G7 countries, Italy was the only
 one affected.
 
 ```{r}
@@ -109,6 +111,23 @@ speeches <- speeches %>%
 ```
 
 ## General cleaning
+
+### Normalisaion of COVID related terms
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)COVID|COVID19|COVID-19|coronavirus", "COVID"))
+```
+
+### Normalisation of select ngrams into acronyms
+
+"Central Bank Digital Currency" is a particular 4-gram of interest and can be converted to its
+abbreviated form.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)Central Bank Digital Currency", "CBDC"))
+```
 
 ### Remove non-ascii characters, emails, social media handles, and links
 
@@ -145,7 +164,7 @@ speeches <- speeches %>%
 
 ### Remove numerical quantities
 
-Remove numbers, dollar signs, and percent signs.
+This included dollar signs, percent signs, punctuation separated numbers, and whole numbers.
 
 ```{r}
 speeches <- speeches %>%
@@ -166,7 +185,7 @@ speeches <- speeches %>%
 
 ### Final squish
 
-Remove any excessive whitespace resulting from previous removals/replacements.
+Excessive whitespace resulting from previous removals/replacements was removed.
 
 ```{r}
 speeches <- speeches %>%
@@ -193,7 +212,7 @@ speeches_board %>%
   )
 ```
 
-Make a copy of just the metadata as well:
+Make a separate copy of the metadata as well:
 
 ```{r}
 speeches_metadata <- speeches %>%
