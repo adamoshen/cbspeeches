@@ -13,3 +13,4 @@ bookdown::bs4_book:
     subdir: "inst/book"
   md_extensions: -smart
   mathjax: null
+  split_bib: true
