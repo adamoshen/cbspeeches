@@ -3,6 +3,10 @@ title: "Analysis of Central Bank Speeches"
 author: "Adam Shen"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 site: bookdown::bookdown_site
+
+bibliography: references.bib
+csl: chicago-fullnote-bibliography.csl
+suppress-bibliography: true
 ---
 
 ```{r, include=FALSE}
@@ -12,28 +16,3 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
 # Analysis of Central Bank Speeches {.unnumbered}
 
 Placeholder text
-
-## Core dependencies {.unnumbered}
-
-Dependencies to carry out the analysis.
-
-```{r}
-deps <- desc::desc_get_deps(here::here())
-imports <- dplyr::filter(deps, type == "Imports")
-imports <- dplyr::pull(imports, package)
-imports <- sessioninfo::package_info(imports, dependencies=FALSE)
-
-imports
-```
-
-## Suggested dependencies {.unnumbered}
-
-Dependencies for building the book.
-
-```{r}
-suggests <- dplyr::filter(deps, type == "Suggests")
-suggests <- dplyr::pull(suggests, package)
-suggests <- sessioninfo::package_info(suggests, dependencies=FALSE)
-
-suggests
-```
