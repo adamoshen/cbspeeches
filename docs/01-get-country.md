@@ -1,6 +1,9 @@
 
 
-# Extracting the country from the text
+# Identifying the country from the text
+
+This chapter documents the extraction of the institution giving the speech. Where applicable, the
+country associated to the institution can then be identified.
 
 ## Initialisation
 

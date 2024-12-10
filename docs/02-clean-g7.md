@@ -2,6 +2,8 @@
 
 # Cleaning text for G7 countries
 
+This chapter documents the cleaning of the text for speeches given by a G7 country.
+
 ## Initialisation
 
 
@@ -23,7 +25,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 
 
 ```r
-g7_members <- c("Canada", "France", "Germany", "Italy", "Japan", "England", "United States")
+g7_members <- c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States")
 
 speeches <- speeches_board %>%
   pin_qread("speeches-with-country") %>%
@@ -48,7 +50,7 @@ speeches <- speeches %>%
 
 ## Repairs and removals
 
-## Remove introductions
+### Remove introductions
 
 The introductory remarks of each speech were removed using the same pattern previously used to
 identify the first sentence of each speech.
@@ -71,7 +73,7 @@ speeches <- speeches %>%
   mutate(text = str_remove(text, "Introduction (?=[:upper:])"))
 ```
 
-## Remove references section
+### Remove references section
 
 
 ```r
@@ -85,7 +87,7 @@ speeches <- speeches %>%
 ### Repair typos
 
 As mentioned in the section on [normalising institution names](#normalise-institution-names), some
-country names were incorrectly entered and require repair. Of the G7 countries, Italy is the only
+country names were incorrectly entered and require repair. Of the G7 countries, Italy was the only
 one affected.
 
 
@@ -97,9 +99,10 @@ speeches <- speeches %>%
 ### Remove own institution and country names
 
 It is of greater interest when a central bank mentions another central bank or another country.
-Therefore, all self-mentions of the bank, country, and inhabitants are removed. For example, for
-Canada, we would remove words such as Bank of Canada, Canada, Canada's, and Canadian. The patterns
-corresponding to each bank are store in `inst/data-misc/bank_country_regex_patterns.xlsx`.
+Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
+Canada, words to remove would include: `Bank of Canada`, `Canada`, `Canada's`, and `Canadian`. The
+removal patterns corresponding to each bank are stored in
+`inst/data-misc/bank_country_regex_patterns.xlsx`.
 
 
 ```r
@@ -114,6 +117,25 @@ speeches <- speeches %>%
 ```
 
 ## General cleaning
+
+### Normalisaion of COVID related terms
+
+
+```r
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)COVID|COVID19|COVID-19|coronavirus", "COVID"))
+```
+
+### Normalisation of select ngrams into acronyms
+
+"Central Bank Digital Currency" is a particular 4-gram of interest and can be converted to its
+abbreviated form.
+
+
+```r
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)Central Bank Digital Currency", "CBDC"))
+```
 
 ### Remove non-ascii characters, emails, social media handles, and links
 
@@ -138,6 +160,10 @@ speeches <- speeches %>%
     text = str_replace_all(text, "\\?|!", "."),
     text = str_remove_all(text, ","),
     text = str_remove_all(text, "\""),
+    text = str_replace_all(text, "'{2,}", "'"),
+    text = str_remove_all(text, "\\B'(?=[:alpha:])"),
+    text = str_remove_all(text, "(?<=[:alpha:])'\\B"),
+    text = str_remove_all(text, "\\B'\\B"),
     text = str_replace_all(text, "\\.{3}", "."),
     text = str_remove_all(text, " \\. "),
     text = str_remove_all(text, "-"),
@@ -146,20 +172,32 @@ speeches <- speeches %>%
   )
 ```
 
-### Remove numbers
+### Remove numerical quantities
+
+This included dollar signs, percent signs, punctuation separated numbers, and whole numbers.
 
 
 ```r
 speeches <- speeches %>%
   mutate(
-    text = str_remove_all(text, "[:digit:]"),
-    text = str_remove_all(text, "\\$")
+    text = str_remove_all(text, "\\$"),
+    text = str_remove_all(text, "%"),
+    text = str_remove_all(text, "[:digit:]+([.,]+[:digit:]+)*"),
+    text = str_remove_all(text, "[:digit:]")
   )
+```
+
+### Remove stray letters
+
+
+```r
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "\\b[A-Za-z]\\b"))
 ```
 
 ### Final squish
 
-To remove any excessive whitespace resulting from previous removals/replacements.
+Excessive whitespace resulting from previous removals/replacements was removed.
 
 
 ```r
@@ -186,5 +224,20 @@ speeches_board %>%
     speeches,
     "speeches-g7-cleaned",
     title = "speeches for g7 countries, cleaned"
+  )
+```
+
+Make a separate copy of the metadata as well:
+
+
+```r
+speeches_metadata <- speeches %>%
+  select(doc, date, institution, country)
+
+speeches_board %>%
+  pin_qsave(
+    speeches_metadata,
+    "speeches-g7-metadata",
+    title = "metadata for g7 speeches"
   )
 ```

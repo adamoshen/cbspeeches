@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>5 Incorporating the found n-grams | Analysis of Central Bank Speeches</title>
+<meta name="author" content="Adam Shen">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="5 Incorporating the found n-grams | Analysis of Central Bank Speeches">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="5 Incorporating the found n-grams | Analysis of Central Bank Speeches">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Noto_Sans-0.4.5/font.css" rel="stylesheet">
+<link href="libs/Fragment_Mono-0.4.5/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<meta name="description" content="This chapter documents the incorporation of the previously found n-grams into the speech text.  5.1 Initialisation library(tidyverse) library(tidytext) library(pins) library(pinsqs)...">
+<meta property="og:description" content="This chapter documents the incorporation of the previously found n-grams into the speech text.  5.1 Initialisation library(tidyverse) library(tidytext) library(pins) library(pinsqs)...">
+<meta name="twitter:description" content="This chapter documents the incorporation of the previously found n-grams into the speech text.  5.1 Initialisation library(tidyverse) library(tidytext) library(pins) library(pinsqs)...">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Analysis of Central Bank Speeches</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
+<li><a class="" href="colophon.html">Colophon</a></li>
+<li class="book-part">Data processing</li>
+<li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
+<li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
+<li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
+<li><a class="active" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
+<li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/adamoshen/cbspeeches">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="incorporating-the-found-n-grams" class="section level1" number="5">
+<h1>
+<span class="header-section-number">5</span> Incorporating the found n-grams<a class="anchor" aria-label="anchor" href="#incorporating-the-found-n-grams"><i class="fas fa-link"></i></a>
+</h1>
+<p>This chapter documents the incorporation of the previously found n-grams into the speech text.</p>
+<div id="initialisation-4" class="section level2" number="5.1">
+<h2>
+<span class="header-section-number">5.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-4"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext">tidytext</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pins.rstudio.com/">pins</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pins.rstudio.com/reference/board_azure.html">board_azure</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data-speeches"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-g7-cleaned"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bigrams</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"gum-bigrams-g7"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">trigrams</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"gum-trigrams-g7"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="text-replacement" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Text replacement<a class="anchor" aria-label="anchor" href="#text-replacement"><i class="fas fa-link"></i></a>
+</h2>
+<p>The identified n-grams were replaced in the text via regex. The <code><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all()</a></code> function allows
+for multiple replacements by supplying a named vector whose names are the regex patterns and whose
+values are the replacements. The regex patterns used were case insensitive and underscores were
+added between words and at the end of the n-gram to prevent its stemming (at a later stage). In
+addition, trigrams were replaced in the text before bigrams to ensure that the longest n-gram was
+captured.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">trigram_replacements</span> <span class="op">&lt;-</span> <span class="va">trigrams</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span>, <span class="va">token3</span><span class="op">)</span>, <span class="va">str_to_lower</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span>, <span class="va">token3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    pattern <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"(?i)\\b"</span>, <span class="va">token1</span>, <span class="st">" "</span>, <span class="va">token2</span>, <span class="st">" "</span>, <span class="va">token3</span>, <span class="st">"\\b"</span><span class="op">)</span>,</span>
+<span>    replacement <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">token1</span>, <span class="st">"_"</span>, <span class="va">token2</span>, <span class="st">"_"</span>, <span class="va">token3</span>, <span class="st">"_"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">replacement</span>, name<span class="op">=</span><span class="va">pattern</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bigram_replacements</span> <span class="op">&lt;-</span> <span class="va">bigrams</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span><span class="op">)</span>, <span class="va">str_to_lower</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    pattern <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"(?i)\\b"</span>, <span class="va">token1</span>, <span class="st">" "</span>, <span class="va">token2</span>, <span class="st">"\\b"</span><span class="op">)</span>,</span>
+<span>    replacement <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">token1</span>, <span class="st">"_"</span>, <span class="va">token2</span>, <span class="st">"_"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">replacement</span>, name<span class="op">=</span><span class="va">pattern</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">trigram_replacements</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">bigram_replacements</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="save-the-data-4" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Save the data<a class="anchor" aria-label="anchor" href="#save-the-data-4"><i class="fas fa-link"></i></a>
+</h2>
+<p>Writing the data to the pin board:</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
+<span>    <span class="va">speeches</span>,</span>
+<span>    <span class="st">"speeches-g7-with-ngrams"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"speeches for g7 countries, with ngrams"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></div>
+<div class="next"><a href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#incorporating-the-found-n-grams"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
+<li><a class="nav-link" href="#initialisation-4"><span class="header-section-number">5.1</span> Initialisation</a></li>
+<li><a class="nav-link" href="#text-replacement"><span class="header-section-number">5.2</span> Text replacement</a></li>
+<li><a class="nav-link" href="#save-the-data-4"><span class="header-section-number">5.3</span> Save the data</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/04-replace-ngrams-g7.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/04-replace-ngrams-g7.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 10, 2024.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

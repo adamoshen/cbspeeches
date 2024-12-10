@@ -1,0 +1,258 @@
+
+
+# Identifying important bigrams and trigrams
+
+This chapter documents the identification of important bigrams and trigrams following the procedure
+described in @hansen_2018 and @justeson_1995.
+
+## Initialisation
+
+
+```r
+library(tidyverse)
+library(tidytext)
+library(udpipe)
+library(magrittr)
+library(pins)
+library(pinsqs)
+library(AzureStor)
+
+source(here::here("R", "azure_init.R"))
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+```
+
+## Tokenise the text for POS-tagging
+
+The text was first tokenised into sentences in order to create a sentence identifier within
+documents. This is required later when looking at tag sequences, as tag sequences that span across
+sentences should not be considered.
+
+The text was not cast to lowercase just yet, as it appeared to affect tagging.
+
+
+```r
+speech_tokens <- speeches_board %>%
+  pin_qread("speeches-g7-cleaned") %>%
+  select(doc, text) %>%
+  unnest_sentences(output=sentence, input=text, to_lower=FALSE) %>%
+  group_by(doc) %>%
+  mutate(sentence_id = 1:n()) %>%
+  ungroup() %>%
+  unnest_tokens(output=token, input=sentence, to_lower=FALSE)
+```
+
+Creating a quick checkpoint:
+
+
+```r
+speeches_board %>%
+  pin_qsave(
+    speech_tokens,
+    "speeches-g7-tokens",
+    title = "tokens of speeches for g7 countries, cleaned"
+  )
+```
+
+## Perform the POS tagging
+
+### Download annotated model
+
+The model that used for tagging is the
+[Universal Dependencies English GUM corpus](https://universaldependencies.org/treebanks/en_gum/index.html).
+The model is included in the `inst/data-misc` folder, but can be downloaded by calling the
+following:
+
+
+```r
+udpipe_download_model(language="english-gum", model_dir=here::here("inst", "data-misc"))
+```
+
+The downloaded model can be loaded as follows:
+
+
+```r
+english_gum <- udpipe_load_model(file = here::here("inst", "data-misc", "english-gum-ud-2.5-191206.udpipe"))
+```
+
+### Tagging
+
+In `udpipe_annotate()`:
+  - `tokenizer = "vertical"` indicates that the supplied text is already tokenised in the form of a
+  data frame.
+  - `parser = "none"` indicates that dependency parsing does not need to be performed.
+  - `trace = 5e5` prints a progress update every 5e5 tokens.
+
+
+```r
+tags_gum <- speech_tokens %$%
+  udpipe_annotate(
+    object=english_gum, x=token, doc_id=doc,
+    tokenizer="vertical", parser="none", trace=5e5
+  ) %>%
+  as_tibble() %>%
+  select(doc_id, token, lemma, upos) %>%
+  rename(upos_gum = upos)
+```
+
+By supplying a tokenised data frame, the resulting output will have the same number of rows. As
+such, the sentence identifier of `speech_tokens` can easily be re-bound to the tagged tokens.
+
+
+```r
+tags_gum <- tags_gum %>%
+  bind_cols(
+    speech_tokens %>%
+      select(sentence_id)
+  ) %>%
+  select(doc_id, sentence_id, token, lemma, upos_gum)
+```
+
+Creating a quick checkpoint:
+
+
+```r
+speeches_board %>%
+  pin_qsave(
+    tags_gum,
+    "gum-tagged-tokens-g7",
+    title = "gum tagged tokens of speeches for g7 countries"
+  )
+```
+
+## Determine bigrams and trigrams
+
+From @hansen_2018, trigram sequences of interest with frequencies greater than or equal to 50 are:
+  - adjective - adjective - noun
+  - adjective - noun - noun
+  - noun - adjective - noun
+  - noun - noun - noun
+  - noun - preposition - noun
+
+Proper nouns were treated as nouns.
+
+
+```r
+trigrams <- tags_gum %>%
+  select(-lemma) %>%
+  rename(token1=token, upos_gum1=upos_gum) %>%
+  group_by(doc_id, sentence_id) %>%
+  mutate(
+    token2 = lead(token1),
+    token3 = lead(token2),
+    upos_gum1 = if_else(upos_gum1 == "PROPN", "NOUN", upos_gum1),
+    upos_gum2 = lead(upos_gum1),
+    upos_gum3 = lead(upos_gum2)
+  ) %>%
+  ungroup() %>%
+  drop_na() %>%
+  select(token1, token2, token3, upos_gum1, upos_gum2, upos_gum3) %>%
+  unite(col="pos_pattern", upos_gum1, upos_gum2, upos_gum3) %>%
+  filter(
+    str_detect(
+      pos_pattern,
+      "ADJ_ADJ_NOUN|ADJ_NOUN_NOUN|NOUN_ADJ_NOUN|NOUN_NOUN_NOUN|NOUN_ADP_NOUN"
+    )
+  ) %>%
+  count(token1, token2, token3, pos_pattern) %>%
+  filter(n >= 50) %>%
+  arrange(desc(n))
+```
+
+From @hansen_2018, bigram sequences of interest with frequencies greater than or equal to 100 are:
+  - adjective - noun
+  - noun - noun
+
+Proper nouns were treated as nouns.
+
+
+```r
+bigrams <- tags_gum %>%
+  select(-lemma) %>%
+  rename(token1=token, upos_gum1=upos_gum) %>%
+  group_by(doc_id) %>%
+  mutate(
+    token2 = lead(token1),
+    upos_gum1 = if_else(upos_gum1 == "PROPN", "NOUN", upos_gum1),
+    upos_gum2 = lead(upos_gum1)
+  ) %>%
+  ungroup() %>%
+  drop_na() %>%
+  select(token1, token2, upos_gum1, upos_gum2) %>%
+  unite(col="pos_pattern", upos_gum1, upos_gum2) %>%
+  filter(
+    str_detect(
+      pos_pattern,
+      "ADJ_NOUN|NOUN_NOUN"
+    )
+  ) %>%
+  count(token1, token2, pos_pattern) %>%
+  filter(n >= 100) %>%
+  arrange(desc(n))
+```
+
+### Prune bigrams
+
+Bigrams whose frequencies fall below the required threshold after consideration for their
+appearances in trigrams should be removed. For example, consider the following n-gram counts:
+
+- `rising oil prices`: 339
+- `falling oil prices`: 275
+- `oil prices`: 642
+
+Since the bigram `oil prices` only appears 642 - 339 - 275 = 28 times on its own, it does not meet
+the bigram frequency threshold and should be removed from the list of bigrams.
+
+
+```r
+trigram_token_counts <- trigrams %>%
+  select(token1, token2, token3, n)
+
+bigram_token_counts <- bigrams %>%
+  select(token1, token2, n)
+
+bigrams_to_remove <- bind_rows(
+  trigram_token_counts %>%
+    select(token1, token2, n) %>%
+    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi")
+  ),
+  trigram_token_counts %>%
+    select(token2, token3, n) %>%
+    rename(token1=token2, token2=token3) %>%
+    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi"))
+) %>%
+  group_by(token1, token2) %>%
+  summarise(
+    n_tri = sum(n_tri),
+    n_bi = unique(n_bi)
+  ) %>%
+  ungroup() %>%
+  mutate(n_diff = n_bi - n_tri) %>%
+  filter(n_diff < 100) %>%
+  select(token1, token2)
+
+bigrams <- anti_join(bigrams, bigrams_to_remove, by=c("token1", "token2"))
+```
+
+## Save the data
+
+Writing the data to the pin board:
+
+
+```r
+speeches_board %>%
+  pin_qsave(
+    trigrams,
+    "gum-trigrams-g7",
+    title = "gum trigrams from g7 speeches"
+  )
+
+speeches_board %>%
+  pin_qsave(
+    bigrams,
+    "gum-bigrams-g7",
+    title = "gum bigrams from g7 speeches"
+  )
+```

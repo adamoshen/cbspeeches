@@ -1,6 +1,12 @@
 
 
+# (PART\*) Data processing {.unnumbered}
+
 # Data setup
+
+In this chapter, the speeches are obtained from the Dropbox (`csv` format), some minor adjustments
+are applied to the `text` and `author` fields, and the data is re-saved for further processing in
+the subsequent chapters.
 
 ## Initialisation
 

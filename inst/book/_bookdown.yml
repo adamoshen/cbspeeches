@@ -4,7 +4,12 @@ rmd_files:
   [
     "index.Rmd",
 
+    "colophon.Rmd",
+
     "00-data-setup.Rmd",
     "01-get-country.Rmd",
-    "02a-clean-g7.Rmd"
+    "02-clean-g7.Rmd",
+    "03-ngrams-g7.Rmd",
+    "04-replace-ngrams-g7.Rmd",
+    "05-preprocess-g7.Rmd"
   ]

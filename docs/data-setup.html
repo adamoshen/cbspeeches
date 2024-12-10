@@ -20,9 +20,9 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
-<meta name="description" content='1.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
-<meta property="og:description" content='1.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
-<meta name="twitter:description" content='1.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
+<meta name="description" content="In this chapter, the speeches are obtained from the Dropbox (csv format), some minor adjustments are applied to the text and author fields, and the data is re-saved for further processing in the...">
+<meta property="og:description" content="In this chapter, the speeches are obtained from the Dropbox (csv format), some minor adjustments are applied to the text and author fields, and the data is re-saved for further processing in the...">
+<meta name="twitter:description" content="In this chapter, the speeches are obtained from the Dropbox (csv format), some minor adjustments are applied to the text and author fields, and the data is re-saved for further processing in the...">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -45,9 +45,14 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
+<li><a class="" href="colophon.html">Colophon</a></li>
+<li class="book-part">Data processing</li>
 <li><a class="active" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
-<li><a class="" href="extracting-the-country-from-the-text.html"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+<li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
+<li><a class="" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
+<li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
 </ul>
 
         <div class="book-extra">
@@ -59,6 +64,9 @@
 <h1>
 <span class="header-section-number">1</span> Data setup<a class="anchor" aria-label="anchor" href="#data-setup"><i class="fas fa-link"></i></a>
 </h1>
+<p>In this chapter, the speeches are obtained from the Dropbox (<code>csv</code> format), some minor adjustments
+are applied to the <code>text</code> and <code>author</code> fields, and the data is re-saved for further processing in
+the subsequent chapters.</p>
 <div id="initialisation" class="section level2" number="1.1">
 <h2>
 <span class="header-section-number">1.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation"><i class="fas fa-link"></i></a>
@@ -128,8 +136,8 @@
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="index.html">Analysis of Central Bank Speeches</a></div>
-<div class="next"><a href="extracting-the-country-from-the-text.html"><span class="header-section-number">2</span> Extracting the country from the text</a></div>
+<div class="prev"><a href="colophon.html">Colophon</a></div>
+<div class="next"><a href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -154,7 +162,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 01, 2024.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 10, 2024.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -4,13 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>2 Extracting the country from the text | Analysis of Central Bank Speeches</title>
+<title>2 Identifying the country from the text | Analysis of Central Bank Speeches</title>
 <meta name="author" content="Adam Shen">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
-<meta property="og:title" content="2 Extracting the country from the text | Analysis of Central Bank Speeches">
+<meta property="og:title" content="2 Identifying the country from the text | Analysis of Central Bank Speeches">
 <meta property="og:type" content="book">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2 Extracting the country from the text | Analysis of Central Bank Speeches">
+<meta name="twitter:title" content="2 Identifying the country from the text | Analysis of Central Bank Speeches">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Noto_Sans-0.4.5/font.css" rel="stylesheet">
@@ -20,9 +20,9 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
-<meta name="description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
-<meta property="og:description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
-<meta name="twitter:description" content='2.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(cld2) library(AzureStor) source(here::here("R", "azure_init.R")) speeches_board &lt;-...'>
+<meta name="description" content="This chapter documents the extraction of the institution giving the speech. Where applicable, the country associated to the institution can then be identified.  2.1 Initialisation...">
+<meta property="og:description" content="This chapter documents the extraction of the institution giving the speech. Where applicable, the country associated to the institution can then be identified.  2.1 Initialisation...">
+<meta name="twitter:description" content="This chapter documents the extraction of the institution giving the speech. Where applicable, the country associated to the institution can then be identified.  2.1 Initialisation...">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -45,9 +45,14 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
+<li><a class="" href="colophon.html">Colophon</a></li>
+<li class="book-part">Data processing</li>
 <li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
-<li><a class="active" href="extracting-the-country-from-the-text.html"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+<li><a class="active" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
+<li><a class="" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
+<li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
 </ul>
 
         <div class="book-extra">
@@ -55,10 +60,12 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="extracting-the-country-from-the-text" class="section level1" number="2">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="identifying-the-country-from-the-text" class="section level1" number="2">
 <h1>
-<span class="header-section-number">2</span> Extracting the country from the text<a class="anchor" aria-label="anchor" href="#extracting-the-country-from-the-text"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2</span> Identifying the country from the text<a class="anchor" aria-label="anchor" href="#identifying-the-country-from-the-text"><i class="fas fa-link"></i></a>
 </h1>
+<p>This chapter documents the extraction of the institution giving the speech. Where applicable, the
+country associated to the institution can then be identified.</p>
 <div id="initialisation-1" class="section level2" number="2.1">
 <h2>
 <span class="header-section-number">2.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-1"><i class="fas fa-link"></i></a>
@@ -333,7 +340,7 @@ be important to keep in mind when cleaning the text at a later step.</p>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#extracting-the-country-from-the-text"><span class="header-section-number">2</span> Extracting the country from the text</a></li>
+<li><a class="nav-link" href="#identifying-the-country-from-the-text"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="nav-link" href="#initialisation-1"><span class="header-section-number">2.1</span> Initialisation</a></li>
 <li><a class="nav-link" href="#load-the-data"><span class="header-section-number">2.2</span> Load the data</a></li>
 <li><a class="nav-link" href="#perform-language-detection"><span class="header-section-number">2.3</span> Perform language detection</a></li>
@@ -363,7 +370,7 @@ be important to keep in mind when cleaning the text at a later step.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 01, 2024.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 10, 2024.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
