@@ -133,11 +133,16 @@ following:</p>
 <h3>
 <span class="header-section-number">4.3.2</span> Tagging<a class="anchor" aria-label="anchor" href="#tagging"><i class="fas fa-link"></i></a>
 </h3>
-<p>In <code><a href="https://rdrr.io/pkg/udpipe/man/udpipe_annotate.html">udpipe_annotate()</a></code>:
-- <code>tokenizer = "vertical"</code> indicates that the supplied text is already tokenised in the form of a
-data frame.
-- <code>parser = "none"</code> indicates that dependency parsing does not need to be performed.
-- <code>trace = 5e5</code> prints a progress update every 5e5 tokens.</p>
+<p>In <code><a href="https://rdrr.io/pkg/udpipe/man/udpipe_annotate.html">udpipe_annotate()</a></code>:</p>
+<ul>
+<li>
+<code>tokenizer = "vertical"</code> indicates that the supplied text is already tokenised in the form of a
+data frame.</li>
+<li>
+<code>parser = "none"</code> indicates that dependency parsing does not need to be performed.</li>
+<li>
+<code>trace = 5e5</code> prints a progress update every 5e5 tokens.</li>
+</ul>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tags_gum</span> <span class="op">&lt;-</span> <span class="va">speech_tokens</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/exposition.html">%$%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/udpipe/man/udpipe_annotate.html">udpipe_annotate</a></span><span class="op">(</span></span>
@@ -170,12 +175,14 @@ such, the sentence identifier of <code>speech_tokens</code> can easily be re-bou
 <h2>
 <span class="header-section-number">4.4</span> Determine bigrams and trigrams<a class="anchor" aria-label="anchor" href="#determine-bigrams-and-trigrams"><i class="fas fa-link"></i></a>
 </h2>
-<p>From <span class="citation">Hansen, McMahon, and Prat<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;.”&lt;/span&gt;&lt;/p&gt;"><sup>3</sup></a></span>, trigram sequences of interest with frequencies greater than or equal to 50 are:
-- adjective - adjective - noun
-- adjective - noun - noun
-- noun - adjective - noun
-- noun - noun - noun
-- noun - preposition - noun</p>
+<p>From <span class="citation">Hansen, McMahon, and Prat<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;.”&lt;/span&gt;&lt;/p&gt;"><sup>3</sup></a></span>, trigram sequences of interest with frequencies greater than or equal to 50 are:</p>
+<ul>
+<li>adjective - adjective - noun</li>
+<li>adjective - noun - noun</li>
+<li>noun - adjective - noun</li>
+<li>noun - noun - noun</li>
+<li>noun - preposition - noun</li>
+</ul>
 <p>Proper nouns were treated as nouns.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trigrams</span> <span class="op">&lt;-</span> <span class="va">tags_gum</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -202,9 +209,11 @@ such, the sentence identifier of <code>speech_tokens</code> can easily be re-bou
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span>, <span class="va">token3</span>, <span class="va">pos_pattern</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;=</span> <span class="fl">50</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>From <span class="citation">Hansen, McMahon, and Prat<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></span>, bigram sequences of interest with frequencies greater than or equal to 100 are:
-- adjective - noun
-- noun - noun</p>
+<p>From <span class="citation">Hansen, McMahon, and Prat<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></span>, bigram sequences of interest with frequencies greater than or equal to 100 are:</p>
+<ul>
+<li>adjective - noun</li>
+<li>noun - noun</li>
+</ul>
 <p>Proper nouns were treated as nouns.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bigrams</span> <span class="op">&lt;-</span> <span class="va">tags_gum</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>

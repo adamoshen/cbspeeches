@@ -96,10 +96,12 @@ terms removed. The code used to obtain this stop word list can be found
 <h2>
 <span class="header-section-number">6.2</span> Pre-processing<a class="anchor" aria-label="anchor" href="#pre-processing"><i class="fas fa-link"></i></a>
 </h2>
-<p>The usual pre-processing steps were performed, including:
-- Unnesting into tokens. Lowercasing occurs at this step.
-- Removal of non-negative stop words.
-- Stemming of words.</p>
+<p>The usual pre-processing steps were performed, including:</p>
+<ul>
+<li>Unnesting into tokens. Lowercasing occurs at this step.</li>
+<li>Removal of non-negative stop words.</li>
+<li>Stemming of words.</li>
+</ul>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html">unnest_tokens</a></span><span class="op">(</span>output<span class="op">=</span><span class="va">word</span>, input<span class="op">=</span><span class="va">text</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>

@@ -80,10 +80,11 @@ english_gum <- udpipe_load_model(file = here::here("inst", "data-misc", "english
 ### Tagging
 
 In `udpipe_annotate()`:
-  - `tokenizer = "vertical"` indicates that the supplied text is already tokenised in the form of a
-  data frame.
-  - `parser = "none"` indicates that dependency parsing does not need to be performed.
-  - `trace = 5e5` prints a progress update every 5e5 tokens.
+
+- `tokenizer = "vertical"` indicates that the supplied text is already tokenised in the form of a
+data frame.
+- `parser = "none"` indicates that dependency parsing does not need to be performed.
+- `trace = 5e5` prints a progress update every 5e5 tokens.
 
 
 ```r
@@ -125,11 +126,12 @@ speeches_board %>%
 ## Determine bigrams and trigrams
 
 From @hansen_2018, trigram sequences of interest with frequencies greater than or equal to 50 are:
-  - adjective - adjective - noun
-  - adjective - noun - noun
-  - noun - adjective - noun
-  - noun - noun - noun
-  - noun - preposition - noun
+
+- adjective - adjective - noun
+- adjective - noun - noun
+- noun - adjective - noun
+- noun - noun - noun
+- noun - preposition - noun
 
 Proper nouns were treated as nouns.
 
@@ -162,8 +164,9 @@ trigrams <- tags_gum %>%
 ```
 
 From @hansen_2018, bigram sequences of interest with frequencies greater than or equal to 100 are:
-  - adjective - noun
-  - noun - noun
+
+- adjective - noun
+- noun - noun
 
 Proper nouns were treated as nouns.
 
