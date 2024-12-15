@@ -41,11 +41,11 @@ Dependencies for building the book.
 
 ```
 ##  package     * version date (UTC) lib source
-##  bookdown      0.26    2022-04-15 [1] CRAN (R 4.1.3)
-##  bslib         0.4.2   2022-12-16 [1] CRAN (R 4.1.3)
+##  bookdown      0.41    2024-10-16 [1] CRAN (R 4.1.3)
+##  bslib         0.8.0   2024-07-29 [1] CRAN (R 4.1.3)
 ##  desc          1.4.2   2022-09-08 [1] CRAN (R 4.1.3)
 ##  downlit       0.4.4   2024-06-10 [1] CRAN (R 4.1.3)
-##  rmarkdown     2.19    2022-12-15 [1] CRAN (R 4.1.3)
+##  rmarkdown     2.29    2024-11-04 [1] CRAN (R 4.1.3)
 ##  servr         0.24    2021-11-16 [1] CRAN (R 4.1.3)
 ##  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.1.3)
 ## 

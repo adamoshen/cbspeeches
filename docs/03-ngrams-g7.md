@@ -8,7 +8,7 @@ described in @hansen_2018 and @justeson_1995.
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(tidytext)
 library(udpipe)
@@ -33,7 +33,7 @@ sentences should not be considered.
 The text was not cast to lowercase just yet, as it appeared to affect tagging.
 
 
-```r
+``` r
 speech_tokens <- speeches_board %>%
   pin_qread("speeches-g7-cleaned") %>%
   select(doc, text) %>%
@@ -47,7 +47,7 @@ speech_tokens <- speeches_board %>%
 Creating a quick checkpoint:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speech_tokens,
@@ -66,14 +66,14 @@ The model is included in the `inst/data-misc` folder, but can be downloaded by c
 following:
 
 
-```r
+``` r
 udpipe_download_model(language="english-gum", model_dir=here::here("inst", "data-misc"))
 ```
 
 The downloaded model can be loaded as follows:
 
 
-```r
+``` r
 english_gum <- udpipe_load_model(file = here::here("inst", "data-misc", "english-gum-ud-2.5-191206.udpipe"))
 ```
 
@@ -87,7 +87,7 @@ data frame.
 - `trace = 5e5` prints a progress update every 5e5 tokens.
 
 
-```r
+``` r
 tags_gum <- speech_tokens %$%
   udpipe_annotate(
     object=english_gum, x=token, doc_id=doc,
@@ -102,7 +102,7 @@ By supplying a tokenised data frame, the resulting output will have the same num
 such, the sentence identifier of `speech_tokens` can easily be re-bound to the tagged tokens.
 
 
-```r
+``` r
 tags_gum <- tags_gum %>%
   bind_cols(
     speech_tokens %>%
@@ -114,7 +114,7 @@ tags_gum <- tags_gum %>%
 Creating a quick checkpoint:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     tags_gum,
@@ -136,7 +136,7 @@ From @hansen_2018, trigram sequences of interest with frequencies greater than o
 Proper nouns were treated as nouns.
 
 
-```r
+``` r
 trigrams <- tags_gum %>%
   select(-lemma) %>%
   rename(token1=token, upos_gum1=upos_gum) %>%
@@ -171,7 +171,7 @@ From @hansen_2018, bigram sequences of interest with frequencies greater than or
 Proper nouns were treated as nouns.
 
 
-```r
+``` r
 bigrams <- tags_gum %>%
   select(-lemma) %>%
   rename(token1=token, upos_gum1=upos_gum) %>%
@@ -209,7 +209,7 @@ Since the bigram `oil prices` only appears 642 - 339 - 275 = 28 times on its own
 the bigram frequency threshold and should be removed from the list of bigrams.
 
 
-```r
+``` r
 trigram_token_counts <- trigrams %>%
   select(token1, token2, token3, n)
 
@@ -244,7 +244,7 @@ bigrams <- anti_join(bigrams, bigrams_to_remove, by=c("token1", "token2"))
 Writing the data to the pin board:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     trigrams,

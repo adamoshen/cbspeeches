@@ -7,7 +7,7 @@ This chapter documents the cleaning of the text for speeches given by a G7 count
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(readxl)
 library(pins)
@@ -24,7 +24,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 ## Filter speeches to G7 countries
 
 
-```r
+``` r
 g7_members <- c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States")
 
 speeches <- speeches_board %>%
@@ -38,7 +38,7 @@ There was one speech whose date should be December 2023, not December 2024, as t
 up to January 2024.
 
 
-```r
+``` r
 data_update <- tribble(
   ~doc, ~date,
   "r240109a", ymd("2023-12-08")
@@ -56,7 +56,7 @@ The introductory remarks of each speech were removed using the same pattern prev
 identify the first sentence of each speech.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove(text, pattern="^[^.]+\\."),
@@ -68,7 +68,7 @@ The "Introduction" headers were also removed, identified by the presence of the 
 in title case, followed by another word in title case.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_remove(text, "Introduction (?=[:upper:])"))
 ```
@@ -76,7 +76,7 @@ speeches <- speeches %>%
 ### Remove references section
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "(?<=[:punct:]|[:digit:]) References:? .+$"),
@@ -91,7 +91,7 @@ country names were incorrectly entered and require repair. Of the G7 countries, 
 one affected.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_replace_all(text, "Italty", "Italy"))
 ```
@@ -102,11 +102,11 @@ It is of greater interest when a central bank mentions another central bank or a
 Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
 Canada, words to remove would include: `Bank of Canada`, `Canada`, `Canada's`, and `Canadian`. The
 removal patterns corresponding to each bank are stored in
-`inst/data-misc/bank_country_regex_patterns.xlsx`.
+`inst/data-misc/bank_country_regex_patterns.csv`.
 
 
-```r
-bank_country_regex_patterns <- read_xlsx("inst/data-misc/bank_country_regex_patterns.xlsx") %>%
+``` r
+bank_country_regex_patterns <- read_csv("inst/data-misc/bank_country_regex_patterns.csv") %>%
   filter(country %in% g7_members) %>%
   select(country, regex_pattern)
 
@@ -121,7 +121,7 @@ speeches <- speeches %>%
 ### Normalisaion of COVID related terms
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_replace_all(text, "(?i)COVID|COVID19|COVID-19|coronavirus", "COVID"))
 ```
@@ -132,7 +132,7 @@ speeches <- speeches %>%
 abbreviated form.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_replace_all(text, "(?i)Central Bank Digital Currency", "CBDC"))
 ```
@@ -140,7 +140,7 @@ speeches <- speeches %>%
 ### Remove non-ascii characters, emails, social media handles, and links
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "[:^ascii:]"),
@@ -153,7 +153,7 @@ speeches <- speeches %>%
 ### Remove/replace stray/excessive punctuation
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "(\\* )+"),
@@ -177,7 +177,7 @@ speeches <- speeches %>%
 This included dollar signs, percent signs, punctuation separated numbers, and whole numbers.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "\\$"),
@@ -190,7 +190,7 @@ speeches <- speeches %>%
 ### Remove stray letters
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_remove_all(text, "\\b[A-Za-z]\\b"))
 ```
@@ -200,7 +200,7 @@ speeches <- speeches %>%
 Excessive whitespace resulting from previous removals/replacements was removed.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(text = str_squish(text))
 ```
@@ -208,7 +208,7 @@ speeches <- speeches %>%
 ### Remove unneeded columns
 
 
-```r
+``` r
 speeches <- speeches %>%
   select(-first_sentence)
 ```
@@ -218,7 +218,7 @@ speeches <- speeches %>%
 Writing the data to the pin board:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,
@@ -230,7 +230,7 @@ speeches_board %>%
 Make a separate copy of the metadata as well:
 
 
-```r
+``` r
 speeches_metadata <- speeches %>%
   select(doc, date, institution, country)
 

@@ -11,7 +11,7 @@ the subsequent chapters.
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(pins)
 library(pinsqs)
@@ -29,7 +29,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 Read in speeches from the Dropbox:
 
 
-```r
+``` r
 speeches <- read_csv("~/boc_speeches/lda/iteration_04/speeches_processed.csv")
 ```
 
@@ -43,7 +43,7 @@ Perform some minor adjustments:
 - Fix select author names for consistency.
 
 
-```r
+``` r
 speeches <- speeches %>%
   rename(text = processed_text) %>%
   mutate(
@@ -70,7 +70,7 @@ speeches <- speeches %>%
 Writing the data to the pin board:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,

@@ -7,7 +7,7 @@ This chapter documents the incorporation of the previously found n-grams into th
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(tidytext)
 library(pins)
@@ -22,7 +22,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 ```
 
 
-```r
+``` r
 speeches <- speeches_board %>%
   pin_qread("speeches-g7-cleaned")
 
@@ -43,7 +43,7 @@ addition, trigrams were replaced in the text before bigrams to ensure that the l
 captured.
 
 
-```r
+``` r
 trigram_replacements <- trigrams %>%
   mutate(across(c(token1, token2, token3), str_to_lower)) %>%
   distinct(token1, token2, token3) %>%
@@ -74,7 +74,7 @@ speeches <- speeches %>%
 Writing the data to the pin board:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,

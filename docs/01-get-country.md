@@ -8,7 +8,7 @@ country associated to the institution can then be identified.
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(readxl)
 library(pins)
@@ -26,7 +26,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 ## Load the data
 
 
-```r
+``` r
 speeches <- speeches_board %>%
   pin_qread("speeches-raw")
 ```
@@ -37,7 +37,7 @@ Speeches where the dominant language is not English, were removed. Of the 18,827
 (99.93%) were English and 14 (0.7%) were not English.
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(lang_cld2 = detect_language(text)) %>%
   filter(lang_cld2 == "en") %>%
@@ -70,7 +70,7 @@ The institutions/organizations were extracted by looking for the general pattern
 the extraction of institution/organization is as follows:
 
 
-```r
+``` r
 extract_pattern1 <- "(?<=(?:Board of Governors|Governing Board|Executive Board|Chief Executive Officer) of the )[^[:punct:]]+"
 extract_pattern2 <- "(?<=(?:Governor|President|Chairman|Director|Executive|Manager|Directorate) of the )[^[:punct:]]+"
 extract_pattern3 <- "(?<=Governor of )[^[:punct:]]+" # for Philippines
@@ -105,12 +105,12 @@ speeches <- speeches %>%
 Where extraction failed or was incorrect (determined by looking for `institution` values of `NA`
 and values with low frequencies), the speeches' institutions/organizations were
 manually determined by Google-ing the author or the speech. This information was stored in
-`inst/data-misc/author_affiliations.xlsx`. The data was updated according to this spreadsheet (where
+`inst/data-misc/author_affiliations.csv`. The data was updated according to this spreadsheet (where
 applicable).
 
 
-```r
-author_affiliations <- read_xlsx(here::here("inst", "data-misc", "author_affiliations.xlsx"))
+``` r
+author_affiliations <- read_csv(here::here("inst", "data-misc", "author_affiliations.csv"))
 
 speeches <- speeches %>%
   rows_update(author_affiliations, by="author")
@@ -120,7 +120,7 @@ Two speeches remained with missing values for author and institution. These miss
 filled in as follows:
 
 
-```r
+``` r
 missing_info <- tribble(
   ~doc, ~author, ~institution,
   "r180725i", "Pablo Hernandez de Cos", "Bank of Spain",
@@ -134,7 +134,7 @@ speeches <- speeches %>%
 ### Normalise institution names
 
 The [list of banks and their official names](https://www.bis.org/cbanks.htm) from the BIS website
-were downloaded and stored in `inst/data-misc/bank_list.xlsx`. The extracted institution names from
+were downloaded and stored in `inst/data-misc/bank_list.csv`. The extracted institution names from
 the previous step are normalised to match the names in this list. Additional organizations were
 added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
 Federal Reserves were associated with the common bank name of `Federal Reserve Bank`.
@@ -148,7 +148,7 @@ be important to keep in mind when cleaning the text at a later step.
 :::
 
 
-```r
+``` r
 speeches <- speeches %>%
   mutate(
     institution = str_squish(institution),
@@ -263,8 +263,8 @@ speeches <- speeches %>%
 From the list of banks, we can associate each speech with a country by performing a join.
 
 
-```r
-bank_list <- read_xlsx(here::here("inst", "data-misc", "bank_list.xlsx"))
+``` r
+bank_list <- read_csv(here::here("inst", "data-misc", "bank_list.csv"))
 
 speeches <- speeches %>%
   left_join(bank_list, by="institution")
@@ -275,7 +275,7 @@ speeches <- speeches %>%
 Writing the data to the pin board:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,

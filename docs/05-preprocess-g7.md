@@ -8,7 +8,7 @@ required document-term matrices and term-document matrices.
 ## Initialisation
 
 
-```r
+``` r
 library(tidyverse)
 library(tidytext)
 library(SnowballC)
@@ -24,7 +24,7 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 ```
 
 
-```r
+``` r
 speeches <- speeches_board %>%
   pin_qread("speeches-g7-with-ngrams")
 ```
@@ -34,7 +34,7 @@ terms removed. The code used to obtain this stop word list can be found
 [here](https://github.com/adamoshen/misc/tree/main/data-raw).
 
 
-```r
+``` r
 nonneg_snowball <- read_rds(here::here("inst", "data-misc", "nonneg_snowball.rds"))
 ```
 
@@ -47,7 +47,7 @@ The usual pre-processing steps were performed, including:
 - Stemming of words.
 
 
-```r
+``` r
 speeches <- speeches %>%
   unnest_tokens(output=word, input=text) %>%
   anti_join(nonneg_snowball, by="word") %>%
@@ -58,7 +58,7 @@ A final check was performed to verify that there were no stemmed tokens that wer
 strings, as this can result in unusable models downstream.
 
 
-```r
+``` r
 speeches %>%
   filter(wordstem == " ")
 
@@ -69,7 +69,7 @@ speeches %>%
 Making a quick checkpoint:
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,
@@ -83,14 +83,14 @@ speeches_board %>%
 The document-term matrix is required for topic models via the `{topicmodels}` package.
 
 
-```r
+``` r
 speeches_dtm <- speeches %>%
   count(doc, wordstem) %>%
   cast_dtm(doc, wordstem, n)
 ```
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches_dtm,
@@ -104,7 +104,7 @@ speeches_board %>%
 The term-document matrix (as a plain matrix) is required for NMF models.
 
 
-```r
+``` r
 speeches_tdm <- speeches %>%
   count(doc, wordstem) %>%
   cast_tdm(wordstem, doc, n) %>%
@@ -112,7 +112,7 @@ speeches_tdm <- speeches %>%
 ```
 
 
-```r
+``` r
 speeches_board %>%
   pin_qsave(
     speeches_tdm,
