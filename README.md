@@ -1,12 +1,11 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # Analysis of Central Bank Speeches
 
-> \[!NOTE\] This is a work in progress.
+> [!NOTE]
+> This is a work in progress.
 
 This repository documents the analysis of central bank speeches,
-obtained from [Bank for International Settlements (BIS) Central Bankers’
+obtained from [Bank for International Settlements (BIS) Central Bankers'
 Speeches](https://www.bis.org/cbspeeches/index.htm?m=60). The rendered
 documentation files can be viewed
 [here](https://adamoshen.github.io/cbspeeches/).
@@ -33,4 +32,4 @@ pak::local_install_dev_deps()
 
 ## Data stats
 
-\[TODO\]
+TODO
