@@ -107,7 +107,7 @@ manually determined by Google-ing the author or the speech. This information was
 applicable).
 
 ```{r}
-author_affiliations <- read_csv(here::here("inst", "data-misc", "author_affiliations.csv"))
+author_affiliations <- read_xlsx(here::here("inst", "data-misc", "author_affiliations.xlsx"))
 
 speeches <- speeches %>%
   rows_update(author_affiliations, by="author")
