@@ -97,10 +97,10 @@ It is of greater interest when a central bank mentions another central bank or a
 Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
 Canada, words to remove would include: `Bank of Canada`, `Canada`, `Canada's`, and `Canadian`. The
 removal patterns corresponding to each bank are stored in
-`inst/data-misc/bank_country_regex_patterns.xlsx`.
+`inst/data-misc/bank_country_regex_patterns.csv`.
 
 ```{r}
-bank_country_regex_patterns <- read_xlsx("inst/data-misc/bank_country_regex_patterns.xlsx") %>%
+bank_country_regex_patterns <- read_csv("inst/data-misc/bank_country_regex_patterns.csv") %>%
   filter(country %in% g7_members) %>%
   select(country, regex_pattern)
 
