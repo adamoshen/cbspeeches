@@ -110,7 +110,7 @@ applicable).
 
 
 ``` r
-author_affiliations <- read_csv(here::here("inst", "data-misc", "author_affiliations.csv"))
+author_affiliations <- read_xlsx(here::here("inst", "data-misc", "author_affiliations.xlsx"))
 
 speeches <- speeches %>%
   rows_update(author_affiliations, by="author")
@@ -264,7 +264,10 @@ From the list of banks, we can associate each speech with a country by performin
 
 
 ``` r
-bank_list <- read_csv(here::here("inst", "data-misc", "bank_list.csv"))
+bank_list <- read_delim(
+  here::here("inst", "data-misc", "bank_list.csv"),
+  delim=",", escape_backslash=TRUE
+)
 
 speeches <- speeches %>%
   left_join(bank_list, by="institution")

@@ -258,7 +258,10 @@ speeches <- speeches %>%
 From the list of banks, we can associate each speech with a country by performing a join.
 
 ```{r}
-bank_list <- read_csv(here::here("inst", "data-misc", "bank_list.csv"))
+bank_list <- read_delim(
+  here::here("inst", "data-misc", "bank_list.csv"),
+  delim=",", escape_backslash=TRUE
+)
 
 speeches <- speeches %>%
   left_join(bank_list, by="institution")

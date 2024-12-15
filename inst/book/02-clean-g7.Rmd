@@ -100,7 +100,10 @@ removal patterns corresponding to each bank are stored in
 `inst/data-misc/bank_country_regex_patterns.csv`.
 
 ```{r}
-bank_country_regex_patterns <- read_csv("inst/data-misc/bank_country_regex_patterns.csv") %>%
+bank_country_regex_patterns <- read_delim(
+  here::here("inst", "data-misc", "bank_country_regex_patterns.csv"),
+  delim=",", escape_backslash=TRUE
+) %>%
   filter(country %in% g7_members) %>%
   select(country, regex_pattern)
 
