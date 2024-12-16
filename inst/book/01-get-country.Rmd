@@ -103,7 +103,7 @@ speeches <- speeches %>%
 Where extraction failed or was incorrect (determined by looking for `institution` values of `NA`
 and values with low frequencies), the speeches' institutions/organizations were
 manually determined by Google-ing the author or the speech. This information was stored in
-`inst/data-misc/author_affiliations.csv`. The data was updated according to this spreadsheet (where
+`inst/data-misc/author_affiliations.xlsx`. The data was updated according to this spreadsheet (where
 applicable).
 
 ```{r}
@@ -130,7 +130,7 @@ speeches <- speeches %>%
 ### Normalise institution names
 
 The [list of banks and their official names](https://www.bis.org/cbanks.htm) from the BIS website
-were downloaded and stored in `inst/data-misc/bank_list.csv`. The extracted institution names from
+were downloaded and stored in `inst/data-misc/bank_list.xlsx`. The extracted institution names from
 the previous step are normalised to match the names in this list. Additional organizations were
 added, such as BIS (Bank for International Settlements) and ECB (European Central Bank). All US
 Federal Reserves were associated with the common bank name of `Federal Reserve Bank`.
@@ -258,10 +258,7 @@ speeches <- speeches %>%
 From the list of banks, we can associate each speech with a country by performing a join.
 
 ```{r}
-bank_list <- read_delim(
-  here::here("inst", "data-misc", "bank_list.csv"),
-  delim=",", escape_backslash=TRUE
-)
+bank_list <- read_xlsx(here::here("inst", "data-misc", "bank_list.xlsx"))
 
 speeches <- speeches %>%
   left_join(bank_list, by="institution")

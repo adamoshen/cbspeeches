@@ -10,7 +10,6 @@ This chapter documents the cleaning of the text for speeches given by a G7 count
 
 ```{r}
 library(tidyverse)
-library(readxl)
 library(pins)
 library(pinsqs)
 library(AzureStor)
@@ -98,6 +97,13 @@ Therefore, all self-mentions of the bank, country, and inhabitants were removed.
 Canada, words to remove would include: `Bank of Canada`, `Canada`, `Canada's`, and `Canadian`. The
 removal patterns corresponding to each bank are stored in
 `inst/data-misc/bank_country_regex_patterns.csv`.
+
+::: {.rmdimportant}
+
+The `bank_country_regex_patterns.csv` file is read in using `read_delim()` rather than `read_csv()`
+as the file contains pre-escaped regex strings, and as such, `escape_backslash = TRUE` is required.
+
+:::
 
 ```{r}
 bank_country_regex_patterns <- read_delim(

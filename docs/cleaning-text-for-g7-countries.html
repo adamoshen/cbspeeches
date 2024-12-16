@@ -20,9 +20,9 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
-<meta name="description" content="This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(AzureStor)...">
-<meta property="og:description" content="This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(AzureStor)...">
-<meta name="twitter:description" content="This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(readxl) library(pins) library(pinsqs) library(AzureStor)...">
+<meta name="description" content='This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R",...'>
+<meta property="og:description" content='This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R",...'>
+<meta name="twitter:description" content='This chapter documents the cleaning of the text for speeches given by a G7 country.  3.1 Initialisation library(tidyverse) library(pins) library(pinsqs) library(AzureStor) source(here::here("R",...'>
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -71,7 +71,6 @@
 </h2>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pins.rstudio.com/">pins</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
@@ -161,6 +160,10 @@ Therefore, all self-mentions of the bank, country, and inhabitants were removed.
 Canada, words to remove would include: <code>Bank of Canada</code>, <code>Canada</code>, <code>Canada's</code>, and <code>Canadian</code>. The
 removal patterns corresponding to each bank are stored in
 <code>inst/data-misc/bank_country_regex_patterns.csv</code>.</p>
+<div class="rmdimportant">
+<p>The <code>bank_country_regex_patterns.csv</code> file is read in using <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim()</a></code> rather than <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code>
+as the file contains pre-escaped regex strings, and as such, <code>escape_backslash = TRUE</code> is required.</p>
+</div>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bank_country_regex_patterns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span></span>
 <span>  <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_country_regex_patterns.csv"</span><span class="op">)</span>,</span>
@@ -346,7 +349,7 @@ abbreviated form.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 15, 2024.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 16, 2024.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
