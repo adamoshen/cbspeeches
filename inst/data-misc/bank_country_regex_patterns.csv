@@ -3,10 +3,10 @@ Afghanistan,Bank of Afghanistan,
 Albania,Bank of Albania,
 Algeria,Bank of Algeria,
 Angola,National Bank of Angola,
-Argentina,Central Bank of Argentina,
+Argentina,Central Bank of Argentina,(Central )?(Bank of )?Argentina('s)?|Argentinian|Argentine
 Armenia,Central Bank of Armenia,
 Aruba,Central Bank of Aruba,
-Australia,Reserve Bank of Australia,
+Australia,Reserve Bank of Australia,(Reserve |Central )?(Bank of )?Australia('s)?|Australian
 Austria,"Oesterreichische Nationalbank, the Austrian Central Bank",
 Azerbaijan,The Central Bank of the Republic of Azerbaijan,
 Bahamas,Central Bank of The Bahamas,
@@ -14,7 +14,7 @@ Bahrain,Central Bank of Bahrain,
 Bangladesh,Bangladesh Bank,
 Barbados,Central Bank of Barbados,
 Belarus,National Bank of the Republic of Belarus,
-Belgium,National Bank of Belgium,(National )?Bank of Belgium|Belgium('s)?|Belgian
+Belgium,National Bank of Belgium,(National |Central )?(Bank of )?Belgium('s)?|Belgian
 Belize,Central Bank of Belize,
 Benin,Central Bank of West African States (BCEAO),
 Bermuda,Bermuda Monetary Authority,
@@ -22,20 +22,20 @@ Bhutan,Royal Monetary Authority of Bhutan,
 Bolivia,Central Bank of Bolivia,
 Bosnia and Herzegovina,Central Bank of Bosnia and Herzegovina,
 Botswana,Bank of Botswana,
-Brazil,Central Bank of Brazil,
+Brazil,Central Bank of Brazil,(Central )?(Bank of )?Brazil('s)?|Brazilian
 Brunei Darussalam,Brunei Darussalam Central Bank,
 Bulgaria,Bulgarian National Bank,
 Burkina Faso,Central Bank of West African States (BCEAO),
 Burundi,Bank of the Republic of Burundi,
 Cambodia,National Bank of Cambodia,
 Cameroon,Bank of Central African States,
-Canada,Bank of Canada,(Bank of )?Canada('s)?|Canadian
+Canada,Bank of Canada,(Central )?(Bank of )?Canada('s)?|Canadian|\\bBoC\\b
 Cape Verde,Bank of Cape Verde,
 Cayman Islands,Cayman Islands Monetary Authority,
 Central African Republic,Bank of Central African States,
 Chad,Bank of Central African States,
 Chile,Central Bank of Chile,
-China,The People's Bank of China,
+China,The People's Bank of China,(The People's |Central )?(Bank of )?China('s)?|Chinese|\\bPBC\\b
 Colombia,Central Bank of Colombia,
 Congo,Bank of Central African States,
 "Congo, the Democratic Republic of the",Central Bank of Congo,
@@ -56,11 +56,11 @@ Eswatini,The Central Bank of Eswatini,
 Ethiopia,National Bank of Ethiopia,
 Fiji,Reserve Bank of Fiji,
 Finland,Bank of Finland,
-France,Bank of France,(Bank of )?France('s)?|French
+France,Bank of France,(Central )?(Bank of )?France('s)?|French
 Gabon,Bank of Central African States,
 "Gambia, The",Central Bank of The Gambia,
 Georgia,National Bank of Georgia,
-Germany,Deutsche Bundesbank,(Deutsche )?Bundesbank|(Bank of )?Germany('s)?|German
+Germany,Deutsche Bundesbank,(Deutsche )?Bundesbank|(Central )?(Bank of )?Germany('s)?|German
 Ghana,Bank of Ghana,
 Greece,Bank of Greece,
 Guatemala,Bank of Guatemala,
@@ -72,20 +72,20 @@ Honduras,Central Bank of Honduras,
 Hong Kong SAR,Hong Kong Monetary Authority,
 Hungary,Magyar Nemzeti Bank,
 Iceland,Central Bank of Iceland,
-India,Reserve Bank of India,
-Indonesia,Bank Indonesia,
+India,Reserve Bank of India,(Reserve |Central )?(Bank of )?India('s)?|Indian
+Indonesia,Bank Indonesia,(Central )?(Bank )?(of )?Indonesia('s)?|Indonesian
 "Iran, Islamic Republic of",The Central Bank of the Islamic Republic of Iran,
 Iraq,Central Bank of Iraq,
 Ireland,Central Bank of Ireland,
 Israel,Bank of Israel,
-Italy,Bank of Italy,(Bank of )?Italy('s)?|Banca d'Italia|Italian
+Italy,Bank of Italy,(Central )?(Bank of )?Italy('s)?|Banca d'Italia|Italian
 Ivory Coast,Central Bank of West African States (BCEAO),
 Jamaica,Bank of Jamaica,
-Japan,Bank of Japan,(Bank of )?Japan('s)?|Japanese
+Japan,Bank of Japan,(Central )?(Bank of )?Japan('s)?|Japanese
 Jordan,Central Bank of Jordan,
 Kazakhstan,National Bank of Kazakhstan,
 Kenya,Central Bank of Kenya,
-"Korea, Republic of",Bank of Korea,
+"Korea, Republic of",Bank of Korea,(Central )?(Bank of )?Korea('s)?|Korean|\\bBOK\\b
 Kosovo,Central Bank of the Republic of Kosovo,
 Kuwait,Central Bank of Kuwait,
 Kyrgyzstan,National Bank of the Kyrgyz Republic,
@@ -105,7 +105,7 @@ Maldives,Maldives Monetary Authority,
 Mali,Central Bank of West African States (BCEAO),
 Malta,Central Bank of Malta,
 Mauritius,Bank of Mauritius,
-Mexico,Bank of Mexico,
+Mexico,Bank of Mexico,(Central )?(Bank of )?Mexico('s)?|Mexican
 "Moldova, Republic of",National Bank of Moldova,
 Mongolia,Bank of Mongolia,
 Montenegro,Central Bank of Montenegro,
@@ -114,7 +114,7 @@ Mozambique,Bank of Mozambique,
 Myanmar,Central Bank of Myanmar,
 Namibia,Bank of Namibia,
 Nepal,Central Bank of Nepal (Nepal Rastra Bank),
-Netherlands,De Nederlandsche Bank,(De )?Nederlandsche Bank|(The )?Netherlands'?|Dutch
+Netherlands,De Nederlandsche Bank,(De )?Nederlandsche( Bank)?|(Central )?(Bank of )?(The )?Netherlands'?|Dutch
 New Zealand,Reserve Bank of New Zealand,
 Nicaragua,Central Bank of Nicaragua,
 Niger,Central Bank of West African States (BCEAO),
@@ -134,11 +134,11 @@ Poland,Narodowy Bank Polski,
 Portugal,Banco de Portugal,
 Qatar,Qatar Central Bank,
 Romania,National Bank of Romania,
-Russian Federation,Central Bank of the Russian Federation,
+Russian Federation,Central Bank of the Russian Federation,(Central )?(Bank of )?(the )?Russia('s)?n?s?( Federation)?
 Rwanda,National Bank of Rwanda,
 Samoa,Central Bank of Samoa,
 San Marino,Central Bank of the Republic of San Marino,
-Saudi Arabia,Saudi Central Bank,
+Saudi Arabia,Saudi Central Bank,(Central )?(Bank of )?Saudi Arabia('s)?n?s?|Saudis?( Central Bank)?
 Senegal,Central Bank of West African States (BCEAO),
 Serbia,National Bank of Serbia,
 Seychelles,Central Bank of Seychelles,
@@ -147,13 +147,13 @@ Singapore,Monetary Authority of Singapore,
 Slovakia,National Bank of Slovakia,
 Slovenia,Bank of Slovenia,
 Solomon Islands,Central Bank of Solomon Islands,
-South Africa,South African Reserve Bank,
+South Africa,South African Reserve Bank,(Central )?(Bank of )?South Africa('s)?n?s?( Reserve Bank)?|\\bSARB\\b
 Spain,Bank of Spain,
 Sri Lanka,Central Bank of Sri Lanka,
 Sudan,Bank of Sudan,
 Suriname,Central Bank of Suriname,
 Sweden,Sveriges Riksbank,Sveriges Riksbank|(Bank of )?Sweden|Swedish
-Switzerland,Swiss National Bank,
+Switzerland,Swiss National Bank,Swiss( National)?( Bank)?|(Central )?(Bank of )?Switzerland
 Syrian Arab Republic,Central Bank of Syria,
 Tajikistan,National Bank of the Republic of Tajikistan,
 "Tanzania, United Republic of",Bank of Tanzania,
@@ -162,12 +162,12 @@ Togo,Central Bank of West African States (BCEAO),
 Tonga,National Reserve Bank of Tonga,
 Trinidad and Tobago,Central Bank of Trinidad and Tobago,
 Tunisia,Central Bank of Tunisia,
-Turkiye,Central Bank of the Republic of Turkiye,
+Turkiye,Central Bank of the Republic of Turkiye,(Central )?(Bank of)?(the Republic of )?(Turkiye|Turkey)|Turkish
 Turkmenistan,Central Bank of Turkmenistan,
 Uganda,Bank of Uganda,
 Ukraine,National Bank of Ukraine,
 United Arab Emirates,Central Bank of the United Arab Emirates,
-United Kingdom,Bank of England,(Bank of )?England('s)?|English|United Kingdom|UK
+United Kingdom,Bank of England,(Bank of )?England('s)?|English|United Kingdom|UK|\\bBoE\\b
 United States,Federal Reserve Bank,United States'|United States( of America)?|American?|USA?|Federal Reserve( Bank)?|Atlanta|Boston|Chicago|Cleveland|Dallas|Kansas City|Minneapolis|New York|Philadelphia|Richmond|San Francisco|St\\.? Louis|Saint Louis|Board of Governors
 Uruguay,Central Bank of Uruguay,
 Uzbekistan,Central Bank of the Republic of Uzbekistan,
@@ -178,7 +178,7 @@ Yemen,Central Bank of Yemen,
 Zambia,Bank of Zambia,
 Zimbabwe,Reserve Bank of Zimbabwe,
 Other_BIS,Bank for International Settlements,
-Other_ECB,European Central Bank,
+Other_ECB,European Central Bank,European( Central Bank)?|\\bECB\\b
 Other_Basel,Basel Committee,
 Other_IMF,International Monetary Fund,
 Other_EMI,European Monetary Institute,
