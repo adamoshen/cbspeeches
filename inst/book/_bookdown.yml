@@ -6,10 +6,10 @@ rmd_files:
 
     "colophon.Rmd",
 
-    "00-data-setup.Rmd",
-    "01-get-country.Rmd",
-    "02-clean-g7.Rmd",
-    "03-ngrams-g7.Rmd",
-    "04-replace-ngrams-g7.Rmd",
-    "05-preprocess-g7.Rmd"
+    "01-00-data-setup.Rmd",
+    "01-01-get-country.Rmd",
+    "01-02-clean-g7.Rmd",
+    "01-03-ngrams-g7.Rmd",
+    "01-04-replace-ngrams-g7.Rmd",
+    "01-05-preprocess-g7.Rmd"
   ]

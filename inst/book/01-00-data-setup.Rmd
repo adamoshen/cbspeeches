@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-# (PART\*) Data processing {.unnumbered}
+# (PART\*) Proof of concept {.unnumbered}
 
 # Data setup
 
