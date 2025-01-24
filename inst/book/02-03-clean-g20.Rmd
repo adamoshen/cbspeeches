@@ -55,6 +55,26 @@ speeches <- speeches %>%
   rows_update(data_update, by="doc")
 ```
 
+## Fix incomplete speech
+
+There was one speech from the ECB that did not have the complete speech text. The full speech text
+was obtained from [the speech's webpage](https://www.bis.org/review/r221027c.htm), read in from
+`inst/data-misc/r221027c.txt`, and replaced the original speech text.
+
+```{r}
+r221027c_text <- read_file("inst/data-misc/r221027c.txt") %>%
+  str_replace_all("[:cntrl:]", " ") %>%
+  str_squish()
+
+data_update <- tribble(
+  ~doc, ~text,
+  "r221027c", r221027c_text
+)
+
+speeches <- speeches %>%
+  rows_update(data_update, by="doc")
+```
+
 ## Repairs and removals
 
 ### Remove introductions
