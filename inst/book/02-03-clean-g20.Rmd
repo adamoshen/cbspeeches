@@ -1,0 +1,269 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Cleaning the G20 speeches
+
+The G20 consists of twenty members: the G7 countries, Argentina, Australia, Brazil, China, India,
+Indonesia, Mexico, Russia, Saudi Arabia, South Africa, South Korea, Turkiye, the United Kingdom, the
+United States, and the European Union. The cleaning process of the G20 speeches is once again nearly
+identical to that used for the G7 and G10 speeches. The most notable difference is the removal of
+the endings and references section of speeches, where member-specific text removal functions are
+applied before the general text removal function (see `R/clean_by_country.R`).
+
+## Initialisation
+
+```{r}
+library(tidyverse)
+library(pins)
+library(pinsqs)
+library(AzureStor)
+
+source(here::here("R", "azure_init.R"))
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+```
+
+## Filter speeches to G20 members
+
+```{r}
+g20_members <- c(
+  "Argentina", "Australia", "Brazil", "Canada", "China", "France", "Germany", "India", "Indonesia",
+  "Italy", "Japan", "Mexico", "Russian Federation", "Saudi Arabia", "South Africa",
+  "Korea, Republic of", "Turkiye", "United Kingdom", "United States", "Other_ECB"
+)
+
+speeches <- speeches_board %>%
+  pin_qread("speeches-with-country") %>%
+  filter(country %in% g20_members)
+```
+
+## Fix one date
+
+There was one speech from the United States whose date should be December 2023, not December 2024,
+as this corpus only goes up to January 2024.
+
+```{r}
+data_update <- tribble(
+  ~doc, ~date,
+  "r240109a", ymd("2023-12-08")
+)
+
+speeches <- speeches %>%
+  rows_update(data_update, by="doc")
+```
+
+## Repairs and removals
+
+### Remove introductions
+
+As before, the first sentence of each speech is only removed if a gratitude word is detected.
+Otherwise, only the brief speech description is removed.
+
+```{r}
+speeches <- speeches %>%
+  mutate(
+    text = if_else(
+      str_detect(first_sentence, pattern="(\\*\\s){3}"),
+      if_else(
+        str_detect(first_sentence, pattern="(?i)thank|acknowledge|honou?r|grateful|pleas|welcome|delight"),
+        str_remove(text, pattern="^[^.]+\\."),
+        str_remove(text, pattern="^.*(\\*\\s){3}")
+      ),
+      str_remove(text, pattern="^[^.]+\\.")
+    ),
+    text = str_squish(text)
+  )
+```
+
+### Remove section headers
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "(Introduction|Closing remarks|Conclusion) (?=[:upper:])"))
+```
+
+### Remove references section
+
+The references section and any concluding remarks were removed using country-specific cleaning
+functions before applying the general cleaning function (see `R/clean_by_country.R`). The members
+whose speeches required a specific cleaning function include Australia, China, Indonesia, Saudi
+Arabia, South Korea, and the European Union.
+
+```{r}
+source("R/clean_by_country.R")
+
+speeches <- speeches %>%
+  mutate(text = case_match(
+    country,
+    "Australia" ~ clean_australia(text),
+    "China" ~ clean_china(text),
+    "Indonesia" ~ clean_indonesia(text),
+    "Saudi Arabia" ~ clean_saudiarabia(text),
+    "Korea, Republic of" ~ clean_korea(text),
+    "Other_ECB" ~ clean_ecb(text),
+    .default = text
+  )) %>%
+  mutate(text = clean_general(text))
+```
+
+### Repair typos
+
+As Sweden and Netherlands are not part of the G20, only Italy's typos required repair.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "Italty", "Italy"))
+```
+
+### Remove mentions of own institution and country
+
+It is of greater interest when a central bank mentions another central bank or another country.
+Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
+Canada, words to remove would include: Bank of Canada, BoC, Canada, Canada's, and Canadian. The
+removal patterns corresponding to each bank are stored in
+`inst/data-misc/bank_country_regex_patterns.csv`.
+
+```{r}
+bank_country_regex_patterns <- read_delim(
+  "inst/data-misc/bank_country_regex_patterns.csv",
+  delim = ",",
+  escape_backslash = TRUE
+) %>%
+  filter(country %in% g20_members) %>%
+  select(country, regex_pattern)
+
+speeches <- speeches %>%
+  left_join(bank_country_regex_patterns, by="country") %>%
+  mutate(text = str_remove_all(text, regex_pattern)) %>%
+  select(-regex_pattern)
+```
+
+### Miscellaneous removals
+
+Mentions of "BIS central bankers' speeches" within speeches were removed.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
+```
+
+## General cleaning
+
+### Normalisation of COVID related terms
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)COVID|COVID19|COVID-19|coronavirus", "COVID"))
+```
+
+### Normalisation of select ngrams into acronyms
+
+"Central Bank Digital Currency" is a particular 4-gram of interest and can be converted to its
+abbreviated form.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_replace_all(text, "(?i)Central Bank Digital Currency", "CBDC"))
+```
+
+### Remove non-ascii characters, emails, social media handles, and links
+
+The only addition to this chunk of code is the last line, where links that do not begin with http,
+https, or www, are removed, e.g. `google.ca`.
+
+```{r}
+speeches <- speeches %>%
+  mutate(
+    text = str_remove_all(text, "[:^ascii:]"),
+    text = str_remove_all(text, "([[:alnum:]_.\\-]+)?@[[:alnum:].\\-]+"),
+    text = str_remove_all(text, "https?://\\S+"),
+    text = str_remove_all(text, "www\\.\\S+"),
+    text = str_remove_all(text, "[A-Za-z]+\\.[A-Za-z]+(\\.[A-Za-z]+)*")
+  )
+```
+
+### Remove/replace stray and/or excessive punctuation
+
+A few minor changes here opting for the replacement of punctuation sequences with spaces, instead of
+their removal.
+
+```{r}
+speeches <- speeches %>%
+  mutate(
+    text = str_remove_all(text, "(\\* )+"),
+    text = str_replace_all(text, "\\?|!", "."),
+    text = str_remove_all(text, ","),
+    text = str_remove_all(text, "\""),
+    text = str_replace_all(text, "'{2,}", "'"),
+    text = str_remove_all(text, "\\B'(?=[:alpha:])"),
+    text = str_remove_all(text, "(?<=[:alpha:])'\\B"),
+    text = str_remove_all(text, "\\B'\\B"),
+    text = str_replace_all(text, "\\.{3}", "."),
+    text = str_replace_all(text, " \\. ", " "),
+    text = str_replace_all(text, "-", " "),
+    text = str_replace_all(text, "_", " "),
+    text = str_remove_all(text, "\\(|\\)|\\{|\\}|\\[|\\]|\\||;|:|\\+")
+  )
+```
+
+### Remove numerical quantities
+
+References to figures, slides, and graphs were removed, in addition to dollar signs, percent signs,
+and other numerical quantities.
+
+```{r}
+speeches <- speeches %>%
+  mutate(
+    text = str_remove_all(text, "\\$"),
+    text = str_remove_all(text, "%"),
+    text = str_remove_all(text, "[:digit:]+([.,]+[:digit:]+)*"),
+    text = str_remove_all(text, "(Figure|Slide|Graph) [:digit:]+"),
+    text = str_remove_all(text, "[:digit:]")
+  )
+```
+
+### Remove excessive whitespace
+
+Excessive whitespace resulting from previous replacements was removed.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_squish(text))
+```
+
+### Remove unneeded columns
+
+```{r}
+speeches <- speeches %>%
+  select(-first_sentence)
+```
+
+## Save the data
+
+Writing the data to the pin board:
+
+```{r}
+speeches_board %>%
+  pin_qsave(
+    speeches,
+    "speeches-g20-cleaned",
+    title = "speeches for g20 countries, cleaned"
+  )
+```
+
+Making a separate copy of the metadata as well:
+
+```{r}
+speeches_metadata <- speeches %>%
+  select(doc, date, institution, country)
+
+speeches_board %>%
+  pin_qsave(
+    speeches_metadata,
+    "speeches-g20-metadata",
+    title = "metadata for g20 speeches"
+  )
+```
