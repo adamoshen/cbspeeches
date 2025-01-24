@@ -89,7 +89,7 @@ A general text cleaning function, found in `R/clean_by_country.R`, was applied t
 references section and any other concluding remarks that were commonly found among speeches.
 
 ```{r}
-source("R/clean_by_country.R")
+source(here::here("R", "clean_by_country.R"))
 
 speeches <- speeches %>%
   mutate(text = clean_general(text))
@@ -116,7 +116,7 @@ removal patterns corresponding to each bank are stored in
 
 ```{r}
 bank_country_regex_patterns <- read_delim(
-  "inst/data-misc/bank_country_regex_patterns.csv",
+  here::here("inst", "data-misc", "bank_country_regex_patterns.csv"),
   delim = ",",
   escape_backslash = TRUE
 ) %>%

@@ -62,7 +62,7 @@ was obtained from [the speech's webpage](https://www.bis.org/review/r221027c.htm
 `inst/data-misc/r221027c.txt`, and replaced the original speech text.
 
 ```{r}
-r221027c_text <- read_file("inst/data-misc/r221027c.txt") %>%
+r221027c_text <- read_file(here::here("inst", "data-misc", "r221027c.txt")) %>%
   str_replace_all("[:cntrl:]", " ") %>%
   str_squish()
 
@@ -113,7 +113,7 @@ whose speeches required a specific cleaning function include Australia, China, I
 Arabia, South Korea, and the European Union.
 
 ```{r}
-source("R/clean_by_country.R")
+source(here::here("R", "clean_by_country.R"))
 
 speeches <- speeches %>%
   mutate(text = case_match(
@@ -148,7 +148,7 @@ removal patterns corresponding to each bank are stored in
 
 ```{r}
 bank_country_regex_patterns <- read_delim(
-  "inst/data-misc/bank_country_regex_patterns.csv",
+  here::here("inst", "data-misc", "bank_country_regex_patterns.csv"),
   delim = ",",
   escape_backslash = TRUE
 ) %>%
