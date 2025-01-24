@@ -177,7 +177,7 @@ Vietnam,State Bank of Vietnam,
 Yemen,Central Bank of Yemen,
 Zambia,Bank of Zambia,
 Zimbabwe,Reserve Bank of Zimbabwe,
-Other_BIS,Bank for International Settlements,
+Other_BIS,Bank for International Settlements,Bank for International Settlements|\\bBIS\\b
 Other_ECB,European Central Bank,European( Central Bank)?|\\bECB\\b
 Other_Basel,Basel Committee,
 Other_IMF,International Monetary Fund,
