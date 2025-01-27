@@ -134,3 +134,15 @@ metadata %>%
     rownames = FALSE
   )
 ```
+
+```{r, eval=FALSE, include=FALSE}
+# For README
+metadata %>%
+  rename(
+    Member = member,
+    `#` = n,
+    `First date` = first_date,
+    `Last date` = last_date
+  ) %>%
+  knitr::kable(format = "pipe")
+```
