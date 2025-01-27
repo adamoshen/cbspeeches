@@ -2,4 +2,4 @@
 
 docs/** linguist-documentation
 
-inst/NMFregress-main/** linguist-vendored
+inst/NMFregress/** linguist-vendored
