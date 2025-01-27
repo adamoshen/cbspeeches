@@ -120,8 +120,7 @@ summarised_theta_by_month <- dtd %>%
   mutate(date = ym(date))
 ```
 
-For plotting, rather than labelling a topic by its anchor word, a topic's top 10 words can be used
-instead.
+For plotting, without assigning names to a topic, a topic's top 10 words can be used instead.
 
 ```{r}
 ttd <- lda_output %>%
