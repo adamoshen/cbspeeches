@@ -1,6 +1,4 @@
-```{r, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-```
+
 
 # Cleaning the BIS speeches
 
@@ -9,7 +7,8 @@ standard.
 
 ## Initialisation
 
-```{r}
+
+``` r
 library(tidyverse)
 library(pins)
 library(pinsqs)
@@ -24,7 +23,8 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 
 ## Filter for BIS speeches
 
-```{r}
+
+``` r
 speeches <- speeches_board %>%
   pin_qread("speeches-with-country") %>%
   filter(country == "Other_BIS")
@@ -37,7 +37,8 @@ speeches <- speeches_board %>%
 As before, the first sentence of each speech is only removed if a gratitude word is detected.
 Otherwise, only the brief speech description is removed.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(
     text = if_else(
@@ -55,7 +56,8 @@ speeches <- speeches %>%
 
 ### Remove section headers
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(text = str_remove_all(text, "(Introduction|Closing remarks|Conclusion) (?=[:upper:])"))
 ```
@@ -64,7 +66,8 @@ speeches <- speeches %>%
 
 The references and concluding remarks can be removed using the `clean_general()` function.
 
-```{r}
+
+``` r
 source(here::here("R", "clean_by_country.R"))
 
 speeches <- speeches %>%
@@ -79,7 +82,8 @@ Canada, words to remove would include: Bank of Canada, BoC, Canada, Canada's, an
 removal patterns corresponding to each bank are stored in
 `inst/data-misc/bank_country_regex_patterns.csv`.
 
-```{r}
+
+``` r
 bis_regex_pattern <- read_delim(
   here::here("inst", "data-misc", "bank_country_regex_patterns.csv"),
   delim = ",",
@@ -96,7 +100,8 @@ speeches <- speeches %>%
 
 Mentions of "BIS central bankers' speeches" within speeches were removed.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
 ```
@@ -105,7 +110,8 @@ speeches <- speeches %>%
 
 ### Normalisation of COVID related terms
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(text = str_replace_all(text, "(?i)COVID|COVID19|COVID-19|coronavirus", "COVID"))
 ```
@@ -115,7 +121,8 @@ speeches <- speeches %>%
 "Central Bank Digital Currency" is a particular 4-gram of interest and can be converted to its
 abbreviated form.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(text = str_replace_all(text, "(?i)Central Bank Digital Currency", "CBDC"))
 ```
@@ -125,7 +132,8 @@ speeches <- speeches %>%
 The only addition to this chunk of code is the last line, where links that do not begin with http,
 https, or www, are removed, e.g. `google.ca`.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "[:^ascii:]"),
@@ -141,7 +149,8 @@ speeches <- speeches %>%
 A few minor changes here opting for the replacement of punctuation sequences with spaces, instead of
 their removal.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "(\\* )+"),
@@ -165,7 +174,8 @@ speeches <- speeches %>%
 References to figures, slides, and graphs were removed, in addition to dollar signs, percent signs,
 and other numerical quantities.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(
     text = str_remove_all(text, "\\$"),
@@ -180,14 +190,16 @@ speeches <- speeches %>%
 
 Excessive whitespace resulting from previous replacements was removed.
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   mutate(text = str_squish(text))
 ```
 
 ### Remove unneeded columns
 
-```{r}
+
+``` r
 speeches <- speeches %>%
   select(-first_sentence)
 ```
@@ -196,7 +208,8 @@ speeches <- speeches %>%
 
 Writing the data to the pin board:
 
-```{r}
+
+``` r
 speeches_board %>%
   pin_qsave(
     speeches,
@@ -207,7 +220,8 @@ speeches_board %>%
 
 Making a separate copy of the metadata as well:
 
-```{r}
+
+``` r
 speeches_metadata <- speeches %>%
   select(doc, date, institution, country)
 

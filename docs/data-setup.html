@@ -46,13 +46,20 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
 <li><a class="" href="colophon.html">Colophon</a></li>
-<li class="book-part">Data processing</li>
+<li class="book-part">Proof of concept</li>
 <li><a class="active" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
 <li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
 <li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
 <li><a class="" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
 <li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
+<li><a class="" href="explorations-with-nmf.html"><span class="header-section-number">7</span> Explorations with NMF</a></li>
+<li><a class="" href="explorations-with-lda.html"><span class="header-section-number">8</span> Explorations with LDA</a></li>
+<li class="book-part">Expanding data coverage</li>
+<li><a class="" href="re-cleaning-the-g7-speeches.html"><span class="header-section-number">9</span> Re-cleaning the G7 speeches</a></li>
+<li><a class="" href="cleaning-the-g10-speeches.html"><span class="header-section-number">10</span> Cleaning the G10 speeches</a></li>
+<li><a class="" href="cleaning-the-g20-speeches.html"><span class="header-section-number">11</span> Cleaning the G20 speeches</a></li>
+<li><a class="" href="cleaning-the-bis-speeches.html"><span class="header-section-number">12</span> Cleaning the BIS speeches</a></li>
 </ul>
 
         <div class="book-extra">
@@ -149,8 +156,8 @@ the subsequent chapters.</p>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/00-data-setup.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/00-data-setup.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/01-00-data-setup.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/01-00-data-setup.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -162,7 +169,7 @@ the subsequent chapters.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on December 16, 2024.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 26, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -170,6 +177,34 @@ the subsequent chapters.</p>
   </div>
 
 </div></div>
-</footer>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
 </body>
 </html>

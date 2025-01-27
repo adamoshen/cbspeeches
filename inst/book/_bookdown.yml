@@ -11,5 +11,12 @@ rmd_files:
     "01-02-clean-g7.Rmd",
     "01-03-ngrams-g7.Rmd",
     "01-04-replace-ngrams-g7.Rmd",
-    "01-05-preprocess-g7.Rmd"
+    "01-05-preprocess-g7.Rmd",
+    "01-06-nmf.Rmd",
+    "01-07-lda.Rmd",
+
+    "02-01-clean-g7.Rmd",
+    "02-02-clean-g10.Rmd",
+    "02-03-clean-g20.Rmd",
+    "02-04-clean-bis.Rmd"
   ]

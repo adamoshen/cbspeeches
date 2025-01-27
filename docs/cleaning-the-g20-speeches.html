@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>11 Cleaning the G20 speeches | Analysis of Central Bank Speeches</title>
+<meta name="author" content="Adam Shen">
+<meta name="generator" content="bookdown 0.41 with bs4_book()">
+<meta property="og:title" content="11 Cleaning the G20 speeches | Analysis of Central Bank Speeches">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="11 Cleaning the G20 speeches | Analysis of Central Bank Speeches">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Noto_Sans-0.4.9/font.css" rel="stylesheet">
+<link href="libs/Fragment_Mono-0.4.9/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<meta name="description" content="The G20 consists of twenty members: the G7 countries, Argentina, Australia, Brazil, China, India, Indonesia, Mexico, Russia, Saudi Arabia, South Africa, South Korea, Turkiye, the United Kingdom,...">
+<meta property="og:description" content="The G20 consists of twenty members: the G7 countries, Argentina, Australia, Brazil, China, India, Indonesia, Mexico, Russia, Saudi Arabia, South Africa, South Korea, Turkiye, the United Kingdom,...">
+<meta name="twitter:description" content="The G20 consists of twenty members: the G7 countries, Argentina, Australia, Brazil, China, India, Indonesia, Mexico, Russia, Saudi Arabia, South Africa, South Korea, Turkiye, the United Kingdom,...">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Analysis of Central Bank Speeches</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
+<li><a class="" href="colophon.html">Colophon</a></li>
+<li class="book-part">Proof of concept</li>
+<li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
+<li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
+<li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
+<li><a class="" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
+<li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
+<li><a class="" href="explorations-with-nmf.html"><span class="header-section-number">7</span> Explorations with NMF</a></li>
+<li><a class="" href="explorations-with-lda.html"><span class="header-section-number">8</span> Explorations with LDA</a></li>
+<li class="book-part">Expanding data coverage</li>
+<li><a class="" href="re-cleaning-the-g7-speeches.html"><span class="header-section-number">9</span> Re-cleaning the G7 speeches</a></li>
+<li><a class="" href="cleaning-the-g10-speeches.html"><span class="header-section-number">10</span> Cleaning the G10 speeches</a></li>
+<li><a class="active" href="cleaning-the-g20-speeches.html"><span class="header-section-number">11</span> Cleaning the G20 speeches</a></li>
+<li><a class="" href="cleaning-the-bis-speeches.html"><span class="header-section-number">12</span> Cleaning the BIS speeches</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/adamoshen/cbspeeches">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="cleaning-the-g20-speeches" class="section level1" number="11">
+<h1>
+<span class="header-section-number">11</span> Cleaning the G20 speeches<a class="anchor" aria-label="anchor" href="#cleaning-the-g20-speeches"><i class="fas fa-link"></i></a>
+</h1>
+<p>The G20 consists of twenty members: the G7 countries, Argentina, Australia, Brazil, China, India,
+Indonesia, Mexico, Russia, Saudi Arabia, South Africa, South Korea, Turkiye, the United Kingdom, the
+United States, and the European Union. The cleaning process of the G20 speeches is once again nearly
+identical to that used for the G7 and G10 speeches. The most notable difference is the removal of
+the endings and references section of speeches, where member-specific text removal functions are
+applied before the general text removal function (see <code>R/clean_by_country.R</code>).</p>
+<div id="initialisation-10" class="section level2" number="11.1">
+<h2>
+<span class="header-section-number">11.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-10"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pins.rstudio.com/">pins</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://pins.rstudio.com/reference/board_azure.html">board_azure</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data-speeches"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="filter-speeches-to-g20-members" class="section level2" number="11.2">
+<h2>
+<span class="header-section-number">11.2</span> Filter speeches to G20 members<a class="anchor" aria-label="anchor" href="#filter-speeches-to-g20-members"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">g20_members</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Argentina"</span>, <span class="st">"Australia"</span>, <span class="st">"Brazil"</span>, <span class="st">"Canada"</span>, <span class="st">"China"</span>, <span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"India"</span>, <span class="st">"Indonesia"</span>,</span>
+<span>  <span class="st">"Italy"</span>, <span class="st">"Japan"</span>, <span class="st">"Mexico"</span>, <span class="st">"Russian Federation"</span>, <span class="st">"Saudi Arabia"</span>, <span class="st">"South Africa"</span>,</span>
+<span>  <span class="st">"Korea, Republic of"</span>, <span class="st">"Turkiye"</span>, <span class="st">"United Kingdom"</span>, <span class="st">"United States"</span>, <span class="st">"Other_ECB"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-with-country"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">g20_members</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="fix-one-date-3" class="section level2" number="11.3">
+<h2>
+<span class="header-section-number">11.3</span> Fix one date<a class="anchor" aria-label="anchor" href="#fix-one-date-3"><i class="fas fa-link"></i></a>
+</h2>
+<p>There was one speech from the United States whose date should be December 2023, not December 2024,
+as this corpus only goes up to January 2024.</p>
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_update</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">doc</span>, <span class="op">~</span><span class="va">date</span>,</span>
+<span>  <span class="st">"r240109a"</span>, <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span><span class="op">(</span><span class="st">"2023-12-08"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">data_update</span>, by<span class="op">=</span><span class="st">"doc"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="fix-incomplete-speech" class="section level2" number="11.4">
+<h2>
+<span class="header-section-number">11.4</span> Fix incomplete speech<a class="anchor" aria-label="anchor" href="#fix-incomplete-speech"><i class="fas fa-link"></i></a>
+</h2>
+<p>There was one speech from the ECB that did not have the complete speech text. The full speech text
+was obtained from <a href="https://www.bis.org/review/r221027c.htm">the speech's webpage</a>, read in from
+<code>inst/data-misc/r221027c.txt</code>, and replaced the original speech text.</p>
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">r221027c_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_file.html">read_file</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"r221027c.txt"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="st">"[:cntrl:]"</span>, <span class="st">" "</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_update</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">doc</span>, <span class="op">~</span><span class="va">text</span>,</span>
+<span>  <span class="st">"r221027c"</span>, <span class="va">r221027c_text</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">data_update</span>, by<span class="op">=</span><span class="st">"doc"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="repairs-and-removals-3" class="section level2" number="11.5">
+<h2>
+<span class="header-section-number">11.5</span> Repairs and removals<a class="anchor" aria-label="anchor" href="#repairs-and-removals-3"><i class="fas fa-link"></i></a>
+</h2>
+<div id="remove-introductions-3" class="section level3" number="11.5.1">
+<h3>
+<span class="header-section-number">11.5.1</span> Remove introductions<a class="anchor" aria-label="anchor" href="#remove-introductions-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>As before, the first sentence of each speech is only removed if a gratitude word is detected.
+Otherwise, only the brief speech description is removed.</p>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">first_sentence</span>, pattern<span class="op">=</span><span class="st">"(\\*\\s){3}"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">first_sentence</span>, pattern<span class="op">=</span><span class="st">"(?i)thank|acknowledge|honou?r|grateful|pleas|welcome|delight"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">text</span>, pattern<span class="op">=</span><span class="st">"^[^.]+\\."</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">text</span>, pattern<span class="op">=</span><span class="st">"^.*(\\*\\s){3}"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">text</span>, pattern<span class="op">=</span><span class="st">"^[^.]+\\."</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-section-headers-2" class="section level3" number="11.5.2">
+<h3>
+<span class="header-section-number">11.5.2</span> Remove section headers<a class="anchor" aria-label="anchor" href="#remove-section-headers-2"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(Introduction|Closing remarks|Conclusion) (?=[:upper:])"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-references-section-3" class="section level3" number="11.5.3">
+<h3>
+<span class="header-section-number">11.5.3</span> Remove references section<a class="anchor" aria-label="anchor" href="#remove-references-section-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>The references section and any concluding remarks were removed using country-specific cleaning
+functions before applying the general cleaning function (see <code>R/clean_by_country.R</code>). The members
+whose speeches required a specific cleaning function include Australia, China, Indonesia, Saudi
+Arabia, South Korea, and the European Union.</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"clean_by_country.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html">case_match</a></span><span class="op">(</span></span>
+<span>    <span class="va">country</span>,</span>
+<span>    <span class="st">"Australia"</span> <span class="op">~</span> <span class="fu">clean_australia</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    <span class="st">"China"</span> <span class="op">~</span> <span class="fu">clean_china</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Indonesia"</span> <span class="op">~</span> <span class="fu">clean_indonesia</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Saudi Arabia"</span> <span class="op">~</span> <span class="fu">clean_saudiarabia</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Korea, Republic of"</span> <span class="op">~</span> <span class="fu">clean_korea</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Other_ECB"</span> <span class="op">~</span> <span class="fu">clean_ecb</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>,</span>
+<span>    .default <span class="op">=</span> <span class="va">text</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu">clean_general</span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="repair-typos-3" class="section level3" number="11.5.4">
+<h3>
+<span class="header-section-number">11.5.4</span> Repair typos<a class="anchor" aria-label="anchor" href="#repair-typos-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>As Sweden and Netherlands are not part of the G20, only Italy's typos required repair.</p>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"Italty"</span>, <span class="st">"Italy"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-mentions-of-own-institution-and-country-2" class="section level3" number="11.5.5">
+<h3>
+<span class="header-section-number">11.5.5</span> Remove mentions of own institution and country<a class="anchor" aria-label="anchor" href="#remove-mentions-of-own-institution-and-country-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>It is of greater interest when a central bank mentions another central bank or another country.
+Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
+Canada, words to remove would include: Bank of Canada, BoC, Canada, Canada's, and Canadian. The
+removal patterns corresponding to each bank are stored in
+<code>inst/data-misc/bank_country_regex_patterns.csv</code>.</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bank_country_regex_patterns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span></span>
+<span>  <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_country_regex_patterns.csv"</span><span class="op">)</span>,</span>
+<span>  delim <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  escape_backslash <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">g20_members</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">regex_pattern</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bank_country_regex_patterns</span>, by<span class="op">=</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">regex_pattern</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">regex_pattern</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="miscellaneous-removals-2" class="section level3" number="11.5.6">
+<h3>
+<span class="header-section-number">11.5.6</span> Miscellaneous removals<a class="anchor" aria-label="anchor" href="#miscellaneous-removals-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Mentions of "BIS central bankers' speeches" within speeches were removed.</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?i)BIS central bankers' speeches"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div id="general-cleaning-3" class="section level2" number="11.6">
+<h2>
+<span class="header-section-number">11.6</span> General cleaning<a class="anchor" aria-label="anchor" href="#general-cleaning-3"><i class="fas fa-link"></i></a>
+</h2>
+<div id="normalisation-of-covid-related-terms-2" class="section level3" number="11.6.1">
+<h3>
+<span class="header-section-number">11.6.1</span> Normalisation of COVID related terms<a class="anchor" aria-label="anchor" href="#normalisation-of-covid-related-terms-2"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?i)COVID|COVID19|COVID-19|coronavirus"</span>, <span class="st">"COVID"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="normalisation-of-select-ngrams-into-acronyms-3" class="section level3" number="11.6.2">
+<h3>
+<span class="header-section-number">11.6.2</span> Normalisation of select ngrams into acronyms<a class="anchor" aria-label="anchor" href="#normalisation-of-select-ngrams-into-acronyms-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>"Central Bank Digital Currency" is a particular 4-gram of interest and can be converted to its
+abbreviated form.</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?i)Central Bank Digital Currency"</span>, <span class="st">"CBDC"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-non-ascii-characters-emails-social-media-handles-and-links-3" class="section level3" number="11.6.3">
+<h3>
+<span class="header-section-number">11.6.3</span> Remove non-ascii characters, emails, social media handles, and links<a class="anchor" aria-label="anchor" href="#remove-non-ascii-characters-emails-social-media-handles-and-links-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>The only addition to this chunk of code is the last line, where links that do not begin with http,
+https, or www, are removed, e.g. <code>google.ca</code>.</p>
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"[:^ascii:]"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"([[:alnum:]_.\\-]+)?@[[:alnum:].\\-]+"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"https?://\\S+"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"www\\.\\S+"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"[A-Za-z]+\\.[A-Za-z]+(\\.[A-Za-z]+)*"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="removereplace-stray-andor-excessive-punctuation-2" class="section level3" number="11.6.4">
+<h3>
+<span class="header-section-number">11.6.4</span> Remove/replace stray and/or excessive punctuation<a class="anchor" aria-label="anchor" href="#removereplace-stray-andor-excessive-punctuation-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>A few minor changes here opting for the replacement of punctuation sequences with spaces, instead of
+their removal.</p>
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(\\* )+"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\?|!"</span>, <span class="st">"."</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">","</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\""</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"'{2,}"</span>, <span class="st">"'"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\B'(?=[:alpha:])"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?&lt;=[:alpha:])'\\B"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\B'\\B"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\.{3}"</span>, <span class="st">"."</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">" \\. "</span>, <span class="st">" "</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"-"</span>, <span class="st">" "</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"_"</span>, <span class="st">" "</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\(|\\)|\\{|\\}|\\[|\\]|\\||;|:|\\+"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-numerical-quantities-3" class="section level3" number="11.6.5">
+<h3>
+<span class="header-section-number">11.6.5</span> Remove numerical quantities<a class="anchor" aria-label="anchor" href="#remove-numerical-quantities-3"><i class="fas fa-link"></i></a>
+</h3>
+<p>References to figures, slides, and graphs were removed, in addition to dollar signs, percent signs,
+and other numerical quantities.</p>
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"\\$"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"%"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"[:digit:]+([.,]+[:digit:]+)*"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(Figure|Slide|Graph) [:digit:]+"</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"[:digit:]"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-excessive-whitespace-2" class="section level3" number="11.6.6">
+<h3>
+<span class="header-section-number">11.6.6</span> Remove excessive whitespace<a class="anchor" aria-label="anchor" href="#remove-excessive-whitespace-2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Excessive whitespace resulting from previous replacements was removed.</p>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="remove-unneeded-columns-3" class="section level3" number="11.6.7">
+<h3>
+<span class="header-section-number">11.6.7</span> Remove unneeded columns<a class="anchor" aria-label="anchor" href="#remove-unneeded-columns-3"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">first_sentence</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div id="save-the-data-7" class="section level2" number="11.7">
+<h2>
+<span class="header-section-number">11.7</span> Save the data<a class="anchor" aria-label="anchor" href="#save-the-data-7"><i class="fas fa-link"></i></a>
+</h2>
+<p>Writing the data to the pin board:</p>
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
+<span>    <span class="va">speeches</span>,</span>
+<span>    <span class="st">"speeches-g20-cleaned"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"speeches for g20 countries, cleaned"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>Making a separate copy of the metadata as well:</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches_metadata</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">date</span>, <span class="va">institution</span>, <span class="va">country</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
+<span>    <span class="va">speeches_metadata</span>,</span>
+<span>    <span class="st">"speeches-g20-metadata"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"metadata for g20 speeches"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="cleaning-the-g10-speeches.html"><span class="header-section-number">10</span> Cleaning the G10 speeches</a></div>
+<div class="next"><a href="cleaning-the-bis-speeches.html"><span class="header-section-number">12</span> Cleaning the BIS speeches</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#cleaning-the-g20-speeches"><span class="header-section-number">11</span> Cleaning the G20 speeches</a></li>
+<li><a class="nav-link" href="#initialisation-10"><span class="header-section-number">11.1</span> Initialisation</a></li>
+<li><a class="nav-link" href="#filter-speeches-to-g20-members"><span class="header-section-number">11.2</span> Filter speeches to G20 members</a></li>
+<li><a class="nav-link" href="#fix-one-date-3"><span class="header-section-number">11.3</span> Fix one date</a></li>
+<li><a class="nav-link" href="#fix-incomplete-speech"><span class="header-section-number">11.4</span> Fix incomplete speech</a></li>
+<li>
+<a class="nav-link" href="#repairs-and-removals-3"><span class="header-section-number">11.5</span> Repairs and removals</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#remove-introductions-3"><span class="header-section-number">11.5.1</span> Remove introductions</a></li>
+<li><a class="nav-link" href="#remove-section-headers-2"><span class="header-section-number">11.5.2</span> Remove section headers</a></li>
+<li><a class="nav-link" href="#remove-references-section-3"><span class="header-section-number">11.5.3</span> Remove references section</a></li>
+<li><a class="nav-link" href="#repair-typos-3"><span class="header-section-number">11.5.4</span> Repair typos</a></li>
+<li><a class="nav-link" href="#remove-mentions-of-own-institution-and-country-2"><span class="header-section-number">11.5.5</span> Remove mentions of own institution and country</a></li>
+<li><a class="nav-link" href="#miscellaneous-removals-2"><span class="header-section-number">11.5.6</span> Miscellaneous removals</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#general-cleaning-3"><span class="header-section-number">11.6</span> General cleaning</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#normalisation-of-covid-related-terms-2"><span class="header-section-number">11.6.1</span> Normalisation of COVID related terms</a></li>
+<li><a class="nav-link" href="#normalisation-of-select-ngrams-into-acronyms-3"><span class="header-section-number">11.6.2</span> Normalisation of select ngrams into acronyms</a></li>
+<li><a class="nav-link" href="#remove-non-ascii-characters-emails-social-media-handles-and-links-3"><span class="header-section-number">11.6.3</span> Remove non-ascii characters, emails, social media handles, and links</a></li>
+<li><a class="nav-link" href="#removereplace-stray-andor-excessive-punctuation-2"><span class="header-section-number">11.6.4</span> Remove/replace stray and/or excessive punctuation</a></li>
+<li><a class="nav-link" href="#remove-numerical-quantities-3"><span class="header-section-number">11.6.5</span> Remove numerical quantities</a></li>
+<li><a class="nav-link" href="#remove-excessive-whitespace-2"><span class="header-section-number">11.6.6</span> Remove excessive whitespace</a></li>
+<li><a class="nav-link" href="#remove-unneeded-columns-3"><span class="header-section-number">11.6.7</span> Remove unneeded columns</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#save-the-data-7"><span class="header-section-number">11.7</span> Save the data</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/02-03-clean-g20.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/02-03-clean-g20.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 26, 2025.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
