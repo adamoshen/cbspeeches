@@ -71,6 +71,15 @@ speeches <- speeches %>%
   mutate(text = clean_general(text))
 ```
 
+### Miscellaneous removals
+
+Mentions of "BIS central bankers' speeches" within speeches were removed.
+
+```{r}
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
+```
+
 ### Remove mentions of own institution and country
 
 It is of greater interest when a central bank mentions another central bank or another country.
@@ -90,15 +99,6 @@ bis_regex_pattern <- read_delim(
 
 speeches <- speeches %>%
   mutate(text = str_remove_all(text, bis_regex_pattern))
-```
-
-### Miscellaneous removals
-
-Mentions of "BIS central bankers' speeches" within speeches were removed.
-
-```{r}
-speeches <- speeches %>%
-  mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
 ```
 
 ## General cleaning
