@@ -14,6 +14,7 @@ Dependencies to carry out the analysis.
 ##  cld2          1.2.5      2024-10-04 [1] RSPM
 ##  dplyr         1.1.4      2023-11-17 [1] RSPM
 ##  fs            1.6.5      2024-10-30 [1] RSPM
+##  gghighlight   0.4.1      2023-12-16 [1] RSPM (R 4.4.0)
 ##  here          1.0.1      2020-12-13 [1] RSPM
 ##  lubridate     1.9.4      2024-12-08 [1] RSPM
 ##  pins          1.4.0      2024-10-07 [1] RSPM
@@ -45,6 +46,7 @@ Dependencies for building the book.
 ##  bslib         0.8.0   2024-07-29 [1] RSPM
 ##  desc          1.4.3   2023-12-10 [1] RSPM
 ##  downlit       0.4.4   2024-06-10 [1] RSPM
+##  DT            0.33    2024-04-04 [1] RSPM (R 4.4.0)
 ##  rmarkdown     2.29    2024-11-04 [1] RSPM
 ##  servr         0.32    2024-10-04 [1] RSPM
 ##  sessioninfo   1.2.2   2021-12-06 [1] RSPM
