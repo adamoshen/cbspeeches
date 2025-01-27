@@ -12,5 +12,5 @@ bookdown::bs4_book:
     branch: "main"
     subdir: "inst/book"
   md_extensions: -smart
-  math_method: katex
+  math_method: "r-katex"
   split_bib: true
