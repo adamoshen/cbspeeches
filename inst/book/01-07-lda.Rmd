@@ -145,7 +145,7 @@ label_top_words <- top_words %>%
 
 ### Plots
 
-```{r}
+```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(topic %in% c(21, 26, 34, 37)) %>%
   ggplot() +
@@ -153,17 +153,18 @@ summarised_theta_by_month %>%
   facet_wrap(~ topic, ncol=1, labeller=label_top_words) +
   gghighlight(max(avg_probability) > 0.4, calculate_per_facet=TRUE, use_direct_label=FALSE) +
   scale_x_date(breaks = "2 years", date_labels="%Y") +
+  scale_color_manual(
+    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6"),
+    guide = guide_legend(nrow = 2)
+  ) +
   labs(
     x="Year", y="Averaged topic probabilities",
     subtitle="Only countries that reach an average topic probability > 0.40 are highlighted"
   ) +
-  theme(legend.title=element_blank()) +
-  scale_color_manual(
-    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6")
-  )
+  theme(legend.title=element_blank(), legend.position="bottom")
 ```
 
-```{r}
+```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(topic %in% c(9, 21, 24)) %>%
   ggplot() +
@@ -171,14 +172,15 @@ summarised_theta_by_month %>%
   facet_wrap(~ topic, ncol=1, labeller=label_top_words) +
   gghighlight(max(avg_probability) > 0.4, calculate_per_facet=TRUE, use_direct_label=FALSE) +
   scale_x_date(breaks = "2 years", date_labels="%Y") +
-  labs(x="Year", y="Averaged topic probabilities") +
-  theme(legend.title=element_blank()) +
   scale_color_manual(
-    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6")
-  )
+    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6"),
+    guide = guide_legend(nrow = 2)
+  ) +
+  labs(x="Year", y="Averaged topic probabilities") +
+  theme(legend.title=element_blank(), legend.position="bottom")
 ```
 
-```{r}
+```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(topic %in% c(14, 8, 31)) %>%
   ggplot() +
@@ -186,13 +188,14 @@ summarised_theta_by_month %>%
   facet_wrap(~ topic, ncol=1, labeller=label_top_words) +
   gghighlight(max(avg_probability) > 0.4, calculate_per_facet=TRUE, use_direct_label=FALSE) +
   scale_x_date(breaks = "2 years", date_labels="%Y") +
+  scale_color_manual(
+    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6"),
+    guide = guide_legend(nrow = 2)
+  ) +
   labs(
     x="Year", y="Averaged topic probabilities",
     subtitle="Only countries that reach an average topic probability > 0.40 are highlighted"
   ) +
-  theme(legend.title=element_blank()) +
-  scale_color_manual(
-    values = c("#ff3b30","#ff9500","#ffcc00","#4cd964","#5ac8fa","#007aff","#5856d6")
-  )
+  theme(legend.title=element_blank(), legend.position="bottom")
 ```
 

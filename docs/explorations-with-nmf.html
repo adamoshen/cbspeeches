@@ -20,6 +20,7 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" data-external="1">
 <meta name="description" content="The non-negative matrix factorization (NMF) files are currently stored under inst/NMFregress (GitHub). In its current state, NMFregress requires the user to specify either all or no anchors. There...">
 <meta property="og:description" content="The non-negative matrix factorization (NMF) files are currently stored under inst/NMFregress (GitHub). In its current state, NMFregress requires the user to specify either all or no anchors. There...">
 <meta name="twitter:description" content="The non-negative matrix factorization (NMF) files are currently stored under inst/NMFregress (GitHub). In its current state, NMFregress requires the user to specify either all or no anchors. There...">
@@ -32,7 +33,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">Analysis of Central Bank Speeches</a>
+        <a href="index.html" title>Analysis of Central Bank Speeches</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -230,7 +231,8 @@ instead.</p>
 <span>    x<span class="op">=</span><span class="st">"Year"</span>, y<span class="op">=</span><span class="st">"Averaged topic probabilities"</span>,</span>
 <span>    subtitle<span class="op">=</span><span class="st">"Only countries that reach an average topic proportion &gt; 0.15 are highlighted"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="01-06-nmf_files/figure-html/unnamed-chunk-12-1.svg" width="672" style="display: block; margin: auto;"></div>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">summarised_theta_by_month</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -247,7 +249,8 @@ instead.</p>
 <span>    x<span class="op">=</span><span class="st">"Year"</span>, y<span class="op">=</span><span class="st">"Averaged topic probabilities"</span>,</span>
 <span>    subtitle<span class="op">=</span><span class="st">"Only countries that reach an average topic proportion &gt; 0.20 are highlighted"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, legend.position<span class="op">=</span><span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="01-06-nmf_files/figure-html/unnamed-chunk-13-1.svg" width="672" style="display: block; margin: auto;"></div>
 
 </div>
@@ -290,7 +293,7 @@ instead.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 26, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 27, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

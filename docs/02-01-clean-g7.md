@@ -109,6 +109,16 @@ speeches <- speeches %>%
   mutate(text = clean_general(text))
 ```
 
+### Miscellaneous removals
+
+Mentions of "BIS central bankers' speeches" within speeches were removed.
+
+
+``` r
+speeches <- speeches %>%
+  mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
+```
+
 ### Repair typos
 
 Repair potential typos of Italy (appearing as *Italty*).
@@ -141,16 +151,6 @@ speeches <- speeches %>%
   left_join(bank_country_regex_patterns, by="country") %>%
   mutate(text = str_remove_all(text, regex_pattern)) %>%
   select(-regex_pattern)
-```
-
-### Miscellaneous removals
-
-Mentions of "BIS central bankers' speeches" within speeches were removed.
-
-
-``` r
-speeches <- speeches %>%
-  mutate(text = str_remove_all(text, "(?i)BIS central bankers' speeches"))
 ```
 
 ## General cleaning

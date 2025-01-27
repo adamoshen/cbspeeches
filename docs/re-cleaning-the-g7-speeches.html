@@ -20,6 +20,7 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" data-external="1">
 <meta name="description" content="The G7 consists of seven countries: Canada, France, Germany, Italy, Japan, the United Kingdom, and the United States. From the results of the models produced in the proof of concept section, and...">
 <meta property="og:description" content="The G7 consists of seven countries: Canada, France, Germany, Italy, Japan, the United Kingdom, and the United States. From the results of the models produced in the proof of concept section, and...">
 <meta name="twitter:description" content="The G7 consists of seven countries: Canada, France, Germany, Italy, Japan, the United Kingdom, and the United States. From the results of the models produced in the proof of concept section, and...">
@@ -32,7 +33,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">Analysis of Central Bank Speeches</a>
+        <a href="index.html" title>Analysis of Central Bank Speeches</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -174,25 +175,34 @@ references section and any other concluding remarks that were commonly found amo
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu">clean_general</span><span class="op">(</span><span class="va">text</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="repair-typos-1" class="section level3" number="9.4.4">
+<div id="miscellaneous-removals" class="section level3" number="9.4.4">
 <h3>
-<span class="header-section-number">9.4.4</span> Repair typos<a class="anchor" aria-label="anchor" href="#repair-typos-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.4.4</span> Miscellaneous removals<a class="anchor" aria-label="anchor" href="#miscellaneous-removals"><i class="fas fa-link"></i></a>
+</h3>
+<p>Mentions of "BIS central bankers' speeches" within speeches were removed.</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?i)BIS central bankers' speeches"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="repair-typos-1" class="section level3" number="9.4.5">
+<h3>
+<span class="header-section-number">9.4.5</span> Repair typos<a class="anchor" aria-label="anchor" href="#repair-typos-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Repair potential typos of Italy (appearing as <em>Italty</em>).</p>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"Italty"</span>, <span class="st">"Italy"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="remove-mentions-of-own-institution-and-country" class="section level3" number="9.4.5">
+<div id="remove-mentions-of-own-institution-and-country" class="section level3" number="9.4.6">
 <h3>
-<span class="header-section-number">9.4.5</span> Remove mentions of own institution and country<a class="anchor" aria-label="anchor" href="#remove-mentions-of-own-institution-and-country"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9.4.6</span> Remove mentions of own institution and country<a class="anchor" aria-label="anchor" href="#remove-mentions-of-own-institution-and-country"><i class="fas fa-link"></i></a>
 </h3>
 <p>It is of greater interest when a central bank mentions another central bank or another country.
 Therefore, all self-mentions of the bank, country, and inhabitants were removed. For example, for
 Canada, words to remove would include: Bank of Canada, BoC, Canada, Canada's, and Canadian. The
 removal patterns corresponding to each bank are stored in
 <code>inst/data-misc/bank_country_regex_patterns.csv</code>.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bank_country_regex_patterns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span></span>
 <span>  <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_country_regex_patterns.csv"</span><span class="op">)</span>,</span>
 <span>  delim <span class="op">=</span> <span class="st">","</span>,</span>
@@ -205,15 +215,6 @@ removal patterns corresponding to each bank are stored in
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bank_country_regex_patterns</span>, by<span class="op">=</span><span class="st">"country"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">regex_pattern</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">regex_pattern</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div id="miscellaneous-removals" class="section level3" number="9.4.6">
-<h3>
-<span class="header-section-number">9.4.6</span> Miscellaneous removals<a class="anchor" aria-label="anchor" href="#miscellaneous-removals"><i class="fas fa-link"></i></a>
-</h3>
-<p>Mentions of "BIS central bankers' speeches" within speeches were removed.</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="va">text</span>, <span class="st">"(?i)BIS central bankers' speeches"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div id="general-cleaning-1" class="section level2" number="9.5">
@@ -353,9 +354,9 @@ and other numerical quantities.</p>
 <li><a class="nav-link" href="#remove-introductions-1"><span class="header-section-number">9.4.1</span> Remove introductions</a></li>
 <li><a class="nav-link" href="#remove-section-headers"><span class="header-section-number">9.4.2</span> Remove section headers</a></li>
 <li><a class="nav-link" href="#remove-references-section-1"><span class="header-section-number">9.4.3</span> Remove references section</a></li>
-<li><a class="nav-link" href="#repair-typos-1"><span class="header-section-number">9.4.4</span> Repair typos</a></li>
-<li><a class="nav-link" href="#remove-mentions-of-own-institution-and-country"><span class="header-section-number">9.4.5</span> Remove mentions of own institution and country</a></li>
-<li><a class="nav-link" href="#miscellaneous-removals"><span class="header-section-number">9.4.6</span> Miscellaneous removals</a></li>
+<li><a class="nav-link" href="#miscellaneous-removals"><span class="header-section-number">9.4.4</span> Miscellaneous removals</a></li>
+<li><a class="nav-link" href="#repair-typos-1"><span class="header-section-number">9.4.5</span> Repair typos</a></li>
+<li><a class="nav-link" href="#remove-mentions-of-own-institution-and-country"><span class="header-section-number">9.4.6</span> Remove mentions of own institution and country</a></li>
 </ul>
 </li>
 <li>
@@ -387,7 +388,7 @@ and other numerical quantities.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 26, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 27, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

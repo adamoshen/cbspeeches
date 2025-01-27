@@ -71,9 +71,9 @@ repairs-and-removals-1
 remove-introductions-1
 remove-section-headers
 remove-references-section-1
+miscellaneous-removals
 repair-typos-1
 remove-mentions-of-own-institution-and-country
-miscellaneous-removals
 general-cleaning-1
 normalisation-of-covid-related-terms
 normalisation-of-select-ngrams-into-acronyms-1
@@ -91,9 +91,9 @@ repairs-and-removals-2
 remove-introductions-2
 remove-section-headers-1
 remove-references-section-2
+miscellaneous-removals-1
 repair-typos-2
 remove-mentions-of-own-institution-and-country-1
-miscellaneous-removals-1
 general-cleaning-2
 normalisation-of-covid-related-terms-1
 normalisation-of-select-ngrams-into-acronyms-2
@@ -112,9 +112,9 @@ repairs-and-removals-3
 remove-introductions-3
 remove-section-headers-2
 remove-references-section-3
+miscellaneous-removals-2
 repair-typos-3
 remove-mentions-of-own-institution-and-country-2
-miscellaneous-removals-2
 general-cleaning-3
 normalisation-of-covid-related-terms-2
 normalisation-of-select-ngrams-into-acronyms-3
@@ -131,8 +131,8 @@ repairs-and-removals-4
 remove-introductions-4
 remove-section-headers-3
 remove-references-section-4
-remove-mentions-of-own-institution-and-country-3
 miscellaneous-removals-3
+remove-mentions-of-own-institution-and-country-3
 general-cleaning-4
 normalisation-of-covid-related-terms-3
 normalisation-of-select-ngrams-into-acronyms-4

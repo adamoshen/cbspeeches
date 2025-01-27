@@ -172,7 +172,7 @@ label_top_words <- top_words %>%
 
 ### Plots
 
-```{r}
+```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(anchor %in% c("brexit", "cbdc", "covid", "ukrain")) %>%
   ggplot() +
@@ -187,10 +187,11 @@ summarised_theta_by_month %>%
     x="Year", y="Averaged topic probabilities",
     subtitle="Only countries that reach an average topic proportion > 0.15 are highlighted"
   ) +
-  theme(legend.title=element_blank())
+  guides(colour = guide_legend(nrow = 2)) +
+  theme(legend.title=element_blank(), legend.position="bottom")
 ```
 
-```{r}
+```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(anchor %in% c("polici", "basel", "inflat", "monetary_policy_")) %>%
   ggplot() +
@@ -205,5 +206,6 @@ summarised_theta_by_month %>%
     x="Year", y="Averaged topic probabilities",
     subtitle="Only countries that reach an average topic proportion > 0.20 are highlighted"
   ) +
-  theme(legend.title=element_blank())
+  guides(colour = guide_legend(nrow = 2)) +
+  theme(legend.title=element_blank(), legend.position="bottom")
 ```
