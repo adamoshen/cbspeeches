@@ -38,7 +38,8 @@ Suggests:
     DT,
     rmarkdown,
     servr,
-    sessioninfo
+    sessioninfo,
+    svglite
 Remotes: 
     adamoshen/pinsqs
 Encoding: UTF-8
