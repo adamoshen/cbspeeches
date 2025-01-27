@@ -15,4 +15,122 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
 
 # Analysis of Central Bank Speeches {.unnumbered}
 
-Placeholder text
+```{r}
+library(tidyverse)
+library(kableExtra)
+library(pins)
+library(pinsqs)
+library(AzureStor)
+
+source(here::here("R", "azure_init.R"))
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+```
+
+```{r}
+members <- bind_rows(
+  tibble(
+    member = c("Canada", "France", "Germany", "Italy", "Japan", "United Kingdom", "United States"),
+    G7 = cli::symbol$tick,
+    G10 = cli::symbol$tick,
+    G20 = cli::symbol$tick
+  ),
+  
+  tibble(
+    member = c("Belgium", "Netherlands", "Sweden", "Switzerland"),
+    G7 = cli::symbol$line,
+    G10 = cli::symbol$tick,
+    G20 = cli::symbol$line
+  ),
+  
+  tibble(
+    member = c(
+      "Argentina", "Australia", "Brazil", "China", "India", "Indonesia", "Mexico",
+      "Russian Federation", "Saudi Arabia", "South Africa", "Korea, Republic of",
+      "Turkiye", "Other_ECB"
+    ),
+    G7 = cli::symbol$line,
+    G10 = cli::symbol$line,
+    G20 = cli::symbol$tick
+  ),
+  
+  tibble(
+    member = c("Other_BIS"),
+    G7 = cli::symbol$line,
+    G10 = cli::symbol$line,
+    G20 = cli::symbol$line
+  )
+)
+```
+
+## Data stats {.unnumbered}
+
+```{r}
+metadata <- bind_rows(
+  speeches_board %>%
+    pin_qread("speeches-g7-metadata") %>%
+    rename(member = country) %>%
+    group_by(member) %>%
+    summarise(
+      n = n(),
+      first_date = min(date),
+      last_date = max(date)
+    ),
+  
+  speeches_board %>%
+    pin_qread("speeches-g10-metadata") %>%
+    filter(country %in% c("Belgium", "Netherlands", "Sweden", "Switzerland")) %>%
+    rename(member = country) %>%
+    group_by(member) %>%
+    summarise(
+      n = n(),
+      first_date = min(date),
+      last_date = max(date)
+    ),
+  
+  speeches_board %>%
+    pin_qread("speeches-g20-metadata") %>%
+    filter(country %in% c(
+      "Argentina", "Australia", "Brazil", "China", "India", "Indonesia", "Mexico",
+      "Russian Federation", "Saudi Arabia", "South Africa", "Korea, Republic of",
+      "Turkiye", "Other_ECB"
+      )
+    ) %>%
+    rename(member = country) %>%
+    group_by(member) %>%
+    summarise(
+      n = n(),
+      first_date = min(date),
+      last_date = max(date)
+    ),
+  
+  speeches_board %>%
+    pin_qread("speeches-bis-metadata") %>%
+    rename(member = country) %>%
+    group_by(member) %>%
+    summarise(
+      n = n(),
+      first_date = min(date),
+      last_date = max(date)
+    )
+) %>%
+  inner_join(members, by="member") %>%
+  relocate(G7, G10, G20, .after=member) %>%
+  arrange(member)
+```
+
+```{r}
+metadata %>%
+  rename(
+    Member = member,
+    `#` = n,
+    `First date` = first_date,
+    `Last date` = last_date
+  ) %>%
+  DT::datatable(
+    options = list(pageLength = 10),
+    rownames = FALSE
+  )
+```
