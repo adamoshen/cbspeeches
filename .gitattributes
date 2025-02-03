@@ -1,5 +1,3 @@
 *.Rmd linguist-detectable
 
-docs/** linguist-documentation
-
 inst/NMFregress/** linguist-vendored
