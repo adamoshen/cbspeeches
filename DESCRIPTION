@@ -18,11 +18,12 @@ Imports:
     here,
     lubridate,
     pins (>= 1.0.0),
-    pinsqs (>= 0.0.0.9000),
+    pinsqs (>= 0.1.0),
     purrr,
     readr,
     readxl,
     rstudioapi,
+    stringa (>= 0.1.0),
     stringi,
     stringr,
     tibble,
@@ -40,6 +41,7 @@ Suggests:
     servr,
     sessioninfo,
     svglite
-Remotes: 
-    adamoshen/pinsqs
+Remotes:  
+    adamoshen/pinsqs,
+    adamoshen/stringa
 Encoding: UTF-8
