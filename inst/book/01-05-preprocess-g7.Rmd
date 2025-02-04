@@ -12,6 +12,7 @@ required document-term matrices and term-document matrices.
 ```{r}
 library(tidyverse)
 library(tidytext)
+library(stringa)
 library(SnowballC)
 library(pins)
 library(pinsqs)
@@ -29,12 +30,16 @@ speeches <- speeches_board %>%
   pin_qread("speeches-g7-with-ngrams")
 ```
 
-The list of stop words used was derived from the Snowball stop word lexicon, but with negation
-terms removed. The code used to obtain this stop word list can be found
-[here](https://github.com/adamoshen/misc/tree/main/data-raw).
+The list of stop words used was derived from the Snowball stop word lexicon (obtained from
+`tidytext::stop_words`), but with negation terms removed. The full data set of stop words with
+negation terms removed (includes stop words from other lexicons) can be found in
+`stringa::nonneg_stop_words`. The code used to obtain this stop word list can be found
+[here](https://github.com/adamoshen/stringa/blob/main/data-raw/nonneg_stop_words.R).
 
 ```{r}
-nonneg_snowball <- read_rds(here::here("inst", "data-misc", "nonneg_snowball.rds"))
+nonneg_snowball <- nonneg_stop_words %>%
+  filter(lexicon == "snowball") %>%
+  select(-lexicon)
 ```
 
 ## Pre-processing
