@@ -210,8 +210,8 @@ bigram_token_counts <- bigrams %>%
 bigrams_to_remove <- bind_rows(
   trigram_token_counts %>%
     select(token1, token2, n) %>%
-    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi")
-  ),
+    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi")),
+   
   trigram_token_counts %>%
     select(token2, token3, n) %>%
     rename(token1=token2, token2=token3) %>%
