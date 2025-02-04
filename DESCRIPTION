@@ -6,8 +6,7 @@ Authors@R:
 Description: Contains the code to document the analysis of central bank
     speeches.
 License: GPL (>= 3)
-URL: https://adamoshen.github.io/cbspeeches/,
-    https://github.com/adamoshen/cbspeeches
+URL: https://adamoshen.github.io/cbspeeches/, https://github.com/adamoshen/cbspeeches
 Imports: 
     AzureAuth,
     AzureStor,
