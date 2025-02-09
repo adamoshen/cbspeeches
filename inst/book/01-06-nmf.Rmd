@@ -197,7 +197,6 @@ summarised_theta_by_month %>%
     x="Year", y="Averaged topic proportions",
     subtitle="Only countries that reach an average topic proportion > 0.15 are highlighted"
   ) +
-  guides(colour = guide_legend(nrow = 2)) +
   theme(legend.title=element_blank(), legend.position="bottom")
 ```
 
