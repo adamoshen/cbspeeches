@@ -67,8 +67,8 @@ r221027c_text <- read_file(here::here("inst", "data-misc", "r221027c.txt")) %>%
   str_squish()
 
 data_update <- tribble(
-  ~doc, ~text,
-  "r221027c", r221027c_text
+  ~doc, ~text, ~first_sentence
+  "r221027c", r221027c_text, str_extract(r221027c_text, "^[^.]+\\.")
 )
 
 speeches <- speeches %>%
