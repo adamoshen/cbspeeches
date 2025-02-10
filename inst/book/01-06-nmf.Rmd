@@ -150,7 +150,7 @@ summarised_theta_by_month <- theta_dates %>%
     month = month(date)
   ) %>%
   group_by(country, year, month, anchor) %>%
-  summarise(avg_proportion = mean(proportion)) %>%
+  summarise(avg_proportion = mean(proportion, na.rm=TRUE)) %>%
   ungroup() %>%
   unite("date", year, month, sep="-") %>%
   mutate(date = ym(date))
