@@ -181,7 +181,6 @@ For a finer view of the plots, open the image in a new tab and zoom in as desire
 ```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(anchor %in% c("brexit", "cbdc", "covid", "ukrain")) %>%
-  drop_na() %>%
   ggplot() +
   geom_line(aes(x=date, y=avg_proportion, colour=country), alpha=0.4) +
   facet_wrap(~ anchor, ncol=1, labeller=label_top_words) +
@@ -204,7 +203,6 @@ summarised_theta_by_month %>%
 ```{r, fig.height=8}
 summarised_theta_by_month %>%
   filter(anchor %in% c("polici", "basel", "inflat", "monetary_policy_")) %>%
-  drop_na() %>%
   ggplot() +
   geom_line(aes(x=date, y=avg_proportion, colour=country), alpha=0.4) +
   facet_wrap(~ anchor, ncol=1, labeller=label_top_words) +
