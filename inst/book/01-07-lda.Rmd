@@ -116,7 +116,6 @@ summarised_theta_by_month <- dtd %>%
   group_by(country, year, month, topic) %>%
   summarise(avg_probability = mean(gamma, na.rm=TRUE)) %>%
   ungroup() %>%
-  mutate(avg_probability = replace_na(avg_probability, 0)) %>%
   unite("date", year, month, sep="-") %>%
   mutate(date = ym(date))
 ```
