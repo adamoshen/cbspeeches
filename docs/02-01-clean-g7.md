@@ -225,11 +225,10 @@ and other numerical quantities.
 ``` r
 speeches <- speeches %>%
   mutate(
+    text = str_remove_all(text, "(Figure|Slide|Graph) [:digit:]+"),
     text = str_remove_all(text, "\\$"),
     text = str_remove_all(text, "%"),
-    text = str_remove_all(text, "[:digit:]+([.,]+[:digit:]+)*"),
-    text = str_remove_all(text, "(Figure|Slide|Graph) [:digit:]+"),
-    text = str_remove_all(text, "[:digit:]")
+    text = str_remove_all(text, "\\b[:digit:]+([.,]+[:digit:]+)*\\b")
   )
 ```
 

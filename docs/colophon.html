@@ -21,14 +21,15 @@
 <script src="libs/datatables-binding-0.33/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
 <script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><script src="libs/d3-bundle-5.16.0/d3-bundle.min.js"></script><script src="libs/d3-lasso-0.0.5/d3-lasso.min.js"></script><script src="libs/save-svg-as-png-1.4.17/save-svg-as-png.min.js"></script><script src="libs/flatbush-4.4.0/flatbush.min.js"></script><link href="libs/ggiraphjs-0.8.10/ggiraphjs.min.css" rel="stylesheet">
+<script src="libs/ggiraphjs-0.8.10/ggiraphjs.min.js"></script><script src="libs/girafe-binding-0.8.12/girafe.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" data-external="1">
-<meta name="description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version  date (UTC) lib source ## AzureAuth   1.3.3   2021-09-13 [1] RSPM ## AzureStor   3.7.0   2022-05-25 [1] RSPM ##...">
-<meta property="og:description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version  date (UTC) lib source ## AzureAuth   1.3.3   2021-09-13 [1] RSPM ## AzureStor   3.7.0   2022-05-25 [1] RSPM ##...">
-<meta name="twitter:description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version  date (UTC) lib source ## AzureAuth   1.3.3   2021-09-13 [1] RSPM ## AzureStor   3.7.0   2022-05-25 [1] RSPM ##...">
+<meta name="description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version date (UTC) lib source ## AzureAuth   1.3.3  2021-09-13 [1] RSPM ## AzureStor   3.7.0  2022-05-25 [1] RSPM ## cld2  ...">
+<meta property="og:description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version date (UTC) lib source ## AzureAuth   1.3.3  2021-09-13 [1] RSPM ## AzureStor   3.7.0  2022-05-25 [1] RSPM ## cld2  ...">
+<meta name="twitter:description" content="Core dependencies Dependencies to carry out the analysis. ## package   * version date (UTC) lib source ## AzureAuth   1.3.3  2021-09-13 [1] RSPM ## AzureStor   3.7.0  2022-05-25 [1] RSPM ## cld2  ...">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -52,7 +53,7 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Analysis of Central Bank Speeches</a></li>
 <li><a class="active" href="colophon.html">Colophon</a></li>
-<li class="book-part">Proof of concept</li>
+<li class="book-part">Proof of concept - G7</li>
 <li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
 <li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
@@ -66,6 +67,10 @@
 <li><a class="" href="cleaning-the-g10-speeches.html"><span class="header-section-number">10</span> Cleaning the G10 speeches</a></li>
 <li><a class="" href="cleaning-the-g20-speeches.html"><span class="header-section-number">11</span> Cleaning the G20 speeches</a></li>
 <li><a class="" href="cleaning-the-bis-speeches.html"><span class="header-section-number">12</span> Cleaning the BIS speeches</a></li>
+<li class="book-part">Proof of concept - G20</li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams-g20.html"><span class="header-section-number">13</span> Identifying important bigrams and trigrams (G20)</a></li>
+<li><a class="" href="incorporating-the-found-n-grams-g20.html"><span class="header-section-number">14</span> Incorporating the found n-grams (G20)</a></li>
+<li><a class="" href="final-pre-processing-g20.html"><span class="header-section-number">15</span> Final pre-processing (G20)</a></li>
 </ul>
 
         <div class="book-extra">
@@ -80,28 +85,30 @@
 <h2>Core dependencies<a class="anchor" aria-label="anchor" href="#core-dependencies"><i class="fas fa-link"></i></a>
 </h2>
 <p>Dependencies to carry out the analysis.</p>
-<pre><code>##  package     * version    date (UTC) lib source
-##  AzureAuth     1.3.3      2021-09-13 [1] RSPM
-##  AzureStor     3.7.0      2022-05-25 [1] RSPM
-##  cld2          1.2.5      2024-10-04 [1] RSPM
-##  dplyr         1.1.4      2023-11-17 [1] RSPM
-##  fs            1.6.5      2024-10-30 [1] RSPM
-##  gghighlight   0.4.1      2023-12-16 [1] RSPM (R 4.4.0)
-##  here          1.0.1      2020-12-13 [1] RSPM
-##  lubridate     1.9.4      2024-12-08 [1] RSPM
-##  pins          1.4.0      2024-10-07 [1] RSPM
-##  pinsqs        0.0.0.9000 2024-12-21 [1] Github (adamoshen/pinsqs@8d8aa38)
-##  purrr         1.0.2      2023-08-10 [1] RSPM
-##  readr         2.1.5      2024-01-10 [1] RSPM
-##  readxl        1.4.3      2023-07-06 [1] RSPM
-##  rstudioapi    0.17.1     2024-10-22 [1] RSPM
-##  stringi       1.8.4      2024-05-06 [1] RSPM
-##  stringr       1.5.1      2023-11-14 [1] RSPM
-##  tibble        3.2.1      2023-03-20 [1] RSPM
-##  tidytext      0.4.2      2024-04-10 [1] RSPM (R 4.4.0)
-##  topicmodels   0.2-17     2024-08-14 [1] RSPM
-##  udpipe        0.8.11     2023-01-06 [1] RSPM
-##  utf8          1.2.4      2023-10-22 [1] RSPM
+<pre><code>##  package     * version date (UTC) lib source
+##  AzureAuth     1.3.3   2021-09-13 [1] RSPM
+##  AzureStor     3.7.0   2022-05-25 [1] RSPM
+##  cld2          1.2.5   2024-10-04 [1] RSPM
+##  dplyr         1.1.4   2023-11-17 [1] RSPM
+##  fs            1.6.5   2024-10-30 [1] RSPM
+##  ggiraph       0.8.12  2025-01-08 [1] RSPM (R 4.4.0)
+##  here          1.0.1   2020-12-13 [1] RSPM
+##  keyATM        0.5.2   2024-04-24 [1] RSPM (R 4.4.0)
+##  lubridate     1.9.4   2024-12-08 [1] RSPM
+##  pins          1.4.0   2024-10-07 [1] RSPM
+##  pinsqs        0.1.0   2025-02-04 [1] Github (adamoshen/pinsqs@23544e1)
+##  purrr         1.0.2   2023-08-10 [1] RSPM
+##  readr         2.1.5   2024-01-10 [1] RSPM
+##  readxl        1.4.3   2023-07-06 [1] RSPM
+##  rstudioapi    0.17.1  2024-10-22 [1] RSPM
+##  stringa       0.1.0   2025-02-04 [1] Github (adamoshen/stringa@5a0d385)
+##  stringi       1.8.4   2024-05-06 [1] RSPM
+##  stringr       1.5.1   2023-11-14 [1] RSPM
+##  tibble        3.2.1   2023-03-20 [1] RSPM
+##  tidytext      0.4.2   2024-04-10 [1] RSPM (R 4.4.0)
+##  topicmodels   0.2-17  2024-08-14 [1] RSPM
+##  udpipe        0.8.11  2023-01-06 [1] RSPM
+##  utf8          1.2.4   2023-10-22 [1] RSPM
 ## 
 ##  [1] C:/Users/Adam/AppData/Local/R/win-library/4.4
 ##  [2] C:/Program Files/R/R-4.4.2/library</code></pre>
@@ -119,6 +126,7 @@
 ##  rmarkdown     2.29    2024-11-04 [1] RSPM
 ##  servr         0.32    2024-10-04 [1] RSPM
 ##  sessioninfo   1.2.2   2021-12-06 [1] RSPM
+##  svglite       2.1.3   2023-12-08 [1] RSPM (R 4.4.0)
 ## 
 ##  [1] C:/Users/Adam/AppData/Local/R/win-library/4.4
 ##  [2] C:/Program Files/R/R-4.4.2/library</code></pre>
@@ -154,7 +162,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 27, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on February 16, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

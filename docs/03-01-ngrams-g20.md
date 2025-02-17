@@ -1,9 +1,12 @@
 
 
-# Identifying important bigrams and trigrams
+# (PART\*) Proof of concept - G20 {.unnumbered}
+
+# Identifying important bigrams and trigrams (G20)
 
 This chapter documents the identification of important bigrams and trigrams following the procedure
-described in @hansen_2018 and @justeson_1995.
+described in @hansen_2018 and @justeson_1995, as was
+[previously done for the G7 countries](#identifying-important-bigrams-and-trigrams).
 
 ## Initialisation
 
@@ -28,15 +31,20 @@ speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", 
 
 The text was first tokenised into sentences in order to create a sentence identifier within
 documents. This is required later when looking at tag sequences, as tag sequences that span across
-sentences should not be considered.
+sentences should not be considered. The text was not cast to lowercase just yet, as it appeared to
+affect tagging.
 
-The text was not cast to lowercase just yet, as it appeared to affect tagging.
+Unlike the tokenising done for POS-tagging for the
+[G7 speeches](#identifying-important-bigrams-and-trigrams), the speeches are also arranged by the
+document ID before tokenising so that the tagged speech tokens can simply be column-bound back to
+the IDs (i.e. no data joining required).
 
 
 ``` r
 speech_tokens <- speeches_board %>%
-  pin_qread("speeches-g7-cleaned") %>%
+  pin_qread("speeches-g20-cleaned") %>%
   select(doc, text) %>%
+  arrange(doc) %>%
   unnest_sentences(output=sentence, input=text, to_lower=FALSE) %>%
   group_by(doc) %>%
   mutate(sentence_id = 1:n()) %>%
@@ -51,8 +59,8 @@ Creating a quick checkpoint:
 speeches_board %>%
   pin_qsave(
     speech_tokens,
-    "speeches-g7-tokens",
-    title = "tokens of speeches for g7 countries, cleaned"
+    "speeches-g20-tokens",
+    title = "tokens of speeches for g20 countries, cleaned"
   )
 ```
 
@@ -77,32 +85,61 @@ The downloaded model can be loaded as follows:
 english_gum <- udpipe_load_model(file = here::here("inst", "data-misc", "english-gum-ud-2.5-191206.udpipe"))
 ```
 
-### Tagging
+### Break text tokens into chunks
 
-In `udpipe_annotate()`:
+One of the values outputted after annotating is the
+[CoNLL-U morphological annotation](https://universaldependencies.org/format.html#morphological-annotation),
+While this information is not used in this analysis, it is obtained by concatenating all word tokens
+with their annotation notes (see example in previous link) into a single string. This becomes
+problematic for larger corpora since the maximum length of a single string is limited to
+$2^{31} - 1$ characters. As such, before annotating, the text tokens must be divided into smaller
+chunks such that the resulting concatenation of word tokens with their annotation notes does not
+exceed the maximum allotted number of characters.
 
-- `tokenizer = "vertical"` indicates that the supplied text is already tokenised in the form of a
-data frame.
-- `parser = "none"` indicates that dependency parsing does not need to be performed.
-- `trace = 5e5` prints a progress update every 5e5 tokens.
+The following code breaks the word tokens into 12 chunks (as a list) while ensuring that all tokens
+belonging to the same document are kept together in the proper order such that exact sentences
+within documents can be recovered later for the discovery of bigrams and trigrams.
 
 
 ``` r
-tags_gum <- speech_tokens %$%
-  udpipe_annotate(
-    object=english_gum, x=token, doc_id=doc,
-    tokenizer="vertical", parser="none", trace=5e5
-  ) %>%
-  as_tibble() %>%
-  select(doc_id, token, lemma, upos) %>%
-  rename(upos_gum = upos)
+speech_token_chunks <- speech_tokens %>%
+  select(doc, token) %>%
+  group_by(doc) %>%
+  mutate(doc_index = cur_group_id()) %>%
+  ungroup() %>%
+  mutate(chunk = cut(doc_index, 12)) %>%
+  group_by(chunk) %>%
+  group_split() %>%
+  map(~ select(.x, -c(doc_index, chunk)))
 ```
 
-By supplying a tokenised data frame, the resulting output will have the same number of rows. As
-such, the sentence identifier of `speech_tokens` can easily be re-bound to the tagged tokens.
+### Tagging
+
+The annotation code from before can be re-used and re-purposed into a function.
 
 
 ``` r
+udpipe_annotate_tibble <- function(chunk) {
+  chunk %$%
+    udpipe_annotate(
+      object=english_gum, x=token, doc_id=doc,
+      tokenizer="vertical", parser="none", trace=5e5
+    ) %>%
+    as_tibble() %>%
+    select(doc_id, token, lemma, upos) %>%
+    rename(upos_gum = upos)
+}
+```
+
+The text chunks are annotated individually before being bound back together with the original
+document ids and sentence ids.
+
+
+``` r
+tags_gum <- speech_token_chunks %>%
+  map(udpipe_annotate_tibble) %>%
+  list_rbind()
+
 tags_gum <- tags_gum %>%
   bind_cols(
     speech_tokens %>%
@@ -111,21 +148,22 @@ tags_gum <- tags_gum %>%
   select(doc_id, sentence_id, token, lemma, upos_gum)
 ```
 
-Creating a quick checkpoint:
+Creating a checkpoint as usual:
 
 
 ``` r
 speeches_board %>%
   pin_qsave(
     tags_gum,
-    "gum-tagged-tokens-g7",
-    title = "gum tagged tokens of speeches for g7 countries"
+    "gum-tagged-tokens-g20",
+    title = "gum tagged tokens of speeches for g20 countries"
   )
 ```
 
 ## Determine bigrams and trigrams
 
-From @hansen_2018, trigram sequences of interest with frequencies greater than or equal to 50 are:
+As before, from @hansen_2018, trigram sequences of interest with frequencies greater than or equal
+to 50 are:
 
 - adjective - adjective - noun
 - adjective - noun - noun
@@ -219,8 +257,8 @@ bigram_token_counts <- bigrams %>%
 bigrams_to_remove <- bind_rows(
   trigram_token_counts %>%
     select(token1, token2, n) %>%
-    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi")),
-   
+    inner_join(bigram_token_counts, by=c("token1", "token2"), suffix=c("_tri", "_bi")
+  ),
   trigram_token_counts %>%
     select(token2, token3, n) %>%
     rename(token1=token2, token2=token3) %>%
@@ -248,14 +286,14 @@ Writing the data to the pin board:
 speeches_board %>%
   pin_qsave(
     trigrams,
-    "gum-trigrams-g7",
-    title = "gum trigrams from g7 speeches"
+    "gum-trigrams-g20",
+    title = "gum trigrams from g20 speeches"
   )
 
 speeches_board %>%
   pin_qsave(
     bigrams,
-    "gum-bigrams-g7",
-    title = "gum bigrams from g7 speeches"
+    "gum-bigrams-g20",
+    title = "gum bigrams from g20 speeches"
   )
 ```

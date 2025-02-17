@@ -18,5 +18,9 @@ rmd_files:
     "02-01-clean-g7.Rmd",
     "02-02-clean-g10.Rmd",
     "02-03-clean-g20.Rmd",
-    "02-04-clean-bis.Rmd"
+    "02-04-clean-bis.Rmd",
+
+    "03-01-ngrams-g20.Rmd",
+    "03-02-replace-ngrams-g20.Rmd",
+    "03-03-preprocess-g20.Rmd"
   ]

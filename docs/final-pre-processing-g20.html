@@ -4,13 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>6 Final pre-processing | Analysis of Central Bank Speeches</title>
+<title>15 Final pre-processing (G20) | Analysis of Central Bank Speeches</title>
 <meta name="author" content="Adam Shen">
 <meta name="generator" content="bookdown 0.41 with bs4_book()">
-<meta property="og:title" content="6 Final pre-processing | Analysis of Central Bank Speeches">
+<meta property="og:title" content="15 Final pre-processing (G20) | Analysis of Central Bank Speeches">
 <meta property="og:type" content="book">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="6 Final pre-processing | Analysis of Central Bank Speeches">
+<meta name="twitter:title" content="15 Final pre-processing (G20) | Analysis of Central Bank Speeches">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Noto_Sans-0.4.9/font.css" rel="stylesheet">
@@ -27,9 +27,9 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" data-external="1">
-<meta name="description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  6.1 Initialisation library(tidyverse)...">
-<meta property="og:description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  6.1 Initialisation library(tidyverse)...">
-<meta name="twitter:description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  6.1 Initialisation library(tidyverse)...">
+<meta name="description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  15.1 Initialisation...">
+<meta property="og:description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  15.1 Initialisation...">
+<meta name="twitter:description" content="This chapter documents the final pre-processing steps before the text can be transformed into the required document-term matrices and term-document matrices.  15.1 Initialisation...">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -59,7 +59,7 @@
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
 <li><a class="" href="identifying-important-bigrams-and-trigrams.html"><span class="header-section-number">4</span> Identifying important bigrams and trigrams</a></li>
 <li><a class="" href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></li>
-<li><a class="active" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
+<li><a class="" href="final-pre-processing.html"><span class="header-section-number">6</span> Final pre-processing</a></li>
 <li><a class="" href="explorations-with-nmf.html"><span class="header-section-number">7</span> Explorations with NMF</a></li>
 <li><a class="" href="explorations-with-lda.html"><span class="header-section-number">8</span> Explorations with LDA</a></li>
 <li class="book-part">Expanding data coverage</li>
@@ -70,7 +70,7 @@
 <li class="book-part">Proof of concept - G20</li>
 <li><a class="" href="identifying-important-bigrams-and-trigrams-g20.html"><span class="header-section-number">13</span> Identifying important bigrams and trigrams (G20)</a></li>
 <li><a class="" href="incorporating-the-found-n-grams-g20.html"><span class="header-section-number">14</span> Incorporating the found n-grams (G20)</a></li>
-<li><a class="" href="final-pre-processing-g20.html"><span class="header-section-number">15</span> Final pre-processing (G20)</a></li>
+<li><a class="active" href="final-pre-processing-g20.html"><span class="header-section-number">15</span> Final pre-processing (G20)</a></li>
 </ul>
 
         <div class="book-extra">
@@ -78,17 +78,17 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="final-pre-processing" class="section level1" number="6">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="final-pre-processing-g20" class="section level1" number="15">
 <h1>
-<span class="header-section-number">6</span> Final pre-processing<a class="anchor" aria-label="anchor" href="#final-pre-processing"><i class="fas fa-link"></i></a>
+<span class="header-section-number">15</span> Final pre-processing (G20)<a class="anchor" aria-label="anchor" href="#final-pre-processing-g20"><i class="fas fa-link"></i></a>
 </h1>
 <p>This chapter documents the final pre-processing steps before the text can be transformed into the
 required document-term matrices and term-document matrices.</p>
-<div id="initialisation-5" class="section level2" number="6.1">
+<div id="initialisation-14" class="section level2" number="15.1">
 <h2>
-<span class="header-section-number">6.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">15.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-14"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/stringa">stringa</a></span><span class="op">)</span></span>
@@ -97,27 +97,29 @@ required document-term matrices and term-document matrices.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/proj_activate.html">proj_activate</a></span><span class="op">(</span><span class="st">"boc_speeches/adam/round2/cbspeeches"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/azure_init.R"</span><span class="op">)</span></span>
+<span><span class="co"># source(here::here("R", "azure_init.R"))</span></span>
 <span></span>
 <span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pins.rstudio.com/reference/board_azure.html">board_azure</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data-speeches"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-g7-with-ngrams"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-g20-with-ngrams"</span><span class="op">)</span></span></code></pre></div>
 <p>The list of stop words used was derived from the Snowball stop word lexicon (obtained from
 <code><a href="https://juliasilge.github.io/tidytext/reference/stop_words.html">tidytext::stop_words</a></code>), but with negation terms removed. The full data set of stop words with
 negation terms removed (includes stop words from other lexicons) can be found in
 <code><a href="https://adamoshen.github.io/stringa/reference/nonneg_stop_words.html">stringa::nonneg_stop_words</a></code>. The code used to obtain this stop word list can be found
 <a href="https://github.com/adamoshen/stringa/blob/main/data-raw/nonneg_stop_words.R">here</a>.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nonneg_snowball</span> <span class="op">&lt;-</span> <span class="va">nonneg_stop_words</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">lexicon</span> <span class="op">==</span> <span class="st">"snowball"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lexicon</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="pre-processing" class="section level2" number="6.2">
+<div id="pre-processing-1" class="section level2" number="15.2">
 <h2>
-<span class="header-section-number">6.2</span> Pre-processing<a class="anchor" aria-label="anchor" href="#pre-processing"><i class="fas fa-link"></i></a>
+<span class="header-section-number">15.2</span> Pre-processing<a class="anchor" aria-label="anchor" href="#pre-processing-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>The usual pre-processing steps were performed, including:</p>
 <ul>
@@ -125,82 +127,137 @@ negation terms removed (includes stop words from other lexicons) can be found in
 <li>Removal of non-negative stop words.</li>
 <li>Stemming of words.</li>
 </ul>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/unnest_tokens.html">unnest_tokens</a></span><span class="op">(</span>output<span class="op">=</span><span class="va">word</span>, input<span class="op">=</span><span class="va">text</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">nonneg_snowball</span>, by<span class="op">=</span><span class="st">"word"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>wordstem <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SnowballC/man/wordStem.html">wordStem</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>A final check was performed to verify that there were no stemmed tokens that were spaces or empty
-strings, as this can result in unusable models downstream.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div id="removal-of-whitespace-tokens-and-empty-strings" class="section level3" number="15.2.1">
+<h3>
+<span class="header-section-number">15.2.1</span> Removal of whitespace tokens and empty strings<a class="anchor" aria-label="anchor" href="#removal-of-whitespace-tokens-and-empty-strings"><i class="fas fa-link"></i></a>
+</h3>
+<p>A check was performed to verify that there were no stemmed tokens that were spaces or empty strings,
+as this can result in unusable models downstream.</p>
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">wordstem</span> <span class="op">==</span> <span class="st">" "</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_isempty.html">stri_isempty</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Making a quick checkpoint:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<p>This time, there were empty wordstems that needed to be removed.</p>
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_isempty.html">stri_isempty</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="reduction-of-vocabulary-size" class="section level3" number="15.2.2">
+<h3>
+<span class="header-section-number">15.2.2</span> Reduction of vocabulary size<a class="anchor" aria-label="anchor" href="#reduction-of-vocabulary-size"><i class="fas fa-link"></i></a>
+</h3>
+<p>After some exploration, it was found that many words appearing across three or fewer documents were
+nonsense words, potential typos, or non-English words. As such, words appearing across three or
+fewer documents were removed in an attempt to reduce the vocabulary size.</p>
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">n_docs</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">low_doc_wordstems</span> <span class="op">&lt;-</span> <span class="va">n_docs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&lt;=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">low_doc_wordstems</span>, by<span class="op">=</span><span class="st">"wordstem"</span><span class="op">)</span></span></code></pre></div>
+<p>Making a checkpoint:</p>
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches</span>,</span>
-<span>    <span class="st">"processed-speeches-g7"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"processed speeches for g7 countries. ready for dtm/tdm conversion."</span></span>
+<span>    <span class="st">"processed-speeches-g20"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"processed speeches for g20 countries. ready for dtm/tdm conversion."</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
-<div id="create-document-term-matrix" class="section level2" number="6.3">
-<h2>
-<span class="header-section-number">6.3</span> Create document-term matrix<a class="anchor" aria-label="anchor" href="#create-document-term-matrix"><i class="fas fa-link"></i></a>
-</h2>
-<p>The document-term matrix is required for topic models via the <code>{topicmodels}</code> package.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">speeches_dtm</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/document_term_casters.html">cast_dtm</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span>, <span class="va">n</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
-<span>    <span class="va">speeches_dtm</span>,</span>
-<span>    <span class="st">"speeches-g7-dtm"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"dtm of speeches for g7 countries"</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
 </div>
-<div id="create-term-document-matrix" class="section level2" number="6.4">
+<div id="create-term-document-matrix-1" class="section level2" number="15.3">
 <h2>
-<span class="header-section-number">6.4</span> Create term-document matrix<a class="anchor" aria-label="anchor" href="#create-term-document-matrix"><i class="fas fa-link"></i></a>
+<span class="header-section-number">15.3</span> Create term-document matrix<a class="anchor" aria-label="anchor" href="#create-term-document-matrix-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>The term-document matrix (as a plain matrix) is required for NMF models.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_tdm</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/document_term_casters.html">cast_tdm</a></span><span class="op">(</span><span class="va">wordstem</span>, <span class="va">doc</span>, <span class="va">n</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches_tdm</span>,</span>
-<span>    <span class="st">"speeches-g7-tdm"</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"tdm of speeches for g7 countries"</span></span>
+<span>    <span class="st">"speeches-g20-tdm"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"tdm of speeches for g20 countries"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div id="create-text-input-for-keyatm" class="section level2" number="15.4">
+<h2>
+<span class="header-section-number">15.4</span> Create text input for keyATM<a class="anchor" aria-label="anchor" href="#create-text-input-for-keyatm"><i class="fas fa-link"></i></a>
+</h2>
+<p>For Keyword-Assisted Topic Models in the {keyATM} package, a data frame containing on document per
+row is required. As such, each document's tokens are re-joined together to form a single string.</p>
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">doc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
+<span>    date <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
+<span>    author <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">author</span><span class="op">)</span>,</span>
+<span>    institution <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">institution</span><span class="op">)</span>,</span>
+<span>    country <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">country</span><span class="op">)</span>,</span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">wordstem</span>, collapse<span class="op">=</span><span class="st">" "</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
+<span>    <span class="va">speeches</span>,</span>
+<span>    <span class="st">"speeches-g20-keyATM"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"processed speeches for keyATM"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 
 </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
   <div class="chapter-nav">
-<div class="prev"><a href="incorporating-the-found-n-grams.html"><span class="header-section-number">5</span> Incorporating the found n-grams</a></div>
-<div class="next"><a href="explorations-with-nmf.html"><span class="header-section-number">7</span> Explorations with NMF</a></div>
+<div class="prev"><a href="incorporating-the-found-n-grams-g20.html"><span class="header-section-number">14</span> Incorporating the found n-grams (G20)</a></div>
+<div class="empty"></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#final-pre-processing"><span class="header-section-number">6</span> Final pre-processing</a></li>
-<li><a class="nav-link" href="#initialisation-5"><span class="header-section-number">6.1</span> Initialisation</a></li>
-<li><a class="nav-link" href="#pre-processing"><span class="header-section-number">6.2</span> Pre-processing</a></li>
-<li><a class="nav-link" href="#create-document-term-matrix"><span class="header-section-number">6.3</span> Create document-term matrix</a></li>
-<li><a class="nav-link" href="#create-term-document-matrix"><span class="header-section-number">6.4</span> Create term-document matrix</a></li>
+<li><a class="nav-link" href="#final-pre-processing-g20"><span class="header-section-number">15</span> Final pre-processing (G20)</a></li>
+<li><a class="nav-link" href="#initialisation-14"><span class="header-section-number">15.1</span> Initialisation</a></li>
+<li>
+<a class="nav-link" href="#pre-processing-1"><span class="header-section-number">15.2</span> Pre-processing</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#removal-of-whitespace-tokens-and-empty-strings"><span class="header-section-number">15.2.1</span> Removal of whitespace tokens and empty strings</a></li>
+<li><a class="nav-link" href="#reduction-of-vocabulary-size"><span class="header-section-number">15.2.2</span> Reduction of vocabulary size</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#create-term-document-matrix-1"><span class="header-section-number">15.3</span> Create term-document matrix</a></li>
+<li><a class="nav-link" href="#create-text-input-for-keyatm"><span class="header-section-number">15.4</span> Create text input for keyATM</a></li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/01-05-preprocess-g7.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/01-05-preprocess-g7.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/adamoshen/cbspeeches/blob/main/inst/book/03-03-preprocess-g20.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/adamoshen/cbspeeches/edit/main/inst/book/03-03-preprocess-g20.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

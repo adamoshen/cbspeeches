@@ -21,7 +21,8 @@
 <script src="libs/datatables-binding-0.33/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
 <script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><script src="libs/d3-bundle-5.16.0/d3-bundle.min.js"></script><script src="libs/d3-lasso-0.0.5/d3-lasso.min.js"></script><script src="libs/save-svg-as-png-1.4.17/save-svg-as-png.min.js"></script><script src="libs/flatbush-4.4.0/flatbush.min.js"></script><link href="libs/ggiraphjs-0.8.10/ggiraphjs.min.css" rel="stylesheet">
+<script src="libs/ggiraphjs-0.8.10/ggiraphjs.min.js"></script><script src="libs/girafe-binding-0.8.12/girafe.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
@@ -52,7 +53,7 @@
         <ul class="book-toc list-unstyled">
 <li><a class="active" href="index.html">Analysis of Central Bank Speeches</a></li>
 <li><a class="" href="colophon.html">Colophon</a></li>
-<li class="book-part">Proof of concept</li>
+<li class="book-part">Proof of concept - G7</li>
 <li><a class="" href="data-setup.html"><span class="header-section-number">1</span> Data setup</a></li>
 <li><a class="" href="identifying-the-country-from-the-text.html"><span class="header-section-number">2</span> Identifying the country from the text</a></li>
 <li><a class="" href="cleaning-text-for-g7-countries.html"><span class="header-section-number">3</span> Cleaning text for G7 countries</a></li>
@@ -66,6 +67,10 @@
 <li><a class="" href="cleaning-the-g10-speeches.html"><span class="header-section-number">10</span> Cleaning the G10 speeches</a></li>
 <li><a class="" href="cleaning-the-g20-speeches.html"><span class="header-section-number">11</span> Cleaning the G20 speeches</a></li>
 <li><a class="" href="cleaning-the-bis-speeches.html"><span class="header-section-number">12</span> Cleaning the BIS speeches</a></li>
+<li class="book-part">Proof of concept - G20</li>
+<li><a class="" href="identifying-important-bigrams-and-trigrams-g20.html"><span class="header-section-number">13</span> Identifying important bigrams and trigrams (G20)</a></li>
+<li><a class="" href="incorporating-the-found-n-grams-g20.html"><span class="header-section-number">14</span> Incorporating the found n-grams (G20)</a></li>
+<li><a class="" href="final-pre-processing-g20.html"><span class="header-section-number">15</span> Final pre-processing (G20)</a></li>
 </ul>
 
         <div class="book-extra">
@@ -79,8 +84,8 @@
 <div id="data-stats" class="section level2 unnumbered">
 <h2>Data stats<a class="anchor" aria-label="anchor" href="#data-stats"><i class="fas fa-link"></i></a>
 </h2>
-<div class="datatables html-widget html-fill-item" id="htmlwidget-9c0acdddf43703f45a82" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-9c0acdddf43703f45a82">{"x":{"filter":"none","vertical":false,"data":[["Argentina","Australia","Belgium","Brazil","Canada","China","France","Germany","India","Indonesia","Italy","Japan","Korea, Republic of","Mexico","Netherlands","Other_BIS","Other_ECB","Russian Federation","Saudi Arabia","South Africa","Sweden","Switzerland","Turkiye","United Kingdom","United States"],["─","─","─","─","✔","─","✔","✔","─","─","✔","✔","─","─","─","─","─","─","─","─","─","─","─","✔","✔"],["─","─","✔","─","✔","─","✔","✔","─","─","✔","✔","─","─","✔","─","─","─","─","─","✔","✔","─","✔","✔"],["✔","✔","─","✔","✔","✔","✔","✔","✔","✔","✔","✔","✔","✔","─","─","✔","✔","✔","✔","─","─","✔","✔","✔"],[34,547,36,11,484,142,444,809,910,65,391,753,94,95,200,22,2535,39,28,402,492,404,98,861,2296],["2004-09-24","1997-02-11","2000-05-12","1999-01-26","1997-03-06","1996-09-10","1996-12-17","1996-12-28","1996-12-28","1999-02-04","1997-01-25","1996-11-06","1998-10-08","2003-04-04","1997-04-16","1997-03-20","1997-03-03","2007-06-04","2006-05-06","1997-02-18","1987-08-29","1998-03-09","1997-04-03","1996-12-16","1996-12-19"],["2023-07-05","2023-12-14","2022-11-08","2015-06-10","2024-02-01","2023-11-28","2023-09-15","2024-01-31","2024-01-24","2022-11-30","2024-01-26","2023-12-25","2023-06-20","2023-01-27","2023-12-05","2007-12-03","2024-01-17","2021-12-17","2014-09-25","2023-12-01","2023-12-20","2023-12-14","2023-07-27","2023-12-19","2024-02-02"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Member<\/th>\n      <th>G7<\/th>\n      <th>G10<\/th>\n      <th>G20<\/th>\n      <th>#<\/th>\n      <th>First date<\/th>\n      <th>Last date<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":4},{"name":"Member","targets":0},{"name":"G7","targets":1},{"name":"G10","targets":2},{"name":"G20","targets":3},{"name":"#","targets":4},{"name":"First date","targets":5},{"name":"Last date","targets":6}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b7fe23425a4a57d6f4df" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b7fe23425a4a57d6f4df">{"x":{"filter":"none","vertical":false,"data":[["Argentina","Australia","Belgium","Brazil","Canada","China","France","Germany","India","Indonesia","Italy","Japan","Korea, Republic of","Mexico","Netherlands","Other_BIS","Other_ECB","Russian Federation","Saudi Arabia","South Africa","Sweden","Switzerland","Turkiye","United Kingdom","United States"],["─","─","─","─","✔","─","✔","✔","─","─","✔","✔","─","─","─","─","─","─","─","─","─","─","─","✔","✔"],["─","─","✔","─","✔","─","✔","✔","─","─","✔","✔","─","─","✔","─","─","─","─","─","✔","✔","─","✔","✔"],["✔","✔","─","✔","✔","✔","✔","✔","✔","✔","✔","✔","✔","✔","─","─","✔","✔","✔","✔","─","─","✔","✔","✔"],[34,547,36,11,484,142,444,809,910,65,391,753,94,95,200,22,2535,39,28,402,492,404,98,861,2296],["2004-09-24","1997-02-11","2000-05-12","1999-01-26","1997-03-06","1996-09-10","1996-12-17","1996-12-28","1996-12-28","1999-02-04","1997-01-25","1996-11-06","1998-10-08","2003-04-04","1997-04-16","1997-03-20","1997-03-03","2007-06-04","2006-05-06","1997-02-18","1987-08-29","1998-03-09","1997-04-03","1996-12-16","1996-12-19"],["2023-07-05","2023-12-14","2022-11-08","2015-06-10","2024-02-01","2023-11-28","2023-09-15","2024-01-31","2024-01-24","2022-11-30","2024-01-26","2023-12-25","2023-06-20","2023-01-27","2023-12-05","2007-12-03","2024-01-17","2021-12-17","2014-09-25","2023-12-01","2023-12-20","2023-12-14","2023-07-27","2023-12-19","2024-02-02"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Member<\/th>\n      <th>G7<\/th>\n      <th>G10<\/th>\n      <th>G20<\/th>\n      <th>#<\/th>\n      <th>First date<\/th>\n      <th>Last date<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":4},{"name":"Member","targets":0},{"name":"G7","targets":1},{"name":"G10","targets":2},{"name":"G20","targets":3},{"name":"#","targets":4},{"name":"First date","targets":5},{"name":"Last date","targets":6}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
   <div class="chapter-nav">
@@ -108,7 +113,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on January 27, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on February 16, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
