@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-# Final pre-processing
+# Final pre-processing (G20)
 
 This chapter documents the final pre-processing steps before the text can be transformed into the
 required document-term matrices and term-document matrices.
