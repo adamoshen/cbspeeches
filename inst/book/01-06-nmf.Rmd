@@ -1,22 +1,12 @@
 ```{r, include=FALSE}
-knitr::opts_chunk$set(
-  echo=TRUE, message=FALSE, warning=FALSE,
-  fig.align="center", dev="svglite"
-)
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.align="center")
 ```
 
 # Explorations with NMF
 
 The non-negative matrix factorization (NMF) files are currently stored under
-`inst/NMFregress` ([GitHub](https://github.com/iamdavecampbell/NMFregress)). In its current state,
-`NMFregress` requires the user to specify either all or no anchors. There are a few anchors that we
-are particularly interested in, and some work needs to be done on `NMFregress` in order to ensure
-that users can supply a subset of the anchors, and the remaining anchors are automatically
-populated.
-
-For the sake of moving forward with the proof of concept, a 50-topic NMF model is fitted, then a
-40-topic NMF model is fitted using our anchors of interest, and the remaining filled in using
-anchors from the 50-topic model.
+`inst/NMFregress` ([GitHub](https://github.com/iamdavecampbell/NMFregress)). In this chapter, a
+40-topic NMF model is fitted on the G7 speeches.
 
 ## Initialisation
 
@@ -47,28 +37,18 @@ models_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", to
   board_azure(path = "data-models")
 ```
 
-## Model fitting
-
-### Fitting the 50-topic model
-
-The following code was used to fit a 50-topic NMF model. 
+Reading in the previously constructed term-document matrix:
 
 ```{r, eval=FALSE}
 speeches <- speeches_board %>%
   pin_qread("speeches-g7-tdm")
-
-nmf_input <- create_input(speeches, vocab=rownames(speeches), topics=50)
-nmf_output <- solve_nmf(nmf_input)
 ```
 
-The anchors can be found by calling `nmf_output$anchors`.
+## Model fitting
 
-### Fitting the 40-topic model
-
-A 40-topic NMF model was fitted using a combination of our anchors of interest and the anchors
-found from the 50-topic NMF model in the previous step. Note that since the text in the
-term-document matrix was lowercased and stemmed, supplied anchors also needed to be in their
-lowercased and stemmed form. 
+Custom anchors for particular topics of interest are supplied in the model fitting process. The
+remaining anchors are determined by the model. Note that since the text in the term-document matrix
+was lowercased and stemmed, supplied anchors also needed to be in their lowercased and stemmed form.
 
 ::: {.rmdnote}
 
@@ -77,20 +57,10 @@ The stemmed form of a word can be obtained by calling `SnowballC::wordstem("word
 :::
 
 ```{r, eval=FALSE}
-anchors_of_interest <- c("basel", "cbdc", "ukrain", "covid", "brexit")
-autofilled_anchors <- c(
-  "inflat", "rate", "euro", "climat", "payment", "trade", "global", "model", "monetary_policy_",
-  "economi", "loan", "target", "market", "fund", "chang", "polici", "growth", "data", "percent",
-  "invest", "liquid", "consum", "system", "compani", "demand", "risk", "effect", "product",
-  "asset", "price", "firm", "pai", "account", "household", "insur"
-)
-custom_anchors <- c(anchors_of_interest, autofilled_anchors)
-```
-
-Fitting the 40-topic NMF model:
-
-```{r, eval=FALSE}
 nmf_input <- create_input(speeches, vocab=rownames(speeches), topics=40)
+
+custom_anchors <- c("basel", "cbdc", "ukrain", "covid", "brexit")
+
 nmf_output <- solve_nmf(nmf_input, user_anchors=custom_anchors)
 ```
 
@@ -111,7 +81,7 @@ Loading the required data:
 
 ```{r, echo=FALSE}
 nmf_output <- models_board %>%
-  pin_qread("nmf-g7-k=40", version="20241209T234844Z-40e9c")
+  pin_qread("nmf-g7-k=40", version="20250218T024628Z-d116a")
 ```
 
 ```{r}

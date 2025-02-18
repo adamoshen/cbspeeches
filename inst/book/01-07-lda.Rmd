@@ -1,8 +1,5 @@
 ```{r, include=FALSE}
-knitr::opts_chunk$set(
-  echo=TRUE, message=FALSE, warning=FALSE,
-  fig.align="center", dev="svglite"
-)
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.align="center")
 ```
 
 # Explorations with LDA
