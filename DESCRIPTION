@@ -39,8 +39,7 @@ Suggests:
     DT,
     rmarkdown,
     servr,
-    sessioninfo,
-    svglite
+    sessioninfo
 Remotes:  
     adamoshen/pinsqs,
     adamoshen/stringa
