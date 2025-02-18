@@ -1,0 +1,197 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.align="center")
+```
+
+# Explorations with NMF
+
+The non-negative matrix factorization (NMF) files are currently stored under
+`inst/NMFregress` ([GitHub](https://github.com/iamdavecampbell/NMFregress)). In this chapter, a
+40-topic NMF model is fitted on the G7 speeches.
+
+## Initialisation
+
+```{r}
+library(tidyverse)
+library(pins)
+library(pinsqs)
+library(AzureStor)
+library(ggiraph)
+
+source(here::here("R", "azure_init.R"))
+
+fs::dir_ls("inst/NMFregress", glob="*.R") %>%
+  walk(source)
+
+theme_set(theme_bw())
+set_girafe_defaults(
+  opts_toolbar = opts_toolbar(position="topright", saveaspng=FALSE),
+  opts_zoom = opts_zoom(min=0.8, max=4)
+)
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+
+models_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-models")
+```
+
+Reading in the previously constructed term-document matrix:
+
+```{r, eval=FALSE}
+speeches <- speeches_board %>%
+  pin_qread("speeches-g20-tdm")
+```
+
+## Model fitting
+
+Custom anchors for particular topics of interest are supplied in the model fitting process. The
+remaining anchors are determined by the model. Note that since the text in the term-document matrix
+was lowercased and stemmed, supplied anchors also needed to be in their lowercased and stemmed form.
+
+::: {.rmdnote}
+
+The stemmed form of a word can be obtained by calling `SnowballC::wordstem("word")`.
+
+:::
+
+```{r, eval=FALSE}
+nmf_input <- create_input(speeches, vocab=rownames(speeches), topics=40)
+
+custom_anchors <- c("basel", "cbdc", "ukrain", "covid", "brexit")
+
+nmf_output <- solve_nmf(nmf_input, user_anchors=custom_anchors)
+```
+
+Creating a checkpoint:
+
+```{r, eval=FALSE}
+models_board %>%
+  pin_qsave(
+    nmf_output,
+    "nmf-g20-k=40",
+    title = "40-topic nmf, g20, custom topics"
+  )
+```
+
+## Explorations
+
+Loading the required data:
+
+```{r, echo=FALSE}
+nmf_output <- local_board %>%
+  pin_qread("nmf-g20-k=40", version="20250216T030104Z-21d5f")
+```
+
+```{r}
+speeches_metadata <- local_board %>%
+  pin_qread("speeches-g20-metadata")
+```
+
+### Pre-exploration data wrangling
+
+::: {.rmdnote}
+
+Variables that refer to `theta` pertain to the document-topic matrix.
+
+:::
+
+First, document-topic proportions were recovered from the NMF model.
+
+```{r}
+normalised_theta <- nmf_output %>%
+  pluck("theta") %>%
+  t() %>%
+  magrittr::divide_by(rowSums(.)) %>%
+  as_tibble(rownames = "doc") %>%
+  pivot_longer(-doc, names_to="anchor", values_to="proportion")
+```
+
+Next, document-topic proportions were reunited with speech metadata. The document-topic proportions
+were then aggregated and averaged by year-month to produce a monthly time series of topic
+proportions.
+
+```{r}
+doc_dates <- speeches_metadata %>%
+  select(doc, country, date)
+
+theta_dates <- inner_join(normalised_theta, doc_dates, by="doc")
+
+summarised_theta_by_month <- theta_dates %>%
+  mutate(
+    year = year(date),
+    month = month(date)
+  ) %>%
+  group_by(country, year, month, anchor) %>%
+  summarise(avg_proportion = mean(proportion, na.rm=TRUE)) %>%
+  ungroup() %>%
+  unite("date", year, month, sep="-") %>%
+  mutate(date = ym(date)) %>%
+  drop_na()
+```
+
+For plotting, rather than labelling a topic by its anchor word, a topic's top 10 words can be used
+instead.
+
+```{r}
+label_top_words <- nmf_output %>%
+  print_top_words() %>%
+  map(str_flatten_comma) %>%
+  list_c() %>%
+  set_names(nmf_output$anchors)
+```
+
+### Plots
+
+::: {.rmdnote}
+
+Hover over plot titles for the top words of each topic. Hover over the series to reveal the country.
+
+:::
+
+```{r}
+data1 <- summarised_theta_by_month %>%
+  filter(anchor %in% c("brexit", "cbdc", "covid", "ukrain"))
+
+plot1 <- ggplot(data1) +
+  geom_line_interactive(
+    aes(x=date, y=avg_proportion, colour=country, tooltip=country, data_id=country),
+    alpha=0.4, show.legend=FALSE
+  ) +
+  facet_wrap_interactive(
+    ~ anchor, ncol=1,
+    labeller = labeller_interactive(aes(tooltip=label_top_words[anchor], data_id=anchor))
+  ) +
+  scale_x_date(breaks = "2 years", date_labels="%Y") +
+  labs(x="", y="Averaged topic proportions")
+
+girafe(ggobj = plot1) %>%
+  girafe_options(
+    opts_hover(css = "stroke-opacity:1;"),
+    opts_hover_inv(css = "opacity:0.5;filter:saturate(20%);")
+  )
+```
+
+```{r}
+data2 <- summarised_theta_by_month %>%
+  filter(anchor %in% c("polici", "basel", "inflat", "monetary_policy_"))
+  
+plot2 <- ggplot(data2) +
+  geom_line_interactive(
+    aes(x=date, y=avg_proportion, colour=country, tooltip=country, data_id=country),
+    alpha=0.4, show.legend=FALSE
+  ) +
+  facet_wrap_interactive(
+    ~ anchor, ncol=1,
+    labeller = labeller_interactive(aes(tooltip=label_top_words[anchor], data_id=anchor))
+  ) +
+  scale_x_date(breaks = "2 years", date_labels="%Y") +
+  labs(x="", y="Averaged topic proportions")
+
+girafe(ggobj = plot2) %>%
+  girafe_options(
+    opts_hover(css = "stroke-opacity:1;"),
+    opts_hover_inv(css = "opacity:0.5;filter:saturate(20%);")
+  )
+```
