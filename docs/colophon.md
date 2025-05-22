@@ -11,7 +11,7 @@ Dependencies to carry out the analysis.
 ##  package     * version date (UTC) lib source
 ##  AzureAuth     1.3.3   2021-09-13 [1] RSPM
 ##  AzureStor     3.7.0   2022-05-25 [1] RSPM
-##  cld2          1.2.5   2024-10-04 [1] RSPM
+##  cld2          1.2.6   2025-03-22 [1] RSPM
 ##  dplyr         1.1.4   2023-11-17 [1] RSPM
 ##  fs            1.6.5   2024-10-30 [1] RSPM
 ##  ggiraph       0.8.12  2025-01-08 [1] RSPM (R 4.4.0)
@@ -52,7 +52,6 @@ Dependencies for building the book.
 ##  rmarkdown     2.29    2024-11-04 [1] RSPM
 ##  servr         0.32    2024-10-04 [1] RSPM
 ##  sessioninfo   1.2.2   2021-12-06 [1] RSPM
-##  svglite       2.1.3   2023-12-08 [1] RSPM (R 4.4.0)
 ## 
 ##  [1] C:/Users/Adam/AppData/Local/R/win-library/4.4
 ##  [2] C:/Program Files/R/R-4.4.2/library

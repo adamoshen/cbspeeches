@@ -52,8 +52,6 @@ create-term-document-matrix
 explorations-with-nmf
 initialisation-6
 model-fitting
-fitting-the-50-topic-model
-fitting-the-40-topic-model
 explorations
 pre-exploration-data-wrangling
 plots

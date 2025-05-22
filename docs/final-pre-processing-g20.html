@@ -88,7 +88,7 @@ required document-term matrices and term-document matrices.</p>
 <h2>
 <span class="header-section-number">15.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-14"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juliasilge.github.io/tidytext/">tidytext</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/stringa">stringa</a></span><span class="op">)</span></span>
@@ -97,14 +97,12 @@ required document-term matrices and term-document matrices.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/proj_activate.html">proj_activate</a></span><span class="op">(</span><span class="st">"boc_speeches/adam/round2/cbspeeches"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/azure_init.R"</span><span class="op">)</span></span>
-<span><span class="co"># source(here::here("R", "azure_init.R"))</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pins.rstudio.com/reference/board_azure.html">board_azure</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"data-speeches"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qread</a></span><span class="op">(</span><span class="st">"speeches-g20-with-ngrams"</span><span class="op">)</span></span></code></pre></div>
 <p>The list of stop words used was derived from the Snowball stop word lexicon (obtained from
@@ -112,7 +110,7 @@ required document-term matrices and term-document matrices.</p>
 negation terms removed (includes stop words from other lexicons) can be found in
 <code><a href="https://adamoshen.github.io/stringa/reference/nonneg_stop_words.html">stringa::nonneg_stop_words</a></code>. The code used to obtain this stop word list can be found
 <a href="https://github.com/adamoshen/stringa/blob/main/data-raw/nonneg_stop_words.R">here</a>.</p>
-<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nonneg_snowball</span> <span class="op">&lt;-</span> <span class="va">nonneg_stop_words</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">lexicon</span> <span class="op">==</span> <span class="st">"snowball"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">lexicon</span><span class="op">)</span></span></code></pre></div>
@@ -127,7 +125,7 @@ negation terms removed (includes stop words from other lexicons) can be found in
 <li>Removal of non-negative stop words.</li>
 <li>Stemming of words.</li>
 </ul>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/unnest_tokens.html">unnest_tokens</a></span><span class="op">(</span>output<span class="op">=</span><span class="va">word</span>, input<span class="op">=</span><span class="va">text</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">nonneg_snowball</span>, by<span class="op">=</span><span class="st">"word"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -138,14 +136,14 @@ negation terms removed (includes stop words from other lexicons) can be found in
 </h3>
 <p>A check was performed to verify that there were no stemmed tokens that were spaces or empty strings,
 as this can result in unusable models downstream.</p>
-<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">wordstem</span> <span class="op">==</span> <span class="st">" "</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_isempty.html">stri_isempty</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This time, there were empty wordstems that needed to be removed.</p>
-<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_isempty.html">stri_isempty</a></span><span class="op">(</span><span class="va">wordstem</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -156,7 +154,7 @@ as this can result in unusable models downstream.</p>
 <p>After some exploration, it was found that many words appearing across three or fewer documents were
 nonsense words, potential typos, or non-English words. As such, words appearing across three or
 fewer documents were removed in an attempt to reduce the vocabulary size.</p>
-<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_docs</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -170,7 +168,7 @@ fewer documents were removed in an attempt to reduce the vocabulary size.</p>
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html">anti_join</a></span><span class="op">(</span><span class="va">low_doc_wordstems</span>, by<span class="op">=</span><span class="st">"wordstem"</span><span class="op">)</span></span></code></pre></div>
 <p>Making a checkpoint:</p>
-<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches</span>,</span>
@@ -184,12 +182,12 @@ fewer documents were removed in an attempt to reduce the vocabulary size.</p>
 <span class="header-section-number">15.3</span> Create term-document matrix<a class="anchor" aria-label="anchor" href="#create-term-document-matrix-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>The term-document matrix (as a plain matrix) is required for NMF models.</p>
-<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_tdm</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">doc</span>, <span class="va">wordstem</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://juliasilge.github.io/tidytext/reference/document_term_casters.html">cast_tdm</a></span><span class="op">(</span><span class="va">wordstem</span>, <span class="va">doc</span>, <span class="va">n</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches_tdm</span>,</span>
@@ -203,7 +201,7 @@ fewer documents were removed in an attempt to reduce the vocabulary size.</p>
 </h2>
 <p>For Keyword-Assisted Topic Models in the {keyATM} package, a data frame containing on document per
 row is required. As such, each document's tokens are re-joined together to form a single string.</p>
-<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">doc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
@@ -213,7 +211,7 @@ row is required. As such, each document's tokens are re-joined together to form 
 <span>    country <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html">first</a></span><span class="op">(</span><span class="va">country</span><span class="op">)</span>,</span>
 <span>    text <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">wordstem</span>, collapse<span class="op">=</span><span class="st">" "</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speeches_board</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://adamoshen.github.io/pinsqs/reference/read-write.html">pin_qsave</a></span><span class="op">(</span></span>
 <span>    <span class="va">speeches</span>,</span>
@@ -269,7 +267,7 @@ row is required. As such, each document's tokens are re-joined together to form 
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on February 16, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on May 22, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

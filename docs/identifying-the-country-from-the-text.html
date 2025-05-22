@@ -96,7 +96,7 @@ country associated to the institution can then be identified.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/cld2/">cld2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -186,7 +186,7 @@ manually determined by Google-ing the author or the speech. This information was
 <code>inst/data-misc/author_affiliations.xlsx</code>. The data was updated according to this spreadsheet (where
 applicable).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">author_affiliations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"author_affiliations.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">author_affiliations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"author_affiliations.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rows.html">rows_update</a></span><span class="op">(</span><span class="va">author_affiliations</span>, by<span class="op">=</span><span class="st">"author"</span><span class="op">)</span></span></code></pre></div>
@@ -331,7 +331,7 @@ be important to keep in mind when cleaning the text at a later step.</p>
 </h3>
 <p>From the list of banks, we can associate each speech with a country by performing a join.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bank_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_list.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">bank_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_xlsx</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"bank_list.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches</span> <span class="op">&lt;-</span> <span class="va">speeches</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">bank_list</span>, by<span class="op">=</span><span class="st">"institution"</span><span class="op">)</span></span></code></pre></div>
@@ -388,7 +388,7 @@ be important to keep in mind when cleaning the text at a later step.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on February 16, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on May 22, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

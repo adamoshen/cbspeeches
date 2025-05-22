@@ -83,7 +83,7 @@
 <span class="header-section-number">4</span> Identifying important bigrams and trigrams<a class="anchor" aria-label="anchor" href="#identifying-important-bigrams-and-trigrams"><i class="fas fa-link"></i></a>
 </h1>
 <p>This chapter documents the identification of important bigrams and trigrams following the procedure
-described in <span class="citation">Stephen Hansen, Michael McMahon, and Andrea Prat<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;: &lt;span&gt;A&lt;/span&gt; &lt;span&gt;Computational&lt;/span&gt; &lt;span&gt;Linguistics&lt;/span&gt; &lt;span&gt;Approach&lt;/span&gt;,”&lt;/span&gt; &lt;em&gt;The Quarterly Journal of Economics&lt;/em&gt; 133, no. 2 (May 2018): 801–70, &lt;a href="https://doi.org/10.1093/qje/qjx045"&gt;https://doi.org/10.1093/qje/qjx045&lt;/a&gt;.&lt;/p&gt;'><sup>1</sup></a></span> and <span class="citation">John S. Justeson and Slava M. Katz<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span&gt;“Technical Terminology: Some Linguistic Properties and an Algorithm for Identification in Text,”&lt;/span&gt; &lt;em&gt;Natural Language Engineering&lt;/em&gt; 1, no. 1 (March 1995): 9–27, &lt;a href="https://doi.org/10.1017/S1351324900000048"&gt;https://doi.org/10.1017/S1351324900000048&lt;/a&gt;.&lt;/p&gt;'><sup>2</sup></a></span>.</p>
+described in <span class="citation">Stephen Hansen, Michael McMahon, and Andrea Prat<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;: &lt;span&gt;A&lt;/span&gt; &lt;span&gt;Computational&lt;/span&gt; &lt;span&gt;Linguistics&lt;/span&gt; &lt;span&gt;Approach&lt;/span&gt;,”&lt;/span&gt; &lt;em&gt;The Quarterly Journal of Economics&lt;/em&gt; 133, no. 2 (May 2018): 801–70, &lt;a href="https://doi.org/10.1093/qje/qjx045"&gt;https://doi.org/10.1093/qje/qjx045&lt;/a&gt;.&lt;/p&gt;'><sup>1</sup></a></span> and <span class="citation">John S. Justeson and Slava M. Katz.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span&gt;“Technical Terminology: Some Linguistic Properties and an Algorithm for Identification in Text,”&lt;/span&gt; &lt;em&gt;Natural Language Engineering&lt;/em&gt; 1, no. 1 (March 1995): 9–27, &lt;a href="https://doi.org/10.1017/S1351324900000048"&gt;https://doi.org/10.1017/S1351324900000048&lt;/a&gt;.&lt;/p&gt;'><sup>2</sup></a></span></p>
 <div id="initialisation-3" class="section level2" number="4.1">
 <h2>
 <span class="header-section-number">4.1</span> Initialisation<a class="anchor" aria-label="anchor" href="#initialisation-3"><i class="fas fa-link"></i></a>
@@ -97,7 +97,7 @@ described in <span class="citation">Stephen Hansen, Michael McMahon, and Andrea 
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://adamoshen.github.io/pinsqs">pinsqs</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Azure/AzureStor">AzureStor</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"azure_init.R"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speeches_board</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/storage_endpoint.html">storage_endpoint</a></span><span class="op">(</span><span class="st">"https://cbspeeches1.dfs.core.windows.net/"</span>, token<span class="op">=</span><span class="va">token</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/AzureStor/man/generics.html">storage_container</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cbspeeches"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -142,10 +142,10 @@ sentences should not be considered.</p>
 The model is included in the <code>inst/data-misc</code> folder, but can be downloaded by calling the
 following:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/udpipe/man/udpipe_download_model.html">udpipe_download_model</a></span><span class="op">(</span>language<span class="op">=</span><span class="st">"english-gum"</span>, model_dir<span class="op">=</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/udpipe/man/udpipe_download_model.html">udpipe_download_model</a></span><span class="op">(</span>language<span class="op">=</span><span class="st">"english-gum"</span>, model_dir<span class="op">=</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The downloaded model can be loaded as follows:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">english_gum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/udpipe/man/udpipe_load_model.html">udpipe_load_model</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"english-gum-ud-2.5-191206.udpipe"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">english_gum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/udpipe/man/udpipe_load_model.html">udpipe_load_model</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">"inst"</span>, <span class="st">"data-misc"</span>, <span class="st">"english-gum-ud-2.5-191206.udpipe"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="tagging" class="section level3" number="4.3.2">
 <h3>
@@ -193,7 +193,7 @@ such, the sentence identifier of <code>speech_tokens</code> can easily be re-bou
 <h2>
 <span class="header-section-number">4.4</span> Determine bigrams and trigrams<a class="anchor" aria-label="anchor" href="#determine-bigrams-and-trigrams"><i class="fas fa-link"></i></a>
 </h2>
-<p>From <span class="citation">Hansen, McMahon, and Prat<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;.”&lt;/span&gt;&lt;/p&gt;"><sup>3</sup></a></span>, trigram sequences of interest with frequencies greater than or equal to 50 are:</p>
+<p>From <span class="citation">Hansen, McMahon, and Prat,<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;&lt;span&gt;“Transparency and &lt;span&gt;Deliberation&lt;/span&gt; &lt;span&gt;Within&lt;/span&gt; the &lt;span&gt;FOMC&lt;/span&gt;.”&lt;/span&gt;&lt;/p&gt;"><sup>3</sup></a></span> trigram sequences of interest with frequencies greater than or equal to 50 are:</p>
 <ul>
 <li>adjective - adjective - noun</li>
 <li>adjective - noun - noun</li>
@@ -227,7 +227,7 @@ such, the sentence identifier of <code>speech_tokens</code> can easily be re-bou
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">token1</span>, <span class="va">token2</span>, <span class="va">token3</span>, <span class="va">pos_pattern</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;=</span> <span class="fl">50</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>From <span class="citation">Hansen, McMahon, and Prat<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></span>, bigram sequences of interest with frequencies greater than or equal to 100 are:</p>
+<p>From <span class="citation">Hansen, McMahon, and Prat,<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></span> bigram sequences of interest with frequencies greater than or equal to 100 are:</p>
 <ul>
 <li>adjective - noun</li>
 <li>noun - noun</li>
@@ -361,7 +361,7 @@ the bigram frequency threshold and should be removed from the list of bigrams.</
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on February 16, 2025.</p>
+    <p>"<strong>Analysis of Central Bank Speeches</strong>" was written by Adam Shen. It was last built on May 22, 2025.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
