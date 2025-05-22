@@ -18,9 +18,7 @@ library(pins)
 library(pinsqs)
 library(AzureStor)
 
-usethis::proj_activate("boc_speeches/adam/round2/cbspeeches")
-source("R/azure_init.R")
-# source(here::here("R", "azure_init.R"))
+source(here::here("R", "azure_init.R"))
 
 speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
   storage_container(name = "cbspeeches") %>%
