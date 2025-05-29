@@ -10,6 +10,10 @@ Speeches](https://www.bis.org/cbspeeches/index.htm?m=60). The rendered
 documentation files can be viewed
 [here](https://adamoshen.github.io/cbspeeches/).
 
+See the [wiki](https://github.com/adamoshen/cbspeeches/wiki) for
+additional information on repository directories/contents and
+data access.
+
 ## Installing dependencies
 
 First download or clone this repository and then activate the .Rproj
