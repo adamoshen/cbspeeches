@@ -1,0 +1,183 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.align="center")
+```
+
+# Explorations with keyATM
+
+## Initialisation
+
+```{r}
+library(tidyverse)
+library(keyATM)
+library(ggiraph)
+library(pins)
+library(pinsqs)
+library(AzureStor)
+
+source(here::here("R", "azure_init.R"))
+
+theme_set(theme_bw())
+set_girafe_defaults(
+  opts_toolbar = opts_toolbar(position="topright", saveaspng=FALSE),
+  opts_zoom = opts_zoom(min=0.8, max=4)
+)
+
+speeches_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-speeches")
+
+models_board <- storage_endpoint("https://cbspeeches1.dfs.core.windows.net/", token=token) %>%
+  storage_container(name = "cbspeeches") %>%
+  board_azure(path = "data-models")
+```
+
+Reading in the previously constructed data for keyATM:
+
+```{r, eval=FALSE}
+speeches <- speeches_board %>%
+  pin_qread("speeches-g20-keyATM")
+```
+
+The data is then converted once again into a keyATM-specific format.
+
+```{r, eval=FALSE}
+keyATM_docs <- keyATM_read(speeches)
+```
+
+## Model fitting
+
+The following key topics and their keywords were supplied:
+
+```{r, eval=FALSE}
+keywords = list(
+  basel = c("basel"),
+  cbdc = c("cbdc", "payment"),
+  ukraine = c("ukrain"),
+  covid = c("covid"),
+  brexit = c("brexit"),
+  climat = c("climat", "green", "carbon", "emiss", "transit")
+)
+```
+
+```{r, eval=FALSE}
+keyATM_out <- keyATM(
+  docs = keyATM_docs,
+  no_keyword_topics = 34,
+  keywords = keywords,
+  model = "base",
+  options = list(seed=25, iterations=6000)
+)
+
+models_board %>%
+  pin_qsave(
+    keyATM_out,
+    "keyATM-g20-k=40",
+    title = "keyATM model for g20 speeches, 40 topics"
+  )
+```
+
+Read in model and metadata.
+
+```{r}
+keyATM_out <- local_board %>%
+  pin_qread("keyATM-g20-k=40")
+
+speeches_metadata <- local_board %>%
+  pin_qread("speeches-g20-metadata") %>%
+  arrange(doc)
+```
+
+```{r}
+theta <- keyATM_out %>%
+  pluck("theta") %>%
+  as_tibble()
+
+doc_dates <- speeches_metadata %>%
+  select(doc, country, date)
+
+theta_dates <- bind_cols(doc_dates, theta) %>%
+  pivot_longer(
+    cols = 4:43,
+    names_to = "topic",
+    values_to = "probability"
+  )
+
+summarised_theta_by_month <- theta_dates %>%
+  mutate(
+    year = year(date),
+    month = month(date)
+  ) %>%
+  group_by(country, year, month, topic) %>%
+  summarise(avg_probability = mean(probability, na.rm=TRUE)) %>%
+  ungroup() %>%
+  unite("date", year, month, sep="-") %>%
+  mutate(date = ym(date)) %>%
+  drop_na()
+```
+
+Create plot topic labels.
+
+```{r}
+label_top_words <- keyATM_out %>%
+  top_words(show_keyword = FALSE) %>%
+  as.list() %>%
+  map(str_flatten_comma) %>%
+  list_c() %>%
+  set_names(colnames(keyATM_out$theta))
+```
+
+```{r}
+data1 <- summarised_theta_by_month %>%
+  filter(topic %in% c("5_brexit", "2_cbdc", "4_covid", "3_ukraine"))
+
+plot1 <- ggplot(data1) +
+  geom_line_interactive(
+    aes(x=date, y=avg_probability, colour=country, tooltip=country, data_id=country),
+    alpha=0.4, show.legend=FALSE
+  ) +
+  facet_wrap_interactive(
+    ~ topic, ncol=1,
+    labeller = labeller_interactive(aes(tooltip=label_top_words[topic], data_id=topic))
+  ) +
+  scale_x_date(breaks = "2 years", date_labels="%Y") +
+  labs(x="", y="Averaged topic proportions")
+
+girafe(ggobj = plot1) %>%
+  girafe_options(
+    opts_hover(css = "stroke-opacity:1;"),
+    opts_hover_inv(css = "opacity:0.5;filter:saturate(20%);")
+  )
+```
+
+```{r, eval=FALSE}
+keyATM_out %>%
+  top_words(show_keyword = FALSE)
+```
+
+```{r}
+data2 <- summarised_theta_by_month %>%
+  filter(topic %in% c("1_basel", "6_climat", "Other_11", "Other_26"))
+
+plot2 <- ggplot(data2) +
+  geom_line_interactive(
+    aes(x=date, y=avg_probability, colour=country, tooltip=country, data_id=country),
+    alpha=0.4, show.legend=FALSE
+  ) +
+  facet_wrap_interactive(
+    ~ topic, ncol=1,
+    labeller = labeller_interactive(aes(tooltip=label_top_words[topic], data_id=topic))
+  ) +
+  scale_x_date(breaks = "2 years", date_labels="%Y") +
+  labs(x="", y="Averaged topic proportions")
+
+girafe(ggobj = plot2) %>%
+  girafe_options(
+    opts_hover(css = "stroke-opacity:1;"),
+    opts_hover_inv(css = "opacity:0.5;filter:saturate(20%);")
+  )
+```
+
+```{r, eval=FALSE}
+write_excel_csv(summarised_theta_by_month, "inst/data-misc/keyATM-time-series-g20.csv")
+write_excel_csv(top_words(keyATM_out), "inst/data-misc/keyATM-time-series-g20-topics.csv")
+```
