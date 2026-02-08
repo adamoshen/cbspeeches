@@ -1,8 +1,8 @@
 
 # Analysis of Central Bank Speeches
 
-> [!NOTE]
-> This is a work in progress.
+> [!WARNING]
+> This work is no longer under active development.
 
 This repository documents the analysis of central bank speeches,
 obtained from [Bank for International Settlements (BIS) Central Bankers'
